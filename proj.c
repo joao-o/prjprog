@@ -38,7 +38,13 @@ main (int argc, char **argv)
 {
   progdata *pdat;
 
-  GtkWidget *window, *button, *bar, *vbox1, *topbox, *midbox, *setbox, *datbox, *drawbox;
+  GtkWidget *window, *button, *bar; 
+  
+  // boxes
+  GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox, *drawbox, *noteb, *notebp1, *optnbox;
+  
+  //frames
+  GtkWidget *dtbfrm, *drwfrm;
 
   pdat = calloc (1, sizeof (progdata));
   strcpy (pdat->val, "value= ");
@@ -49,48 +55,53 @@ main (int argc, char **argv)
   gtk_window_set_default_size (GTK_WINDOW (window), 720, 576);
   gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_CENTER);
 
-  vbox1 = gtk_vbox_new (FALSE, 10);
+/////////////////////////////////////////////////////////////////////////////////////////////
+  vbox1 = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox1);
-  gtk_widget_show (vbox1);
 
-  topbox = gtk_hbox_new (FALSE, 10);
+  topbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX(vbox1), topbox, FALSE, TRUE, 0);
-  gtk_widget_show(topbox);
 
-  midbox = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX(vbox1), midbox, FALSE, TRUE, 0);
-  gtk_widget_show(midbox);
+  midbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX(vbox1), midbox, TRUE, TRUE, 0);
 
-  setbox = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_end (GTK_BOX(vbox1), setbox, FALSE, TRUE, 10);
-  gtk_widget_show(setbox);
+  setbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_end (GTK_BOX(vbox1), setbox, FALSE, FALSE, 0);
   
-  datbox = gtk_vbox_new (FALSE, 10);
-  gtk_box_pack_end (GTK_BOX(midbox), datbox, FALSE, TRUE, 10);
-  gtk_widget_show(datbox);
+  datbox = gtk_vbox_new (FALSE, 0);
+  gtk_box_pack_end (GTK_BOX(midbox), datbox, FALSE, FALSE, 0);
 
-  drawbox = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX(midbox), drawbox, TRUE, TRUE, 0);
-  gtk_widget_show(drawbox);
+  dtbfrm = gtk_frame_new ("Opções");
+  gtk_box_pack_start (GTK_BOX (datbox), dtbfrm, TRUE, TRUE,0);
 
-  
+  drawbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX(midbox), drawbox, TRUE, TRUE, 0); 
 
+  drwfrm = gtk_frame_new ("main");
+  gtk_container_add (GTK_CONTAINER (drawbox), drwfrm);
+
+  notebp1 = gtk_vbox_new(FALSE, 0);
+
+  optnbox = gtk_vbox_new(FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(dtbfrm),optnbox);
+
+/////////////////////////////////////////////////////////////////////////////////////////////
   pdat->adj = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
-
   
   bar = gtk_hscale_new (GTK_ADJUSTMENT (pdat->adj));
-  gtk_box_pack_start (GTK_BOX (setbox), bar, TRUE, TRUE, 0);
-  gtk_widget_show (bar);
+  gtk_box_pack_start (GTK_BOX (optnbox), bar, FALSE, TRUE, 0);
 
   pdat->lbl = gtk_label_new (pdat->val);
   gtk_box_pack_start (GTK_BOX (topbox), pdat->lbl, TRUE, TRUE, 0);
-  gtk_widget_show (pdat->lbl);
 
-  button = gtk_button_new_with_label("reset");
-  gtk_box_pack_start(GTK_BOX(drawbox), button, TRUE, TRUE, 0);
-  gtk_widget_show(button);
- 
+  noteb = gtk_notebook_new();
+  gtk_notebook_append_page (GTK_NOTEBOOK(noteb),notebp1,NULL);
+  gtk_box_pack_start(GTK_BOX(setbox),noteb, TRUE, TRUE, 0);
 
+  button = gtk_button_new_with_label("\treset\t");
+  gtk_box_pack_start(GTK_BOX(optnbox), button, FALSE, FALSE ,20);
+
+/////////////////////////////////////////////////////////////////////////////////////////////
   g_signal_connect_swapped (G_OBJECT (window), "destroy",
 			    G_CALLBACK (gtk_main_quit), NULL);
   
@@ -101,7 +112,7 @@ main (int argc, char **argv)
 		    G_CALLBACK (upd_txt), pdat);
  
 
-  gtk_widget_show (window);
+  gtk_widget_show_all(window);
   gtk_main ();
   return 0;
 }
