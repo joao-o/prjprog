@@ -3,5 +3,6 @@
 
 extern gboolean upd_txt (GtkWidget, gpointer);
 extern gboolean set_val (GtkWidget, gpointer);
+extern gboolean lchange (GtkWidget, gpointer);
 
 #endif

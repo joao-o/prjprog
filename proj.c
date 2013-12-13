@@ -26,6 +26,9 @@ main (int argc, char **argv)
   pdat = calloc (1, sizeof (progdata));
   strcpy (pdat->val, "value= ");
 
+  pdat->lockind=0;
+  sprintf(pdat->locklabel," Unlocked ");
+
   gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -78,12 +81,24 @@ main (int argc, char **argv)
   button = gtk_button_new_with_label("\treset\t");
   gtk_box_pack_start(GTK_BOX(optnbox), button, FALSE, FALSE ,20);
 
+  gdk_color_parse ("red", &pdat->color1);
+  gdk_color_parse ("cyan", &pdat->color2);
+  pdat->lock = gtk_button_new_with_label(pdat->locklabel);
+  gtk_box_pack_start(GTK_BOX(optnbox), pdat->lock, FALSE, FALSE ,2);
+  gtk_widget_modify_bg (pdat->lock, GTK_STATE_NORMAL, &pdat->color2);
+  gtk_widget_modify_bg (pdat->lock, GTK_STATE_PRELIGHT, &pdat->color1);
+  gtk_widget_modify_bg (pdat->lock, GTK_STATE_ACTIVE, &pdat->color1);
+  
+
 /////////////////////////////////////////////////////////////////////////////////////////////
   g_signal_connect_swapped (G_OBJECT (window), "destroy",
 			    G_CALLBACK (gtk_main_quit), NULL);
   
   g_signal_connect (G_OBJECT (button), "clicked",
 		    G_CALLBACK (set_val), pdat);
+
+  g_signal_connect (G_OBJECT (pdat->lock), "clicked",
+		    G_CALLBACK (lchange), pdat);
 
   g_signal_connect (G_OBJECT (pdat->adj), "value-changed",
 		    G_CALLBACK (upd_txt), pdat);
