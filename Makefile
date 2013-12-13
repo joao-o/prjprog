@@ -2,7 +2,7 @@ W_FLAGS    = -Wall -std=c99 #-pedantic
 CFLAGS_GTK = `pkg-config --cflags glib-2.0` `pkg-config --cflags gtk+-2.0`
 DB_FLAGS   = -ggdb -g
 
-INC_FLAGS  =
+INC_FLAGS  = -I./include
 GTK_LINK   = `pkg-config --libs glib-2.0` `pkg-config --libs gtk+-2.0`
 LINK_LIBS  = $(GTK_LINK) -lm
 LINK_FLAGS =
@@ -15,8 +15,8 @@ RM = /bin/rm
 
 TARGET = proj
 INCLUDE =
-PROGS  = proj.c
-OBJECT = proj.o
+PROGS  = proj.c callbacks.c
+OBJECT = proj.o callbacks.o
 
 all: comp link
 
@@ -29,10 +29,13 @@ link: $(TARGET)
 comp: $(OBJECT)
 
 proj.o: proj.c
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
-proj: $(OBJECT)
+callbacks.o: callbacks.c
+	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
+
+$(TARGET): $(OBJECT)
 	$(CC) $(LFLAGS) -o $@ $^ $(LINK_LIBS)
 
 clean: 
-	$(RM) -f *~ *.o $(PROGS)  
+	$(RM) -f *~ *.o $(TARGET) 
