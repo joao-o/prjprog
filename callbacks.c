@@ -42,15 +42,14 @@ lchange (GtkWidget * widget, gpointer dat)
   progdata *pdat;
   pdat = (progdata *) dat;
   btnbarra = &pdat->btnbarra;
-  if (btnbarra->state == 0)
+  if (!btnbarra->state)
     {
       sprintf (btnbarra->label, "  Locked  ");
       gtk_button_set_label (GTK_BUTTON (btnbarra->name), btnbarra->label);
       btnbarra->state = 1;
       pdat->adjsave = (GTK_ADJUSTMENT (pdat->adj))->value;
-      printf("%f\n",pdat->adjsave);
     }
-  else if (btnbarra->state == 1)
+  else 
     {
       sprintf (btnbarra->label, " Unlocked ");
       gtk_button_set_label (GTK_BUTTON (btnbarra->name), btnbarra->label);
