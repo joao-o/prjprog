@@ -26,8 +26,8 @@ main (int argc, char **argv)
   pdat = calloc (1, sizeof (progdata));
   strcpy (pdat->val, "value= ");
 
-  pdat->lockind=0;
-  sprintf(pdat->locklabel," Unlocked ");
+  pdat->btnbarra.state=0;
+  sprintf(pdat->btnbarra.label," Unlocked ");
 
   gtk_init (&argc, &argv);
 
@@ -35,7 +35,7 @@ main (int argc, char **argv)
   gtk_window_set_default_size (GTK_WINDOW (window), 720, 576);
   gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_CENTER);
 
-/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
   vbox1 = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox1);
 
@@ -65,7 +65,7 @@ main (int argc, char **argv)
   optnbox = gtk_vbox_new(FALSE, 0);
   gtk_container_add(GTK_CONTAINER(dtbfrm),optnbox);
 
-/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
   pdat->adj = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
   
   bar = gtk_hscale_new (GTK_ADJUSTMENT (pdat->adj));
@@ -81,23 +81,26 @@ main (int argc, char **argv)
   button = gtk_button_new_with_label("\treset\t");
   gtk_box_pack_start(GTK_BOX(optnbox), button, FALSE, FALSE ,20);
 
-  gdk_color_parse ("red", &pdat->color1);
-  gdk_color_parse ("cyan", &pdat->color2);
-  pdat->lock = gtk_button_new_with_label(pdat->locklabel);
-  gtk_box_pack_start(GTK_BOX(optnbox), pdat->lock, FALSE, FALSE ,2);
-  gtk_widget_modify_bg (pdat->lock, GTK_STATE_NORMAL, &pdat->color2);
-  gtk_widget_modify_bg (pdat->lock, GTK_STATE_PRELIGHT, &pdat->color1);
-  gtk_widget_modify_bg (pdat->lock, GTK_STATE_ACTIVE, &pdat->color1);
+  //butão toggle com cores
+
+  gdk_color_parse ("red", &pdat->btnbarra.coloron);
+  gdk_color_parse ("green", &pdat->btnbarra.coloroff);
+  gdk_color_parse ("cyan", &pdat->btnbarra.colorhigh);
+  pdat->btnbarra.name = gtk_toggle_button_new_with_label(pdat->btnbarra.label);
+  gtk_box_pack_start(GTK_BOX(optnbox), pdat->btnbarra.name, FALSE, FALSE ,2);
+  gtk_widget_modify_bg (pdat->btnbarra.name, GTK_STATE_NORMAL, &pdat->btnbarra.coloroff);
+  gtk_widget_modify_bg (pdat->btnbarra.name, GTK_STATE_PRELIGHT, &pdat->btnbarra.colorhigh);
+  gtk_widget_modify_bg (pdat->btnbarra.name, GTK_STATE_ACTIVE, &pdat->btnbarra.coloron);
   
 
-/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
   g_signal_connect_swapped (G_OBJECT (window), "destroy",
 			    G_CALLBACK (gtk_main_quit), NULL);
   
   g_signal_connect (G_OBJECT (button), "clicked",
 		    G_CALLBACK (set_val), pdat);
 
-  g_signal_connect (G_OBJECT (pdat->lock), "clicked",
+  g_signal_connect (G_OBJECT (pdat->btnbarra.name), "toggled",
 		    G_CALLBACK (lchange), pdat);
 
   g_signal_connect (G_OBJECT (pdat->adj), "value-changed",

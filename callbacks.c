@@ -10,8 +10,13 @@ upd_txt (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
-  sprintf (pdat->val + 7, "%.3f", (GTK_ADJUSTMENT (pdat->adj))->value);
-  gtk_label_set_text (GTK_LABEL (pdat->lbl), pdat->val);
+  if (!pdat->btnbarra.state) 
+    {
+      sprintf (pdat->val + 7, "%.3f", (GTK_ADJUSTMENT (pdat->adj))->value);
+      gtk_label_set_text (GTK_LABEL (pdat->lbl), pdat->val);
+    } 
+  else 
+    (GTK_ADJUSTMENT (pdat->adj))->value = pdat->adjsave;
   return TRUE;
 }
 
@@ -20,34 +25,36 @@ set_val (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
-  (GTK_ADJUSTMENT (pdat->adj))->value = 0.;
-  g_signal_emit_by_name (GTK_ADJUSTMENT(pdat->adj), "changed");
-  g_signal_emit_by_name (GTK_ADJUSTMENT(pdat->adj), "value-changed");
+  if (!pdat->btnbarra.state) 
+    {
+      (GTK_ADJUSTMENT (pdat->adj))->value = 0.;
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->adj), "changed");
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->adj), "value-changed");
+    }
   return TRUE;
 }
+
 //Função associada a butão "lock"
 gboolean
 lchange (GtkWidget * widget, gpointer dat)
 {
+  tbtn *btnbarra;
   progdata *pdat;
   pdat = (progdata *) dat;
-  if (pdat->lockind == 0)
+  btnbarra = &pdat->btnbarra;
+  if (btnbarra->state == 0)
     {
-      sprintf(pdat->locklabel,"  Locked  ");
-      gtk_button_set_label (GTK_BUTTON(pdat->lock), pdat->locklabel);
-      gtk_widget_modify_bg (pdat->lock, GTK_STATE_NORMAL, &pdat->color1);
-      gtk_widget_modify_bg (pdat->lock, GTK_STATE_PRELIGHT, &pdat->color1);
-      gtk_widget_modify_bg (pdat->lock, GTK_STATE_ACTIVE, &pdat->color1);
-      pdat->lockind=1;
+      sprintf (btnbarra->label, "  Locked  ");
+      gtk_button_set_label (GTK_BUTTON (btnbarra->name), btnbarra->label);
+      btnbarra->state = 1;
+      pdat->adjsave = (GTK_ADJUSTMENT (pdat->adj))->value;
+      printf("%f\n",pdat->adjsave);
     }
-   else if (pdat->lockind == 1)
+  else if (btnbarra->state == 1)
     {
-      sprintf(pdat->locklabel," Unlocked ");
-      gtk_button_set_label (GTK_BUTTON (pdat->lock), pdat->locklabel);
-      gtk_widget_modify_bg (pdat->lock, GTK_STATE_NORMAL, &pdat->color2);
-      gtk_widget_modify_bg (pdat->lock, GTK_STATE_PRELIGHT, &pdat->color1);
-      gtk_widget_modify_bg (pdat->lock, GTK_STATE_ACTIVE, &pdat->color1);
-      pdat->lockind=0;
+      sprintf (btnbarra->label, " Unlocked ");
+      gtk_button_set_label (GTK_BUTTON (btnbarra->name), btnbarra->label);
+      btnbarra->state = 0;
     }
   return TRUE;
 }
