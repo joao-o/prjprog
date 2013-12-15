@@ -5,55 +5,74 @@
 #include <stdlib.h>
 #include <structs.h>
 
+// ficheiro com as CSR (callback service routines)
+
+// callback que muda os números nas labels quando os ajust mudam
 gboolean
-upd_txt (GtkWidget * widget, gpointer dat)
+upd_txt (GtkWidget *widget, gpointer dat)
 {
   progdata *pdat;
-  pdat = (progdata *) dat;
-  if (!pdat->btnbarra.state) 
+  barradat *barra;
+  pdat = (progdata*) dat;
+
+  if (GTK_OBJECT(widget) == pdat->barl.adj)
+      barra=&pdat->barl;
+  else
+      barra=&pdat->barr;
+    
+    
+  if (!pdat->btnlock.state) 
     {
-      sprintf (pdat->val + 7, "%.3f", (GTK_ADJUSTMENT (pdat->adj))->value);
-      gtk_label_set_text (GTK_LABEL (pdat->lbl), pdat->val);
+      sprintf (barra->str + 7, "%.3f", (GTK_ADJUSTMENT (barra->adj))->value);
+      gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
     } 
   else 
-    (GTK_ADJUSTMENT (pdat->adj))->value = pdat->adjsave;
+      (GTK_ADJUSTMENT (barra->adj))->value = barra->save;
   return TRUE;
 }
+
+//CSR do butão reset 
 
 gboolean
 set_val (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
-  if (!pdat->btnbarra.state) 
+  if (!pdat->btnlock.state) 
     {
-      (GTK_ADJUSTMENT (pdat->adj))->value = 0.;
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->adj), "changed");
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->adj), "value-changed");
+      (GTK_ADJUSTMENT (pdat->barl.adj))->value = 0.;
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj), "changed");
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj), "value-changed");
+
+      (GTK_ADJUSTMENT (pdat->barr.adj))->value = 0.;
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj), "changed");
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj), "value-changed");
     }
   return TRUE;
 }
 
-//Função associada a butão "lock"
+// CSR do butão "lock"
+
 gboolean
 lchange (GtkWidget * widget, gpointer dat)
 {
-  tbtn *btnbarra;
+  tbtn *btnlock;
   progdata *pdat;
   pdat = (progdata *) dat;
-  btnbarra = &pdat->btnbarra;
-  if (!btnbarra->state)
+  btnlock = &pdat->btnlock;
+  if (!btnlock->state)
     {
-      sprintf (btnbarra->label, "  Locked  ");
-      gtk_button_set_label (GTK_BUTTON (btnbarra->name), btnbarra->label);
-      btnbarra->state = 1;
-      pdat->adjsave = (GTK_ADJUSTMENT (pdat->adj))->value;
+      sprintf (btnlock->label, "  Locked  ");
+      gtk_button_set_label (GTK_BUTTON (btnlock->name), btnlock->label);
+      btnlock->state = 1;
+      pdat->barl.save = (GTK_ADJUSTMENT (pdat->barl.adj))->value;
+      pdat->barr.save = (GTK_ADJUSTMENT (pdat->barr.adj))->value;
     }
   else 
     {
-      sprintf (btnbarra->label, " Unlocked ");
-      gtk_button_set_label (GTK_BUTTON (btnbarra->name), btnbarra->label);
-      btnbarra->state = 0;
+      sprintf (btnlock->label, " Unlocked ");
+      gtk_button_set_label (GTK_BUTTON (btnlock->name), btnlock->label);
+      btnlock->state = 0;
     }
   return TRUE;
 }

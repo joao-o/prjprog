@@ -20,8 +20,8 @@ OBJECT = proj.o callbacks.o
 
 all: comp link
 
-debug: CFLAGS += $(DBG_FLAGS)
-debug: LFLAGS += $(DBG_FLAGS)	
+debug: CFLAGS += $(DB_FLAGS)
+debug: LFLAGS += $(DB_FLAGS)	
 debug: all
 
 link: $(TARGET)
