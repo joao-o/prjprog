@@ -12,9 +12,9 @@ typedef struct {
 
 typedef struct
 {
-  char val[20];
-  GtkObject *adj;
-  GtkWidget *lbl;
+  char val1[20], val2[20];
+  GtkObject *adj1, *adj2;
+  GtkWidget *lbl1, *lbl2;
   tbtn btnbarra;
   double adjsave;
 } progdata;

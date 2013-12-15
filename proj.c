@@ -15,16 +15,18 @@ main (int argc, char **argv)
 {
   progdata *pdat;
 
-  GtkWidget *window, *button, *bar; 
+  GtkWidget *window, *button, *barlens1, *barlens2; 
   
   // boxes
-  GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox, *drawbox, *noteb, *notebp1, *optnbox;
+  GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox, *drawbox,
+    *noteb, *notebp1, *notebp2, *notebp3, *optnbox, *statusbox;
   
   //frames
   GtkWidget *dtbfrm, *drwfrm;
 
   pdat = calloc (1, sizeof (progdata));
-  strcpy (pdat->val, "value= ");
+  strcpy (pdat->val1, "value= 0.00");
+  strcpy (pdat->val2, "value= 0.00");
 
   pdat->btnbarra.state=0;
   sprintf(pdat->btnbarra.label," Unlocked ");
@@ -61,21 +63,35 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (drawbox), drwfrm);
 
   notebp1 = gtk_vbox_new(FALSE, 0);
+  notebp2 = gtk_vbox_new(FALSE, 0);
+  notebp3 = gtk_vbox_new(FALSE, 0);
 
   optnbox = gtk_vbox_new(FALSE, 0);
   gtk_container_add(GTK_CONTAINER(dtbfrm),optnbox);
 
-////////////////////////////////////////////////////////////////////////////////
-  pdat->adj = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
-  
-  bar = gtk_hscale_new (GTK_ADJUSTMENT (pdat->adj));
-  gtk_box_pack_start (GTK_BOX (optnbox), bar, FALSE, TRUE, 0);
+  statusbox = gtk_vbox_new(FALSE, 0);
+  gtk_box_pack_end (GTK_BOX(optnbox), statusbox, FALSE, FALSE, 100);
 
-  pdat->lbl = gtk_label_new (pdat->val);
-  gtk_box_pack_start (GTK_BOX (topbox), pdat->lbl, TRUE, TRUE, 0);
+////////////////////////////////////////////////////////////////////////////////
+  pdat->adj1 = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
+  pdat->adj2 = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
+  
+  barlens1 = gtk_hscale_new (GTK_ADJUSTMENT (pdat->adj1));
+  gtk_box_pack_start (GTK_BOX (notebp1), barlens1, FALSE, TRUE, 0);
+
+  barlens2 = gtk_hscale_new (GTK_ADJUSTMENT (pdat->adj2));
+  gtk_box_pack_start (GTK_BOX (notebp1), barlens2, FALSE, TRUE, 0);
+
+  pdat->lbl1 = gtk_label_new (pdat->val1);
+  gtk_box_pack_start (GTK_BOX (statusbox), pdat->lbl1, TRUE, TRUE, 0);
+
+  pdat->lbl2 = gtk_label_new (pdat->val2);
+  gtk_box_pack_start (GTK_BOX (statusbox), pdat->lbl2, TRUE, TRUE, 0);
 
   noteb = gtk_notebook_new();
   gtk_notebook_append_page (GTK_NOTEBOOK(noteb),notebp1,NULL);
+  gtk_notebook_append_page (GTK_NOTEBOOK(noteb),notebp2,NULL);
+  gtk_notebook_append_page (GTK_NOTEBOOK(noteb),notebp3,NULL);
   gtk_box_pack_start(GTK_BOX(setbox),noteb, TRUE, TRUE, 0);
 
   button = gtk_button_new_with_label("\treset\t");
@@ -87,10 +103,15 @@ main (int argc, char **argv)
   gdk_color_parse ("green", &pdat->btnbarra.coloroff);
   gdk_color_parse ("cyan", &pdat->btnbarra.colorhigh);
   pdat->btnbarra.name = gtk_toggle_button_new_with_label(pdat->btnbarra.label);
-  gtk_box_pack_start(GTK_BOX(optnbox), pdat->btnbarra.name, FALSE, FALSE ,2);
-  gtk_widget_modify_bg (pdat->btnbarra.name, GTK_STATE_NORMAL, &pdat->btnbarra.coloroff);
-  gtk_widget_modify_bg (pdat->btnbarra.name, GTK_STATE_PRELIGHT, &pdat->btnbarra.colorhigh);
-  gtk_widget_modify_bg (pdat->btnbarra.name, GTK_STATE_ACTIVE, &pdat->btnbarra.coloron);
+
+  gtk_box_pack_start(GTK_BOX(optnbox), 
+		     pdat->btnbarra.name, FALSE, FALSE ,2);
+  gtk_widget_modify_bg (pdat->btnbarra.name, 
+			GTK_STATE_NORMAL, &pdat->btnbarra.coloroff);
+  gtk_widget_modify_bg (pdat->btnbarra.name, 
+			GTK_STATE_PRELIGHT, &pdat->btnbarra.colorhigh);
+  gtk_widget_modify_bg (pdat->btnbarra.name, 
+			GTK_STATE_ACTIVE, &pdat->btnbarra.coloron);
   
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -103,7 +124,10 @@ main (int argc, char **argv)
   g_signal_connect (G_OBJECT (pdat->btnbarra.name), "toggled",
 		    G_CALLBACK (lchange), pdat);
 
-  g_signal_connect (G_OBJECT (pdat->adj), "value-changed",
+  g_signal_connect (G_OBJECT (pdat->adj1), "value-changed",
+		    G_CALLBACK (upd_txt), pdat);
+
+  g_signal_connect (G_OBJECT (pdat->adj2), "value-changed",
 		    G_CALLBACK (upd_txt), pdat);
  
 
