@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
+
 #include <cairo.h>
+#include <prjcairo.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,9 +9,10 @@
 
 // ficheiro com as CSR (callback service routines)
 
-// callback que muda os números nas labels quando os ajust mudam
+// callback que muda coisas quando os ajust mudam
+
 gboolean
-upd_txt (GtkWidget *widget, gpointer dat)
+upd_adj (GtkWidget *widget, gpointer dat)
 {
   progdata *pdat;
   barradat *barra;
@@ -25,6 +28,7 @@ upd_txt (GtkWidget *widget, gpointer dat)
     {
       sprintf (barra->str + 7, "%.3f", (GTK_ADJUSTMENT (barra->adj))->value);
       gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
+      obj_draw();
     } 
   else 
       (GTK_ADJUSTMENT (barra->adj))->value = barra->save;
@@ -42,7 +46,7 @@ set_val (GtkWidget * widget, gpointer dat)
     {
       (GTK_ADJUSTMENT (pdat->barl.adj))->value = 0.;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj), "changed");
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj), "value-changed");
+g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj), "value-changed");
 
       (GTK_ADJUSTMENT (pdat->barr.adj))->value = 0.;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj), "changed");

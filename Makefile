@@ -15,8 +15,8 @@ RM = /bin/rm
 
 TARGET = proj
 INCLUDE =
-PROGS  = proj.c callbacks.c
-OBJECT = proj.o callbacks.o
+PROGS  = proj.c callbacks.c prjcairo.c
+OBJECT = proj.o callbacks.o prjcairo.o
 
 all: comp link
 
@@ -32,6 +32,9 @@ proj.o: proj.c
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
 callbacks.o: callbacks.c
+	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
+
+prjcairo.o: prjcairo.c
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
 $(TARGET): $(OBJECT)

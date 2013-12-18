@@ -1,7 +1,6 @@
 #include <gtk/gtk.h>
 #include <cairo.h>
 
-
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
@@ -9,6 +8,7 @@
 
 #include <callbacks.h>
 #include <structs.h>
+#include <prjcairo.h>
 
 int
 main (int argc, char **argv)
@@ -131,11 +131,15 @@ main (int argc, char **argv)
 		    G_CALLBACK (lchange), pdat);
 
   g_signal_connect (G_OBJECT (pdat->barl.adj), "value-changed",
-		    G_CALLBACK (upd_txt), pdat);
+		    G_CALLBACK (upd_adj), pdat);
 
   g_signal_connect (G_OBJECT (pdat->barr.adj), "value-changed",
-		    G_CALLBACK (upd_txt), pdat);
- 
+		    G_CALLBACK (upd_adj), pdat);
+
+////////////////////////////////////////////////////////////////////////////////  
+  // timeouts
+   
+  //g_timeout_add (16 ,(GSourceFunc) timeupd ,(gpointer)window );
 
   gtk_widget_show_all(window);
   gtk_main ();

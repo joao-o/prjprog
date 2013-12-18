@@ -12,6 +12,11 @@ typedef struct
   GtkWidget *name;
 } tbtn;
 
+typedef struct 
+{
+  
+} rbg;
+
 //struct com dados de uma barra de ajuste com label associada
 
 typedef struct
