@@ -17,6 +17,7 @@ TARGET = proj
 INCLUDE =
 PROGS  = proj.c callbacks.c prjcairo.c
 OBJECT = proj.o callbacks.o prjcairo.o
+TESTE = cairotest.c
 
 all: comp link
 
@@ -36,6 +37,9 @@ callbacks.o: callbacks.c
 
 prjcairo.o: prjcairo.c
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
+
+teste: $(TESTE)
+	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $^ $(LINK_LIBS)
 
 $(TARGET): $(OBJECT)
 	$(CC) $(LFLAGS) -o $@ $^ $(LINK_LIBS)
