@@ -32,6 +32,7 @@ typedef struct
 {
   barradat barl, barr;
   tbtn btnlock;
+  GtkWidget *window, *drawbox;
 } progdata;
 
 //tentar manter as coisas modulares e nao acrescentar coisas do tipo adj1,adj1 .
