@@ -22,13 +22,12 @@ upd_adj (GtkWidget *widget, gpointer dat)
       barra=&pdat->barl;
   else
       barra=&pdat->barr;
-    
-    
+   
   if (!pdat->btnlock.state) 
     {
       sprintf (barra->str + 7, "%.3f", (GTK_ADJUSTMENT (barra->adj))->value);
       gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
-      obj_draw();
+      obj_draw(pdat->window);
     } 
   else 
       (GTK_ADJUSTMENT (barra->adj))->value = barra->save;

@@ -3,10 +3,10 @@
 #include <structs.h>
 
 
-void obj_draw()
+void obj_draw(GtkWidget *window)
 {
-  cairo_surface_t *surface;
-  cairo_t *cr;
+  gtk_widget_queue_draw(window);
+  return;
 }
 
 gboolean
@@ -60,23 +60,13 @@ on_expose_event (GtkWidget       *widget ,
   return FALSE;
 }
 
-gboolean 
-change_scale (GtkWidget  *widget,
-              gpointer    data )
-{
-  progdata  *pdat ;
-
-  pdat = (progdata *) data;
-  gtk_widget_queue_draw (pdat->window);
-
-  return TRUE;
-}
-
 gboolean
 on_configure_event (GtkWidget       *widget ,
                     GdkEventExpose  *event  ,
                     gpointer         data   )
 {
-  change_scale (widget, data);
+  progdata *pdat;
+  pdat = (progdata*) data;
+  obj_draw(pdat->window);
   return FALSE;
 }
