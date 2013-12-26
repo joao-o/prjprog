@@ -38,6 +38,9 @@ callbacks.o: callbacks.c
 prjcairo.o: prjcairo.c
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
+phys.o: phys.c
+	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
+
 $(TARGET): $(OBJECT)
 	$(CC) $(LFLAGS) -o $@ $^ $(LINK_LIBS)
 
