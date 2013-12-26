@@ -120,6 +120,13 @@ main (int argc, char **argv)
   gtk_notebook_append_page (GTK_NOTEBOOK(noteb),notebp3,NULL);
   gtk_box_pack_start(GTK_BOX(setbox),noteb, TRUE, TRUE, 0);
 
+///////////////////////////////////////////////////////////////////////
+  // temporário até ser ajustável
+  pdat->lensdata.ylen=60;
+  pdat->lensdata.xwid=4;
+  pdat->lensdata.headwid1=7;
+  pdat->lensdata.headwid2=7;
+
 ////////////////////////////////////////////////////////////////////////////////
   //sinais e callbacks
 

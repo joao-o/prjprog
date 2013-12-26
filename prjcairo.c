@@ -10,9 +10,15 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   progdata *pdat;
   cairo_t *cr;
   int width, height;
-  double pos1, pos2;
+  double pos1, pos2, pos3;
+  double ylen, xwid, hwid1, hwid2;
   
   pdat = (progdata*) dat;
+
+  ylen = pdat->lensdata.ylen;
+  xwid = pdat->lensdata.xwid;
+  hwid1 = pdat->lensdata.headwid1;
+  hwid2 = pdat->lensdata.headwid2;
 
   gtk_window_get_size (GTK_WINDOW (pdat->window), &width, &height);
 
@@ -26,28 +32,66 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   gtk_adjustment_set_upper (GTK_ADJUSTMENT (pdat->barl.adj),
 			    pdat->drawbox->allocation.width);
 
+  pos3 = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barr.adj));
+
+  if (pos3 > pdat->drawbox->allocation.width)
+    {
+      pos3 = pdat->drawbox->allocation.width;
+      gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->barr.adj), pos3);
+    }
+  gtk_adjustment_set_upper (GTK_ADJUSTMENT (pdat->barr.adj),
+			    pdat->drawbox->allocation.width);
+
   cr = gdk_cairo_create (pdat->window->window);
 
   cairo_set_source_rgb (cr, 1., 1., 1.);
   cairo_set_line_width (cr, 2);
-  cairo_move_to (cr, 0, 3. * pdat->drawbox->allocation.height / 4.);
+  cairo_move_to (cr, 0, 3. * pdat->drawbox->allocation.height / 5.);
   cairo_line_to (cr, pdat->drawbox->allocation.width,
-		 3. * pdat->drawbox->allocation.height / 4.);
+		 3. * pdat->drawbox->allocation.height / 5.);
   cairo_stroke (cr);
 
   cairo_set_source_rgb (cr, 1, 0.55, 0);
 
-  cairo_set_line_width (cr, 5);
-  pos2 = 3. * pdat->drawbox->allocation.height / 4.;
-  cairo_move_to (cr, pos1, pos2);
-  cairo_line_to (cr, pos1, pos2 - 40);
+  cairo_set_line_width (cr, xwid);
+  pos2 = 3. * pdat->drawbox->allocation.height / 5.;
+  cairo_move_to (cr, pos1, pos2 - 3);
+  cairo_line_to (cr, pos1, pos2 - ylen);
   cairo_stroke (cr);
 
-  cairo_move_to (cr, pos1 - 7, pos2 - 40);
-  cairo_line_to (cr, pos1 + 7, pos2 - 40);
-  cairo_line_to (cr, pos1, pos2 - 55);
-  cairo_line_to (cr, pos1 - 7, pos2 - 40);
-  cairo_line_to (cr, pos1 + 7, pos2 - 40);
+  cairo_move_to (cr, pos1 - hwid1, pos2 - ylen);
+  cairo_line_to (cr, pos1 + hwid1, pos2 - ylen);
+  cairo_line_to (cr, pos1, pos2 - ylen -15);
+  cairo_line_to (cr, pos1 - hwid1, pos2 - ylen);
+  cairo_line_to (cr, pos1 + hwid1, pos2 - ylen);
+
+  cairo_move_to (cr, pos1 - hwid1, pos2 - 15);
+  cairo_line_to (cr, pos1 + hwid1, pos2 - 15);
+  cairo_line_to (cr, pos1, pos2);
+  cairo_line_to (cr, pos1 - hwid1, pos2 -15);
+  cairo_line_to (cr, pos1 + hwid1, pos2 -15);
+
+  cairo_fill (cr);
+  cairo_stroke (cr);
+
+  cairo_set_source_rgb (cr, 0.21, 0.21, 1);
+
+  cairo_set_line_width (cr, xwid);
+  cairo_move_to (cr, pos3, pos2);
+  cairo_line_to (cr, pos3, pos2 - ylen -13);
+  cairo_stroke (cr);
+
+  cairo_move_to (cr, pos3 - hwid2, pos2 - ylen - 15);
+  cairo_line_to (cr, pos3 + hwid2, pos2 - ylen - 15);
+  cairo_line_to (cr, pos3, pos2 - ylen);
+  cairo_line_to (cr, pos3 - hwid2, pos2 - ylen -15);
+  cairo_line_to (cr, pos3 + hwid2, pos2 - ylen -15);
+
+  cairo_move_to (cr, pos3 - hwid2, pos2);
+  cairo_line_to (cr, pos3 + hwid2, pos2);
+  cairo_line_to (cr, pos3, pos2 - 15);
+  cairo_line_to (cr, pos3 - hwid2, pos2);
+  cairo_line_to (cr, pos3 + hwid2, pos2);
   cairo_fill (cr);
   cairo_stroke (cr);
 
