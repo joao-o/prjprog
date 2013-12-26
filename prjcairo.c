@@ -52,5 +52,5 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_stroke (cr);
 
   cairo_destroy (cr);
-  return;
+  return FALSE;
 }
