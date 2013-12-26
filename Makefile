@@ -8,7 +8,7 @@ LINK_LIBS  = $(GTK_LINK) -lm
 LINK_FLAGS =
 
 CFLAGS     = $(W_FLAGS) $(INC_FLAGS)  $(CFLAGS_GTK) 
-LFLAGS     = $(W_FLAGS) $(LINK_FLAGS) # $(LINK_LIBS) 
+LFLAGS     = $(W_FLAGS) $(LINK_FLAGS) $(LINK_LIBS) 
 
 CC = gcc
 RM = /bin/rm
@@ -37,9 +37,6 @@ callbacks.o: callbacks.c
 
 prjcairo.o: prjcairo.c
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
-
-teste: $(TESTE)
-	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $^ $(LINK_LIBS)
 
 $(TARGET): $(OBJECT)
 	$(CC) $(LFLAGS) -o $@ $^ $(LINK_LIBS)

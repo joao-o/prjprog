@@ -1,36 +1,47 @@
 #include <gtk/gtk.h>
-
 #include <cairo.h>
+
+#include <structs.h>
 #include <prjcairo.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <structs.h>
 
 // ficheiro com as CSR (callback service routines)
+
+// CSR de "configure events" (as dimensões da janela mudaram)
+
+gboolean
+cfg_event (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
+{
+  progdata *pdat;
+  pdat = (progdata *) dat;
+  gtk_widget_queue_draw(pdat->window);
+  return FALSE;
+}
 
 // callback que muda coisas quando os ajust mudam
 
 gboolean
-upd_adj (GtkWidget *widget, gpointer dat)
+upd_adj (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
   barradat *barra;
-  pdat = (progdata*) dat;
+  pdat = (progdata *) dat;
 
-  if (GTK_OBJECT(widget) == pdat->barl.adj)
-      barra=&pdat->barl;
+  if (GTK_OBJECT (widget) == pdat->barl.adj)
+    barra = &pdat->barl;
   else
-      barra=&pdat->barr;
-   
-  if (!pdat->btnlock.state) 
+    barra = &pdat->barr;
+
+  if (!pdat->btnlock.state)
     {
       sprintf (barra->str + 7, "%.3f", (GTK_ADJUSTMENT (barra->adj))->value);
       gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
-      obj_draw(pdat->window);
-    } 
-  else 
-      (GTK_ADJUSTMENT (barra->adj))->value = barra->save;
+      gtk_widget_queue_draw(pdat->window);
+    }
+  else
+    (GTK_ADJUSTMENT (barra->adj))->value = barra->save;
   return TRUE;
 }
 
@@ -41,15 +52,17 @@ set_val (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
-  if (!pdat->btnlock.state) 
+  if (!pdat->btnlock.state)
     {
       (GTK_ADJUSTMENT (pdat->barl.adj))->value = 0.;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj), "changed");
-g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj), "value-changed");
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
+			     "value-changed");
 
       (GTK_ADJUSTMENT (pdat->barr.adj))->value = 0.;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj), "changed");
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj), "value-changed");
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
+			     "value-changed");
     }
   return TRUE;
 }
@@ -71,7 +84,7 @@ lchange (GtkWidget * widget, gpointer dat)
       pdat->barl.save = (GTK_ADJUSTMENT (pdat->barl.adj))->value;
       pdat->barr.save = (GTK_ADJUSTMENT (pdat->barr.adj))->value;
     }
-  else 
+  else
     {
       sprintf (btnlock->label, " Unlocked ");
       gtk_button_set_label (GTK_BUTTON (btnlock->name), btnlock->label);

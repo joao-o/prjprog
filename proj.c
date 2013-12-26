@@ -142,11 +142,11 @@ main (int argc, char **argv)
 		    G_CALLBACK (upd_adj), pdat);
 
   g_signal_connect (pdat->window, "expose-event", 
-		    G_CALLBACK (on_expose_event), pdat);
+		    G_CALLBACK (expose_ev), pdat);
 
   // neste caso o configure-event é accionado por mudança no tamanho da janela
   g_signal_connect (pdat->window, "configure-event", 
-		    G_CALLBACK (on_configure_event), pdat);
+		    G_CALLBACK (cfg_event), pdat);
 
   gtk_widget_set_app_paintable (pdat->window, TRUE);
 
