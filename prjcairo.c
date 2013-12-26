@@ -3,6 +3,7 @@
 #include <structs.h>
 #include <stdio.h>
 #include <phys.h>
+#include <math.h>
 
 // é na realidade uma CSR para espose events está aqui porque desenha principalmente
 
@@ -12,7 +13,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   progdata *pdat;
   cairo_t *cr;
   int width, height;
-  double pos1, pos2, pos3, pos4, pos5, fc, fd;
+  double pos1, pos2, pos3, pos4, pos5, fc, fd, hmid, hfin;
   double ylen, xwid, hwid1, hwid2;
   
   pdat = (progdata*) dat;
@@ -104,16 +105,16 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   fc = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj));
 
 
-  // Os sianais precisam de ser revistos
+  // Os sinais precisam de ser revistos
   if(pos3 < pos1)
     {
       pos4 = - fd + pos3;
-      pos5 = pos1 + fconj(fc,- (pos1 - pos4));
+      pos5 = pos1 + fconj(-fc,- fabs(pos1 - pos4));
     }
   else
     {
       pos4 = fc + pos1;
-      pos5 = pos3 + fconj(-fd,- (pos3 - pos4));
+      pos5 = pos3 - fconj(fd, (pos3 - pos4));
     }
 
   if (pos4 > pdat->drawbox->allocation.width)
@@ -135,6 +136,42 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_move_to (cr, pos5, pos2);
   cairo_line_to (cr, pos5, pos2 - ylen -13);
   cairo_stroke (cr);
+
+  // prototipo raios
+  cairo_set_source_rgb (cr, 0.90, 0.90, 0.00);
+  if (pos1 < pos3)
+    {
+      cairo_set_line_width (cr, xwid/3);
+      cairo_move_to (cr, 0, pos2 - ylen - 15);
+      cairo_line_to (cr, pos1, pos2 - ylen - 15);
+      cairo_stroke (cr);
+
+      cairo_set_line_width (cr, xwid/3);
+      cairo_move_to (cr, 0, pos2);
+      cairo_line_to (cr, pos1, pos2);
+      cairo_stroke (cr);
+
+      cairo_set_line_width (cr, xwid/3);
+      cairo_move_to (cr, pos1, pos2 - ylen - 15);
+      cairo_line_to (cr, pos4, pos2 - (ylen +15)/2 );
+      cairo_stroke (cr);
+
+      cairo_set_line_width (cr, xwid/3);
+      cairo_move_to (cr, pos1, pos2);
+      cairo_line_to (cr, pos4, pos2 - (ylen +15)/2 );
+      cairo_stroke (cr);
+
+      cairo_set_line_width (cr, xwid/3);
+      cairo_move_to (cr, pos4, pos2 - (ylen +15)/2 );
+      cairo_line_to (cr, pos3, pos2 - ( ( (ylen +15)/2 ) * ( (pos3-pos1)/(pos4-pos1) ) ) );
+      cairo_stroke (cr);
+      
+      cairo_set_line_width (cr, xwid/3);
+      cairo_move_to (cr, pos4, pos2 - (ylen +15)/2 );
+      cairo_line_to (cr, pos3, pos2 + ( ( (ylen +15)/2 ) * ( (pos3-pos4)/(pos4-pos1) -1 ) ) );
+      cairo_stroke (cr);
+
+    }
 
   cairo_destroy (cr);
   return FALSE;
