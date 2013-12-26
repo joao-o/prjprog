@@ -9,13 +9,14 @@
 #include <callbacks.h>
 #include <structs.h>
 #include <prjcairo.h>
+#include <phys.h>
 
 int
 main (int argc, char **argv)
 {
   progdata *pdat;
 
-  GtkWidget *button, *barlensl, *barlensr; 
+  GtkWidget *button, *barlensl, *barlensr, *barfocc, *barfocd; 
   
   // boxes
   GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox,
@@ -27,8 +28,11 @@ main (int argc, char **argv)
 
   //setup inicial e criação da janela principal
   pdat = calloc (1, sizeof (progdata));
+
   strcpy (pdat->barl.str, "value= 0.000");
   strcpy (pdat->barr.str, "value= 0.000");
+  strcpy (pdat->barfc.str, "focal length=\n 0.000");
+  strcpy (pdat->barfd.str, "focal length=\n 0.000");
 
   pdat->btnlock.state=0;
   sprintf(pdat->btnlock.label," Unlocked ");
@@ -91,6 +95,23 @@ main (int argc, char **argv)
 
   pdat->barr.lbl = gtk_label_new (pdat->barr.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barr.lbl, TRUE, TRUE, 0);
+
+  pdat->barfc.adj = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
+  pdat->barfd.adj = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
+  
+  barfocc = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barfc.adj));
+  gtk_box_pack_start (GTK_BOX (notebp2), barfocc, FALSE, TRUE, 0);
+
+  barfocd = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barfd.adj));
+  gtk_box_pack_start (GTK_BOX (notebp2), barfocd, FALSE, TRUE, 0);
+
+  pdat->barfc.lbl = gtk_label_new (pdat->barfc.str);
+  gtk_box_pack_start (GTK_BOX (statusbox), pdat->barfc.lbl, TRUE, TRUE, 0);
+
+  pdat->barfd.lbl = gtk_label_new (pdat->barfd.str);
+  gtk_box_pack_start (GTK_BOX (statusbox), pdat->barfd.lbl, TRUE, TRUE, 0);
+
+
 ////////////////////////////////////////////////////////////////////////////////
   //botões
   button = gtk_button_new_with_label("\treset\t");
@@ -122,10 +143,10 @@ main (int argc, char **argv)
 
 ///////////////////////////////////////////////////////////////////////
   // temporário até ser ajustável
-  pdat->lensdata.ylen=60;
-  pdat->lensdata.xwid=4;
-  pdat->lensdata.headwid1=7;
-  pdat->lensdata.headwid2=7;
+  pdat->lensdata.ylen = 60;
+  pdat->lensdata.xwid = 4;
+  pdat->lensdata.headwid1 = 7;
+  pdat->lensdata.headwid2 = 7;
 
 ////////////////////////////////////////////////////////////////////////////////
   //sinais e callbacks
@@ -147,6 +168,12 @@ main (int argc, char **argv)
 
   g_signal_connect (G_OBJECT (pdat->barr.adj), "value-changed",
 		    G_CALLBACK (upd_adj), pdat);
+
+  g_signal_connect (G_OBJECT (pdat->barfc.adj), "value-changed",
+		    G_CALLBACK (upd_adj_free), pdat);
+
+  g_signal_connect (G_OBJECT (pdat->barfd.adj), "value-changed",
+		    G_CALLBACK (upd_adj_free), pdat);
 
   g_signal_connect (pdat->window, "expose-event", 
 		    G_CALLBACK (expose_ev), pdat);

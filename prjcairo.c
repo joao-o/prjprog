@@ -2,15 +2,17 @@
 #include <gtk/gtk.h>
 #include <structs.h>
 #include <stdio.h>
+#include <phys.h>
 
 // é na realidade uma CSR para espose events está aqui porque desenha principalmente
+
 gboolean
 expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 {
   progdata *pdat;
   cairo_t *cr;
   int width, height;
-  double pos1, pos2, pos3;
+  double pos1, pos2, pos3, pos4, pos5, fc, fd;
   double ylen, xwid, hwid1, hwid2;
   
   pdat = (progdata*) dat;
@@ -93,6 +95,45 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_line_to (cr, pos3 - hwid2, pos2);
   cairo_line_to (cr, pos3 + hwid2, pos2);
   cairo_fill (cr);
+  cairo_stroke (cr);
+
+
+  // Desenho das imagens (alpha) 
+
+  fd = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfd.adj));
+  fc = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj));
+
+
+  // Os sianais precisam de ser revistos
+  if(pos3 < pos1)
+    {
+      pos4 = - fd + pos3;
+      pos5 = pos1 + fconj(fc,- (pos1 - pos4));
+    }
+  else
+    {
+      pos4 = fc + pos1;
+      pos5 = pos3 + fconj(-fd,- (pos3 - pos4));
+    }
+
+  if (pos4 > pdat->drawbox->allocation.width)
+    pos4 = pdat->drawbox->allocation.width;
+
+  if (pos5 > pdat->drawbox->allocation.width)
+    pos5 = pdat->drawbox->allocation.width;
+
+  cairo_set_source_rgb (cr, 0.44, 1.00, 0.22);
+
+  cairo_set_line_width (cr, xwid/2);
+  cairo_move_to (cr, pos4, pos2);
+  cairo_line_to (cr, pos4, pos2 - ylen -13);
+  cairo_stroke (cr);
+
+  cairo_set_source_rgb (cr, 0.55, 0.00, 0.55);
+
+  cairo_set_line_width (cr, xwid/2);
+  cairo_move_to (cr, pos5, pos2);
+  cairo_line_to (cr, pos5, pos2 - ylen -13);
   cairo_stroke (cr);
 
   cairo_destroy (cr);

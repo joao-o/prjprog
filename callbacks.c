@@ -6,6 +6,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 
 // ficheiro com as CSR (callback service routines)
 
@@ -20,7 +22,7 @@ cfg_event (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   return FALSE;
 }
 
-// callback que muda coisas quando os ajust mudam
+// callback que muda coisas quando os ajust mudam (lockable)
 
 gboolean
 upd_adj (GtkWidget * widget, gpointer dat)
@@ -45,6 +47,28 @@ upd_adj (GtkWidget * widget, gpointer dat)
   return TRUE;
 }
 
+// callback que muda coisas quando os ajust mudam (independente do lock)
+
+gboolean
+upd_adj_free (GtkWidget * widget, gpointer dat)
+{
+  progdata *pdat;
+  barradat *barra;
+  pdat = (progdata *) dat;
+  double l;
+  
+  if (GTK_OBJECT (widget) == pdat->barfc.adj)
+    barra = &pdat->barfc;
+  else
+    barra = &pdat->barfd;
+
+  sprintf (barra->str + 15, "%.3f", (GTK_ADJUSTMENT (barra->adj))->value);
+  gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
+  gtk_widget_queue_draw(pdat->window);
+
+  return TRUE;
+}
+
 //CSR do butão reset 
 
 gboolean
@@ -54,12 +78,12 @@ set_val (GtkWidget * widget, gpointer dat)
   pdat = (progdata *) dat;
   if (!pdat->btnlock.state)
     {
-      (GTK_ADJUSTMENT (pdat->barl.adj))->value = 0.;
+      (GTK_ADJUSTMENT (pdat->barl.adj))->value = 25.;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj), "changed");
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
 			     "value-changed");
 
-      (GTK_ADJUSTMENT (pdat->barr.adj))->value = 0.;
+      (GTK_ADJUSTMENT (pdat->barr.adj))->value = 50.;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj), "changed");
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
 			     "value-changed");

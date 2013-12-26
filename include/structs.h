@@ -23,7 +23,7 @@ typedef struct
 {
   GtkObject *adj;
   GtkWidget *nome, *lbl;
-  char str[20];
+  char str[40];
   double save;
 } barradat;
 
@@ -36,13 +36,23 @@ typedef struct
   double headwid1, headwid2; //espessura dos triangulos
 } drawdata;
 
+//struct com valores físicos do programa
+typedef struct
+{
+  double focalc; //distancia focal da lente convergente
+  double focald; //distancia focal da lente divergente (em modulo)
+  double imgmidy, imgmidx; //altura/posicao da imagem intermédia
+  double imgfiny, imgfinx; //altura/posicao da imagem final
+} physdata;
+
 // struct principal com os dados do programa
 typedef struct
 {
-  barradat barl, barr;
+  barradat barl, barr, barfc, barfd;
   tbtn btnlock;
   GtkWidget *window, *drawbox;
   drawdata lensdata;
+  physdata lensvalue;
 } progdata;
 
 //tentar manter as coisas modulares e nao acrescentar coisas do tipo adj1,adj1 .
