@@ -5,8 +5,6 @@
 #include <phys.h>
 #include <math.h>
 
-void draw_varrow(double x, double y, double hgt,double focus ,cairo_t *cr)
-
 void draw_varrow(double x, double y, double hgt, double focus ,cairo_t *cr)
 {
   double i;
