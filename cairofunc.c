@@ -18,9 +18,9 @@ void draw_varrow(double x, double y, double hgt, double focus ,cairo_t *cr)
     {
       cairo_move_to(cr,x,y-hgt);
       cairo_line_to(cr,
-                    x+i*(0.05*focus+5),
-                    y-hgt+(-0.05*focus+17)*(fabs(hgt)/hgt));
-                    //12 = 0,1 * o focus máximo + 2
+                    x+i*(-0.05*focus+10),
+                    y-hgt+(0.05*focus+10)*(fabs(hgt)/hgt));
+                    // numeros mágicos acima controlam o ajuste de curvatura
       cairo_stroke(cr);
     }
 }
