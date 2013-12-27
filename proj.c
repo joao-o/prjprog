@@ -148,7 +148,7 @@ main (int argc, char **argv)
   pdat->lensdata.xwid = 4;
   pdat->lensdata.headwid1 = 7;
   pdat->lensdata.headwid2 = 7;
-
+  pdat->v = 1;
 ////////////////////////////////////////////////////////////////////////////////
   //sinais e callbacks
 

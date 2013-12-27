@@ -13,9 +13,9 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_t *cr;
   int width, height, i;
   double pos1, pos2, pos3, pos4, pos5, fc, fd, hmid, hfin;
-  double uy[5], ly[5], mx[5];
+  double uy[7], ly[7], mx[7];
   double ylen, xwid, hwid1, hwid2;
-  
+
   pdat = (progdata*) dat;
 
   ylen = pdat->lensdata.ylen;
@@ -151,8 +151,8 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
  
       //infinito
       mx[0]=0;
-      ly[0]= pos2 - 17;
-      uy[0]= pos2 - ylen + 2;
+      ly[0]= pos2 - 2;
+      uy[0]= pos2 - ylen -15 + 2;
 
       //lente convergente
       ly[1]= ly[0];
@@ -160,7 +160,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       mx[1]= pos1;
 
       //imagem 1
-      ly[2]= pos2 - (ylen+15)/2;
+      ly[2]= hmid = pos2 - (ylen+15)/2; //temp
       uy[2]= ly[2];
       mx[2]= pos4;
 
@@ -170,12 +170,23 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       ly[3]= lin(mx[1], uy[1], mx[2], ly[2], mx[3]);
 
       //infinito, alinhado com imagem 2
+      /*
       mx[4]= pdat->drawbox->allocation.width;
       uy[4]= lin(mx[3], uy[3], pos5, ly[2], mx[4]);
       ly[4]= lin(mx[3], ly[3], pos5, ly[2], mx[4]);
+      */
 
-      //corrige excessos
-      for(i=0;i<4;i++)
+      mx[4]= alin(mx[3], ly[3], pos5, ly[2], pdat->drawbox->allocation.height);
+      uy[4]= pdat->drawbox->requisition.height;
+      ly[4]= pdat->drawbox->allocation.height;
+
+      //imagem2
+      mx[5]= pos5;
+      uy[5]= hfin= ly[2]; //temp
+      ly[5]= uy[5];
+
+      //corrige excessos (buggado)
+      /*for(i=0;i<5;i++)
 	{
 	  if (ly[i] > pdat->drawbox->allocation.height)
 	    ly[i] = pdat->drawbox->allocation.height;
@@ -185,21 +196,42 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 	    ly[i] = 0;
 	  if (uy[i] <0)
 	    uy[i] = 0;
-	}
+	    }*/
 
       cairo_set_line_width (cr, xwid/3);
 
       //desenha
       for(i=0;i<4;i++)
 	{
-	  cairo_move_to (cr, mx[i], ly[i]);
-	  cairo_line_to (cr, mx[i+1], ly[i+1]);
+	  if(mx[i]<mx[i+1])
+	    cairo_set_source_rgb (cr, 0.90, 0.90, 0.00);
+	  else
+	    cairo_set_source_rgb (cr, 0.7, 1, 1);
+	  
+	  if(mx[i]<mx[i+1] || pdat->v == 1)
+	    {
+	      cairo_move_to (cr, mx[i], ly[i]);
+	      cairo_line_to (cr, mx[i+1], ly[i+1]);
+	      cairo_stroke (cr);
+
+	      cairo_move_to (cr, mx[i], uy[i]);
+	      cairo_line_to (cr, mx[i+1], uy[i+1]);
+	      cairo_stroke (cr);
+	    }
+	}
+      
+      if(pdat->v == 1 && pos5 < pos3)
+	{
+	  cairo_set_source_rgb (cr, 0.7, 1, 1);
+	  cairo_move_to (cr, mx[3], ly[3]);
+	  cairo_line_to (cr, mx[5], ly[5]);
 	  cairo_stroke (cr);
 
-	  cairo_move_to (cr, mx[i], uy[i]);
-	  cairo_line_to (cr, mx[i+1], uy[i+1]);
+	  cairo_move_to (cr, mx[3], uy[3]);
+	  cairo_line_to (cr, mx[5], uy[5]);
 	  cairo_stroke (cr);
-	}
+	  }
+
     }
 
   cairo_destroy (cr);

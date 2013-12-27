@@ -53,6 +53,7 @@ typedef struct
   GtkWidget *window, *drawbox;
   drawdata lensdata;
   physdata lensvalue;
+  int v; //raios virtuais 1 = On 0 = Off
 } progdata;
 
 //tentar manter as coisas modulares e nao acrescentar coisas do tipo adj1,adj1 .
