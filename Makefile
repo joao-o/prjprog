@@ -15,8 +15,8 @@ RM = /bin/rm
 
 TARGET = proj
 INCLUDE =
-PROGS  = proj.c callbacks.c prjcairo.c phys.c
-OBJECT = proj.o callbacks.o prjcairo.o phys.o
+PROGS  = proj.c callbacks.c prjcairo.c phys.c cairofunc.c
+OBJECT = proj.o callbacks.o prjcairo.o phys.o cairofunc.o
 TESTE = cairotest.c
 
 all: comp link
@@ -39,6 +39,9 @@ prjcairo.o: prjcairo.c
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
 phys.o: phys.c
+	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
+
+cairofunc.o: cairofunc.c
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
 $(TARGET): $(OBJECT)

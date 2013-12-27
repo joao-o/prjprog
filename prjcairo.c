@@ -6,7 +6,6 @@
 #include <math.h>
 
 // é na realidade uma CSR para espose events está aqui porque desenha principalmente
-
 gboolean
 expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 {
@@ -22,6 +21,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   xwid = pdat->lensdata.xwid;
   hwid1 = pdat->lensdata.headwid1;
   hwid2 = pdat->lensdata.headwid2;
+///////////////////////////////////////////////////////////////////////////////
 
   gtk_window_get_size (GTK_WINDOW (pdat->window), &width, &height);
 
@@ -44,6 +44,8 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
     }
   gtk_adjustment_set_upper (GTK_ADJUSTMENT (pdat->barr.adj),
 			    pdat->drawbox->allocation.width);
+
+////////////////////////////////////////////////////////////////////////////////
 
   cr = gdk_cairo_create (pdat->window->window);
 
@@ -138,6 +140,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_stroke (cr);
 
   // prototipo raios
+  
   cairo_set_source_rgb (cr, 0.90, 0.90, 0.00);
   if (pos1 < pos3)
     {
@@ -176,3 +179,5 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_destroy (cr);
   return FALSE;
 }
+
+
