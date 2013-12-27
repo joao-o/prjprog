@@ -55,7 +55,6 @@ upd_adj_free (GtkWidget * widget, gpointer dat)
   progdata *pdat;
   barradat *barra;
   pdat = (progdata *) dat;
-  double l;
   
   if (GTK_OBJECT (widget) == pdat->barfc.adj)
     barra = &pdat->barfc;
@@ -63,7 +62,6 @@ upd_adj_free (GtkWidget * widget, gpointer dat)
     barra = &pdat->barfd;
 
   sprintf (barra->str + 15, "%.3f", (GTK_ADJUSTMENT (barra->adj))->value);
-  pdat->lensvalue.focalc
   gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
   gtk_widget_queue_draw(pdat->window);
 

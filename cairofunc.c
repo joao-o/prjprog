@@ -7,7 +7,7 @@
 
 #define A_THK 10.
 
-void draw_varrow(double x, double y, double hgt,double focus ,cairo_t *cr)
+void draw_varrow(double x, double y, double hgt, double focus ,cairo_t *cr)
 {
   double i;
   cairo_set_source_rgb (cr, 1., 0.55, 0.);
