@@ -177,7 +177,7 @@ main (int argc, char **argv)
 		    G_CALLBACK (upd_adj_free), pdat);
 
   g_signal_connect (pdat->window, "expose-event", 
-		    G_CALLBACK (expose_evv), pdat);
+		    G_CALLBACK (expose_ev), pdat);
 
   // neste caso o configure-event é accionado por mudança no tamanho da janela
   g_signal_connect (pdat->window, "configure-event", 

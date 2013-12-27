@@ -55,7 +55,6 @@ upd_adj_free (GtkWidget * widget, gpointer dat)
   progdata *pdat;
   barradat *barra;
   pdat = (progdata *) dat;
-  double l;
   
   if (GTK_OBJECT (widget) == pdat->barfc.adj)
     barra = &pdat->barfc;
