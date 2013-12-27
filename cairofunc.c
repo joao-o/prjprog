@@ -5,8 +5,6 @@
 #include <phys.h>
 #include <math.h>
 
-#define A_THK 10.
-
 void draw_varrow(double x, double y, double hgt,double focus ,cairo_t *cr)
 {
   double i;
@@ -16,12 +14,13 @@ void draw_varrow(double x, double y, double hgt,double focus ,cairo_t *cr)
   cairo_move_to (cr, x, y);
   cairo_line_to (cr, x, y-hgt);
   cairo_stroke (cr);
-  for(i = -A_THK; i <= A_THK; i+=A_THK*2) 
+  for(i = -1; i <= 1; i+=2) 
     {
       cairo_move_to(cr,x,y-hgt);
-      //encontrar um modelo de jeito para isto.
-      //tentar aproximar seno / exponencial (série/modelo linear??).
-      cairo_line_to(cr,x+i,y-hgt+A_THK/focus);
+      cairo_line_to(cr,
+                    x+i*(0.05*focus+5),
+                    y-hgt+(-0.05*focus+17)*(fabs(hgt)/hgt));
+                    //12 = 0,1 * o focus máximo + 2
       cairo_stroke(cr);
     }
 }
@@ -61,8 +60,9 @@ expose_evv (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
     draw_varrow(( GTK_ADJUSTMENT (pdat->barl.adj))->value,
               pdat->drawbox->allocation.height/2,
               -pdat->lensdata.ylen,
-              -(GTK_ADJUSTMENT (pdat->barfc.adj))->value,
+              (GTK_ADJUSTMENT (pdat->barfc.adj))->value,
               cr);
+
 
     cairo_destroy(cr);
     return FALSE;
