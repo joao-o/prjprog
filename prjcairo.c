@@ -5,6 +5,8 @@
 #include <phys.h>
 #include <math.h>
 
+#define PI 3.1415926535897932
+
 // é na realidade uma CSR para espose events está aqui porque desenha principalmente
 gboolean
 expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
@@ -14,7 +16,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   int width, height, i;
   double pos1, pos2, pos3, pos4, pos5, fc, fd, hmid, hfin;
   double uy[7], ly[7], mx[7];
-  double ylen, xwid, hwid1, hwid2;
+  double ylen, xwid, hwid1, hwid2, ang;
 
   pdat = (progdata*) dat;
 
@@ -61,21 +63,21 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
   cairo_set_line_width (cr, xwid);
   pos2 = 3. * pdat->drawbox->allocation.height / 5.;
-  cairo_move_to (cr, pos1, pos2 - 3);
-  cairo_line_to (cr, pos1, pos2 - ylen);
+  cairo_move_to (cr, pos1, pos2 + (ylen)/2 - 3);
+  cairo_line_to (cr, pos1, pos2 - (ylen)/2 + 3);
   cairo_stroke (cr);
 
-  cairo_move_to (cr, pos1 - hwid1, pos2 - ylen);
-  cairo_line_to (cr, pos1 + hwid1, pos2 - ylen);
-  cairo_line_to (cr, pos1, pos2 - ylen -15);
-  cairo_line_to (cr, pos1 - hwid1, pos2 - ylen);
-  cairo_line_to (cr, pos1 + hwid1, pos2 - ylen);
+  cairo_move_to (cr, pos1 - hwid1, pos2 - (ylen)/2 + 15);
+  cairo_line_to (cr, pos1 + hwid1, pos2 - (ylen)/2 + 15);
+  cairo_line_to (cr, pos1, pos2 - (ylen)/2);
+  cairo_line_to (cr, pos1 - hwid1, pos2 - (ylen)/2 + 15);
+  cairo_line_to (cr, pos1 + hwid1, pos2 - (ylen)/2 + 15);
 
-  cairo_move_to (cr, pos1 - hwid1, pos2 - 15);
-  cairo_line_to (cr, pos1 + hwid1, pos2 - 15);
-  cairo_line_to (cr, pos1, pos2);
-  cairo_line_to (cr, pos1 - hwid1, pos2 -15);
-  cairo_line_to (cr, pos1 + hwid1, pos2 -15);
+  cairo_move_to (cr, pos1 - hwid1, pos2 + (ylen)/2 - 15);
+  cairo_line_to (cr, pos1 + hwid1, pos2 + (ylen)/2 - 15);
+  cairo_line_to (cr, pos1, pos2 + (ylen)/2);
+  cairo_line_to (cr, pos1 - hwid1, pos2 + (ylen)/2 - 15);
+  cairo_line_to (cr, pos1 + hwid1, pos2 + (ylen)/2 - 15);
 
   cairo_fill (cr);
   cairo_stroke (cr);
@@ -83,21 +85,23 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_set_source_rgb (cr, 0.21, 0.21, 1);
 
   cairo_set_line_width (cr, xwid);
-  cairo_move_to (cr, pos3, pos2);
-  cairo_line_to (cr, pos3, pos2 - ylen -13);
+
+  cairo_move_to (cr, pos3, pos2 + (ylen)/2);
+  cairo_line_to (cr, pos3, pos2 - (ylen)/2);
   cairo_stroke (cr);
 
-  cairo_move_to (cr, pos3 - hwid2, pos2 - ylen - 15);
-  cairo_line_to (cr, pos3 + hwid2, pos2 - ylen - 15);
-  cairo_line_to (cr, pos3, pos2 - ylen);
-  cairo_line_to (cr, pos3 - hwid2, pos2 - ylen -15);
-  cairo_line_to (cr, pos3 + hwid2, pos2 - ylen -15);
+  cairo_move_to (cr, pos3 - hwid1, pos2 - (ylen)/2 );
+  cairo_line_to (cr, pos3 + hwid1, pos2 - (ylen)/2 );
+  cairo_line_to (cr, pos3, pos2 - (ylen)/2 +15 );
+  cairo_line_to (cr, pos3 - hwid1, pos2 - (ylen)/2 );
+  cairo_line_to (cr, pos3 + hwid1, pos2 - (ylen)/2 );
 
-  cairo_move_to (cr, pos3 - hwid2, pos2);
-  cairo_line_to (cr, pos3 + hwid2, pos2);
-  cairo_line_to (cr, pos3, pos2 - 15);
-  cairo_line_to (cr, pos3 - hwid2, pos2);
-  cairo_line_to (cr, pos3 + hwid2, pos2);
+  cairo_move_to (cr, pos3 - hwid1, pos2 + (ylen)/2 );
+  cairo_line_to (cr, pos3 + hwid1, pos2 + (ylen)/2 );
+  cairo_line_to (cr, pos3, pos2 + (ylen)/2 - 15);
+  cairo_line_to (cr, pos3 - hwid1, pos2 + (ylen)/2 );
+  cairo_line_to (cr, pos3 + hwid1, pos2 + (ylen)/2 );
+
   cairo_fill (cr);
   cairo_stroke (cr);
 
@@ -106,6 +110,8 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
   fd = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfd.adj));
   fc = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj));
+  ang = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barang.adj));
+  ang = ang*(PI/180); //M_PI não estava a ser reconhecido por alguma razao misteriosa
 
 
   // Os sinais precisam de ser revistos
@@ -126,20 +132,6 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   if (pos5 > pdat->drawbox->allocation.width)
     pos5 = pdat->drawbox->allocation.width;
 
-  cairo_set_source_rgb (cr, 0.44, 1.00, 0.22);
-
-  cairo_set_line_width (cr, xwid/2);
-  cairo_move_to (cr, pos4, pos2);
-  cairo_line_to (cr, pos4, pos2 - ylen -13);
-  cairo_stroke (cr);
-
-  cairo_set_source_rgb (cr, 0.55, 0.00, 0.55);
-
-  cairo_set_line_width (cr, xwid/2);
-  cairo_move_to (cr, pos5, pos2);
-  cairo_line_to (cr, pos5, pos2 - ylen -13);
-  cairo_stroke (cr);
-
   // prototipo raios
   
   cairo_set_source_rgb (cr, 0.90, 0.90, 0.00);
@@ -151,39 +143,55 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
  
       //infinito
       mx[0]=0;
-      ly[0]= pos2 - 2;
-      uy[0]= pos2 - ylen -15 + 2;
+      ly[0]= - pos1*tan(ang) + pos2 - (ylen)/2;
+      uy[0]= ly[0] - (ylen+15)/2;
 
       //lente convergente
-      ly[1]= ly[0];
-      uy[1]= uy[0];
+      ly[1]= pos2;
+      uy[1]= pos2 - (ylen)/2;
       mx[1]= pos1;
 
       //imagem 1
-      ly[2]= hmid = pos2 - (ylen+15)/2; //temp
-      uy[2]= ly[2];
       mx[2]= pos4;
+      ly[2]= lin(mx[0],ly[0],mx[1],ly[1],mx[2]);
+      uy[2]= ly[2];
 
       //lente divergente
       mx[3]= pos3;
-      uy[3]= lin(mx[1], ly[1], mx[2], ly[2], mx[3]);
-      ly[3]= lin(mx[1], uy[1], mx[2], ly[2], mx[3]);
-
-      //infinito, alinhado com imagem 2
-      /*
-      mx[4]= pdat->drawbox->allocation.width;
-      uy[4]= lin(mx[3], uy[3], pos5, ly[2], mx[4]);
-      ly[4]= lin(mx[3], ly[3], pos5, ly[2], mx[4]);
-      */
-
-      mx[4]= alin(mx[3], ly[3], pos5, ly[2], pdat->drawbox->allocation.height);
-      uy[4]= pdat->drawbox->requisition.height;
-      ly[4]= pdat->drawbox->allocation.height;
+      uy[3]= pos2;
+      ly[3]= ly[2];
 
       //imagem2
       mx[5]= pos5;
-      uy[5]= hfin= ly[2]; //temp
+      uy[5]= lin(mx[2],ly[2],mx[3],uy[3],mx[5]);
       ly[5]= uy[5];
+    
+      cairo_set_source_rgb (cr, 0.44, 1.00, 0.22);
+
+      cairo_set_line_width (cr, xwid/2);
+      cairo_move_to (cr, pos4, pos2);
+      cairo_line_to (cr, pos4, ly[2]);
+      cairo_stroke (cr);
+
+      cairo_set_source_rgb (cr, 0.55, 0.00, 0.55);
+
+      cairo_set_line_width (cr, xwid/2);
+      cairo_move_to (cr, pos5, pos2);
+      cairo_line_to (cr, pos5, ly[5]);
+      cairo_stroke (cr);
+
+
+      //infinito, alinhado com imagem 2
+      /*  mx[4]= alin(mx[3], ly[3], pos5, ly[5], pdat->drawbox->allocation.height);
+      uy[4]= pdat->drawbox->requisition.height;
+      ly[4]= pdat->drawbox->allocation.height;*/
+
+      //if(mx[4]>pdat->drawbox->allocation.width)
+      //	{
+	  mx[4]= pdat->drawbox->allocation.width;
+	  uy[4]= lin(mx[3], uy[3], pos5, ly[5], mx[4]);
+	  ly[4]= lin(mx[3], ly[3], pos5, ly[5], mx[4]);
+	  //	  }
 
       //corrige excessos (buggado)
       /*for(i=0;i<5;i++)

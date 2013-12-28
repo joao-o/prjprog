@@ -55,13 +55,26 @@ upd_adj_free (GtkWidget * widget, gpointer dat)
   progdata *pdat;
   barradat *barra;
   pdat = (progdata *) dat;
+  int l;
   
   if (GTK_OBJECT (widget) == pdat->barfc.adj)
-    barra = &pdat->barfc;
-  else
-    barra = &pdat->barfd;
+    {
+      barra = &pdat->barfc;
+      l = 15;
+    }
+  else if (GTK_OBJECT (widget) == pdat->barfd.adj)
+    {
+      barra = &pdat->barfd;
+      l = 15;
+    }
+  else if (GTK_OBJECT (widget) == pdat->barang.adj)
+    {
+      barra = &pdat->barang;
+      l = 8;
+    }
 
-  sprintf (barra->str + 15, "%.3f", (GTK_ADJUSTMENT (barra->adj))->value);
+  sprintf (barra->str + l, "%.3f", (GTK_ADJUSTMENT (barra->adj))->value);
+  //sprintf (barra->str + 15, "%.3f", (GTK_ADJUSTMENT (barra->adj))->value);
   gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
   gtk_widget_queue_draw(pdat->window);
 

@@ -17,7 +17,8 @@ main (int argc, char **argv)
 {
   progdata *pdat;
 
-  GtkWidget *button, *barlensl, *barlensr, *barfocc, *barfocd; 
+  GtkWidget *button, *barlensl, *barlensr, 
+            *barfocc, *barfocd, *barangl; 
   
   // boxes
   GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox,
@@ -34,6 +35,7 @@ main (int argc, char **argv)
   strcpy (pdat->barr.str, "value= 0.000");
   strcpy (pdat->barfc.str, "focal length=\n 0.000");
   strcpy (pdat->barfd.str, "focal length=\n 0.000");
+  strcpy (pdat->barang.str, "angulo= 0.000");
 
   pdat->btnlock.state=0;
   sprintf(pdat->btnlock.label," Unlocked ");
@@ -112,6 +114,13 @@ main (int argc, char **argv)
   pdat->barfd.lbl = gtk_label_new (pdat->barfd.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barfd.lbl, TRUE, TRUE, 0);
 
+  pdat->barang.adj = gtk_adjustment_new (50.0, -90.0, 90.0, 0.1, 1.0, 1.0);
+
+  barangl = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barang.adj));
+  gtk_box_pack_start (GTK_BOX (notebp3), barangl, FALSE, TRUE, 0);
+  
+  pdat->barang.lbl = gtk_label_new (pdat->barang.str);
+  gtk_box_pack_start (GTK_BOX (statusbox), pdat->barang.lbl, TRUE, TRUE, 0);
 
 ////////////////////////////////////////////////////////////////////////////////
   //botões
@@ -144,7 +153,7 @@ main (int argc, char **argv)
 
 ///////////////////////////////////////////////////////////////////////
   // temporário até ser ajustável
-  pdat->lensdata.ylen = 60;
+  pdat->lensdata.ylen = 100;
   pdat->lensdata.xwid = 4;
   pdat->lensdata.headwid1 = 7;
   pdat->lensdata.headwid2 = 7;
@@ -176,8 +185,11 @@ main (int argc, char **argv)
   g_signal_connect (G_OBJECT (pdat->barfd.adj), "value-changed",
 		    G_CALLBACK (upd_adj_free), pdat);
 
+  g_signal_connect (G_OBJECT (pdat->barang.adj), "value-changed",
+  		    G_CALLBACK (upd_adj_free), pdat);
+
   g_signal_connect (pdat->window, "expose-event", 
-		    G_CALLBACK (expose_evv), pdat);
+		    G_CALLBACK (expose_ev), pdat);
 
   // neste caso o configure-event é accionado por mudança no tamanho da janela
   g_signal_connect (pdat->window, "configure-event", 
