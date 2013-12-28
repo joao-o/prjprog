@@ -208,7 +208,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 	  else
 	    cairo_set_source_rgb (cr, 0.7, 1, 1);
 	  
-	  if(mx[i]<mx[i+1] || pdat->v == 1)
+	  if(mx[i]<mx[i+1] || pdat->virt == 1)
 	    {
 	      cairo_move_to (cr, mx[i], ly[i]);
 	      cairo_line_to (cr, mx[i+1], ly[i+1]);
@@ -220,7 +220,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 	    }
 	}
       
-      if(pdat->v == 1 && pos5 < pos3)
+      if(pdat->virt == 1 && pos5 < pos3)
 	{
 	  cairo_set_source_rgb (cr, 0.7, 1, 1);
 	  cairo_move_to (cr, mx[3], ly[3]);

@@ -82,8 +82,8 @@ main (int argc, char **argv)
 
 ////////////////////////////////////////////////////////////////////////////////
   // adjusts e barras
-  pdat->barl.adj = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
-  pdat->barr.adj = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
+  pdat->barl.adj = gtk_adjustment_new (200.0, 20.0, 101.0, 0.1, 1.0, 1.0);
+  pdat->barr.adj = gtk_adjustment_new (250.0, 20.0, 101.0, 0.1, 1.0, 1.0);
   
   barlensl = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barl.adj));
   gtk_box_pack_start (GTK_BOX (notebp1), barlensl, FALSE, TRUE, 0);
@@ -97,8 +97,8 @@ main (int argc, char **argv)
   pdat->barr.lbl = gtk_label_new (pdat->barr.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barr.lbl, TRUE, TRUE, 0);
 
-  pdat->barfc.adj = gtk_adjustment_new (30.0, 1.0, 101.0, 0.1, 1.0, 1.0);
-  pdat->barfd.adj = gtk_adjustment_new (30.0, 1.0, 101.0, 0.1, 1.0, 1.0);
+  pdat->barfc.adj = gtk_adjustment_new (100.0, 1.0, 101.0, 0.1, 1.0, 1.0);
+  pdat->barfd.adj = gtk_adjustment_new (50.0, 1.0, 101.0, 0.1, 1.0, 1.0);
   
   barfocc = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barfc.adj));
   gtk_box_pack_start (GTK_BOX (notebp2), barfocc, FALSE, TRUE, 0);
@@ -148,7 +148,7 @@ main (int argc, char **argv)
   pdat->lensdata.xwid = 4;
   pdat->lensdata.headwid1 = 7;
   pdat->lensdata.headwid2 = 7;
-  pdat->v = 1;
+  pdat->virt = 1;
 ////////////////////////////////////////////////////////////////////////////////
   //sinais e callbacks
 
@@ -177,7 +177,7 @@ main (int argc, char **argv)
 		    G_CALLBACK (upd_adj_free), pdat);
 
   g_signal_connect (pdat->window, "expose-event", 
-		    G_CALLBACK (expose_ev), pdat);
+		    G_CALLBACK (expose_evv), pdat);
 
   // neste caso o configure-event é accionado por mudança no tamanho da janela
   g_signal_connect (pdat->window, "configure-event", 
