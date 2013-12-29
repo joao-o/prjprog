@@ -112,11 +112,10 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   ang = ang*(M_PI/180); 
 
 
-  // Os sinais precisam de ser revistos em pos3 < pos1
   if(pos3 < pos1)
     {
       pos4 = - fd + pos3;
-      pos5 = pos1 + fconj(fc,- fabs(pos1 - pos4));
+      pos5 = pos1 + fconj(fc, - (pos1 - pos4));
       flens = pos3; //primeira lente
       slens = pos1; //segunda lente
     }
