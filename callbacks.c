@@ -122,7 +122,7 @@ luneta (GtkWidget * widget, gpointer dat)
   else
     {
      (GTK_ADJUSTMENT (pdat->barr.adj))->value = *pdat->lnsc.pos + 
-       (*pdat->lnsc.focus - fabs(*pdat->lnsd.focus) );
+       (*pdat->lnsc.focus - fabs(*pdat->lnsd.focus) - 5);
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj), 
 			     "changed");
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),

@@ -123,7 +123,7 @@ main (int argc, char **argv)
   pdat->barfd.lbl = gtk_label_new (pdat->barfd.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barfd.lbl, TRUE, TRUE, 0);
 
-  pdat->barang.adj = gtk_adjustment_new (0.0, -89.0, 90.0, 0.1, 1.0, 1.0);
+  pdat->barang.adj = gtk_adjustment_new (20, -89.0, 90.0, 0.1, 1.0, 1.0);
 
   barangl = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barang.adj));
   gtk_box_pack_start (GTK_BOX (notebp3), barangl, FALSE, TRUE, 0);
