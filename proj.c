@@ -38,12 +38,9 @@ main (int argc, char **argv)
   strcpy (pdat->barfc.str, "focal length=\n 0.000");
   strcpy (pdat->barfd.str, "focal length=\n 0.000");
   strcpy (pdat->barang.str, "angulo= 0.000");
-
   pdat->btnlock.state=0;
   sprintf(pdat->btnlock.label," Unlocked ");
   
-
-
   gtk_init (&argc, &argv);
 
   pdat->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -141,7 +138,7 @@ main (int argc, char **argv)
   button = gtk_button_new_with_label("\treset\t");
   gtk_box_pack_start(GTK_BOX(optnbox), button, FALSE, FALSE, 20);
 
-  lunbtn = gtk_button_new_with_label("\tCriar Luneta\t");
+  lunbtn = gtk_button_new_with_label("Criar Luneta");
   gtk_box_pack_end(GTK_BOX(optnbox), lunbtn, FALSE, FALSE, 20);
 
 
@@ -171,9 +168,9 @@ main (int argc, char **argv)
 
 ///////////////////////////////////////////////////////////////////////
   // temporário até ser ajustável
-  pdat->lensdata.ylen = 100;
+  pdat->lensdata.ylen = 125;
   pdat->pts.ylen = 100;
-  pdat->lensdata.xwid = 4;
+  pdat->lensdata.xwid = 3;
   pdat->lensdata.headwid1 = 7;
   pdat->lensdata.headwid2 = 7;
   pdat->virt = 1;

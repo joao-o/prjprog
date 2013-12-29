@@ -140,23 +140,22 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_set_source_rgb (cr, 0.90, 0.90, 0.00);
 
   // determina os pontos onde tem de passar os raios
-  // ly é "lower height", altura do raio mais baixo
-  // uy é "upper height", altura do raio mais alto
- 
+
   //infinito
   mx[0]=0;
   ly[0]= pos2 - flens*tan(ang);
-  uy[0]= ly[0] - (ylen)/2;
 
   //lente convergente
   ly[1]= pos2;
-  uy[1]= pos2 - (ylen)/2;
   mx[1]= flens;
 
   //imagem 1
   mx[2]= pos4;
   ly[2]= lin(mx[0],ly[0],mx[1],ly[1],mx[2]);
   uy[2]= ly[2];
+
+  uy[1]= uy[2];
+  uy[0]= ly[0] + (uy[1] - ly[1]);
 
   //lente divergente
   mx[3]= slens;
