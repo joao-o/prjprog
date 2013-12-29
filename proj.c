@@ -107,7 +107,7 @@ main (int argc, char **argv)
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barr.lbl, TRUE, TRUE, 0);
 
   pdat->barfc.adj = gtk_adjustment_new (100.0, 1.0, 101.0, 0.1, 1.0, 1.0);
-  pdat->barfd.adj = gtk_adjustment_new (-50.0, -100.0, 0.0, 0.1, 1.0, 1.0);
+  pdat->barfd.adj = gtk_adjustment_new (-50.0, -101.0, -1.0, 0.1, 1.0, 1.0);
   
   barfocc = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barfc.adj));
   gtk_box_pack_start (GTK_BOX (notebp2), barfocc, FALSE, TRUE, 0);
