@@ -105,7 +105,7 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 
   cairo_set_source_rgb (cr, 1., 1., 0.);
 
-  for (i=0;i<2;i++){
+  for (i=0;i<3;i++){
     draw_line(cr,pdat->pts.px[i],pdat->pts.pye[i],
              pdat->pts.px[i+1],pdat->pts.pye[i+1]);
 
