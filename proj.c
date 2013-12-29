@@ -6,8 +6,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <callbacks.h>
 #include <structs.h>
+#include <callbacks.h>
 #include <prjcairo.h>
 #include <phys.h>
 #include <cairofunc.h>
@@ -211,7 +211,7 @@ main (int argc, char **argv)
   		    G_CALLBACK (upd_adj_free), pdat);
 
   g_signal_connect (pdat->window, "expose-event", 
-		    G_CALLBACK (expose_ev), pdat);
+		    G_CALLBACK (expose_evv), pdat);
 
   // neste caso o configure-event é accionado por mudança no tamanho da janela
   g_signal_connect (pdat->window, "configure-event", 

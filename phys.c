@@ -13,10 +13,10 @@
 //Funcao dos focos conjugados
 
 double
-fconj (double p, double q)
+fconj (double a, double b)
 {
-  /* (1/f) = (1/p) + (1/q) retorna f */
-  return 1 / (1 / p + 1 / q);
+  /* (1/c) = (1/a) + (1/b) retorna f */
+  return 1 / (1 / a + 1 / b);
 }
 
 //Para uma recta que passa em (x1,y1) e (x2,y2) dá y3 de um x3
