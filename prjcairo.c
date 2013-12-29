@@ -124,7 +124,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
     {
       //tenho de rever esta fórmula
       pos4 = fc + pos1;
-      pos5 = pos3 + fconj(-fd, -(pos3 - pos4));
+      pos5 = pos3 + fconj(-fd, - (pos3 - pos4));
       flens = pos1;
       slens = pos3;
     }

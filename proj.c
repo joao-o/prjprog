@@ -2,12 +2,14 @@
 #include <cairo.h>
 
 #include <stdio.h>
+#include <math.h>
 #include <string.h>
 #include <stdlib.h>
 
 #include <structs.h>
 #include <callbacks.h>
 #include <prjcairo.h>
+#include <phys.h>
 #include <cairofunc.h>
 
 int
@@ -103,7 +105,7 @@ main (int argc, char **argv)
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barr.lbl, TRUE, TRUE, 0);
 
   pdat->barfc.adj = gtk_adjustment_new (100.0, 1.0, 101.0, 0.1, 1.0, 1.0);
-  pdat->barfd.adj = gtk_adjustment_new (-50.0, -100.0, 0.0, 0.1, 1.0, 1.0);
+  pdat->barfd.adj = gtk_adjustment_new (-50.0, -101.0, -1.0, 0.1, 1.0, 1.0);
 
   barfocc = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barfc.adj));
   gtk_box_pack_start (GTK_BOX (notebp2), barfocc, FALSE, TRUE, 0);
@@ -202,7 +204,7 @@ main (int argc, char **argv)
 		    G_CALLBACK (upd_adj_free), pdat);
 
   g_signal_connect (pdat->window, "expose-event",
-		    G_CALLBACK (expose_ev), pdat);
+		    G_CALLBACK (expose_evv), pdat);
 
   // neste caso o configure-event é accionado por mudança no tamanho da janela
   g_signal_connect (pdat->window, "configure-event",
