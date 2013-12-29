@@ -6,8 +6,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <callbacks.h>
 #include <structs.h>
+#include <callbacks.h>
 #include <prjcairo.h>
 #include <phys.h>
 #include <cairofunc.h>
