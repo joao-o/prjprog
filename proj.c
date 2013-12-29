@@ -39,6 +39,8 @@ main (int argc, char **argv)
 
   pdat->btnlock.state=0;
   sprintf(pdat->btnlock.label," Unlocked ");
+  
+
 
   gtk_init (&argc, &argv);
 
@@ -82,6 +84,11 @@ main (int argc, char **argv)
   statusbox = gtk_vbox_new(FALSE, 0);
   gtk_box_pack_end (GTK_BOX(optnbox), statusbox, FALSE, FALSE, 100);
 
+  pdat->pts.lup= &(pdat->drawbox->allocation.y);
+  pdat->pts.ldn= &(pdat->drawbox->allocation.height);
+  pdat->pts.llt= &(pdat->drawbox->allocation.x);
+  pdat->pts.lrt= &(pdat->drawbox->allocation.width);
+
 ////////////////////////////////////////////////////////////////////////////////
   // adjusts e barras
   pdat->barl.adj = gtk_adjustment_new (200.0, 20.0, 101.0, 0.1, 1.0, 1.0);
@@ -100,7 +107,7 @@ main (int argc, char **argv)
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barr.lbl, TRUE, TRUE, 0);
 
   pdat->barfc.adj = gtk_adjustment_new (100.0, 1.0, 101.0, 0.1, 1.0, 1.0);
-  pdat->barfd.adj = gtk_adjustment_new (50.0, 1.0, 101.0, 0.1, 1.0, 1.0);
+  pdat->barfd.adj = gtk_adjustment_new (-50.0, -100.0, 0.0, 0.1, 1.0, 1.0);
   
   barfocc = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barfc.adj));
   gtk_box_pack_start (GTK_BOX (notebp2), barfocc, FALSE, TRUE, 0);
@@ -114,13 +121,18 @@ main (int argc, char **argv)
   pdat->barfd.lbl = gtk_label_new (pdat->barfd.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barfd.lbl, TRUE, TRUE, 0);
 
-  pdat->barang.adj = gtk_adjustment_new (50.0, -90.0, 90.0, 0.1, 1.0, 1.0);
+  pdat->barang.adj = gtk_adjustment_new (0.0, -89.0, 90.0, 0.1, 1.0, 1.0);
 
   barangl = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barang.adj));
   gtk_box_pack_start (GTK_BOX (notebp3), barangl, FALSE, TRUE, 0);
   
   pdat->barang.lbl = gtk_label_new (pdat->barang.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barang.lbl, TRUE, TRUE, 0);
+
+  pdat->lnsc.pos   = &(GTK_ADJUSTMENT(pdat->barl.adj )->value);
+  pdat->lnsc.focus = &(GTK_ADJUSTMENT(pdat->barfc.adj)->value);
+  pdat->lnsd.pos   = &(GTK_ADJUSTMENT(pdat->barr.adj )->value);
+  pdat->lnsd.focus = &(GTK_ADJUSTMENT(pdat->barfd.adj)->value);
 
 ////////////////////////////////////////////////////////////////////////////////
   //botões
@@ -154,6 +166,7 @@ main (int argc, char **argv)
 ///////////////////////////////////////////////////////////////////////
   // temporário até ser ajustável
   pdat->lensdata.ylen = 100;
+  pdat->pts.ylen = 100;
   pdat->lensdata.xwid = 4;
   pdat->lensdata.headwid1 = 7;
   pdat->lensdata.headwid2 = 7;
@@ -198,9 +211,6 @@ main (int argc, char **argv)
   gtk_widget_set_app_paintable (pdat->window, TRUE);
 
 ////////////////////////////////////////////////////////////////////////////////  
-  // timeouts
-   
-  //g_timeout_add (16 ,(GSourceFunc) timeupd ,(gpointer)window );
 
   gtk_widget_show_all(pdat->window);
   gtk_main ();

@@ -1,6 +1,9 @@
 #ifndef _STRUCTSINC
 #define _STRUCTSINC
 
+#define NPTS 7
+#define TOL 20			//Distância ente eixo optico e borda da drawbox
+
 // struct com dados para butao toggle com cores que mudam 
 typedef struct
 {
@@ -22,6 +25,7 @@ typedef struct
   double save;
 } barradat;
 
+
 //struct com dados do desenho das lentes
 
 typedef struct
@@ -30,6 +34,12 @@ typedef struct
   double xwid; //espessura das lentes
   double headwid1, headwid2; //espessura dos triangulos
 } drawdata;
+
+//stuct com dados das lentes
+typedef struct
+{
+  double *pos,*focus;
+} lens;
 
 //struct com valores físicos do programa
 typedef struct
@@ -40,6 +50,17 @@ typedef struct
   double imgfiny, imgfinx; //altura/posicao da imagem final
 } physdata;
 
+//struct c/ os pontos a desenhar
+typedef struct
+{
+  double px[NPTS],pye[NPTS],pyp[NPTS];
+  //px posição em x dos raios py1 
+  //pye posiçao em y do raio que passa no eixo
+  //pyp posiçao em y do raio que sai paralelo da lente1
+  gint *lup,*ldn,*llt,*lrt;
+  double ang,ylen;
+} draw;
+
 // struct principal com os dados do programa
 typedef struct
 {
@@ -47,6 +68,8 @@ typedef struct
   tbtn btnlock;
   GtkWidget *window, *drawbox;
   drawdata lensdata;
+  draw pts;
+  lens lnsc,lnsd;
   physdata lensvalue;
   char virt; //raios virtuais 1 = On 0 = Off
 } progdata;

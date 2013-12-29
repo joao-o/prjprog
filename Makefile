@@ -1,4 +1,4 @@
-W_FLAGS    = -Wall -std=c99 #-pedantic
+W_FLAGS    = -Wall #-pedantic
 CFLAGS_GTK = `pkg-config --cflags glib-2.0` `pkg-config --cflags gtk+-2.0`
 DB_FLAGS   = -ggdb -g
 OPT_FLAGS  = -O3

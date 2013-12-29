@@ -5,8 +5,6 @@
 #include <phys.h>
 #include <math.h>
 
-#define PI 3.1415926535897932
-
 // é na realidade uma CSR para espose events está aqui porque desenha principalmente
 gboolean
 expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
@@ -108,10 +106,10 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
   // Desenho das imagens (alpha) 
 
-  fd = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfd.adj));
+  fd = -gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfd.adj));
   fc = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj));
   ang = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barang.adj));
-  ang = ang*(PI/180); //M_PI não estava a ser reconhecido por alguma razao misteriosa
+  ang = ang*(M_PI/180); 
 
 
   // Os sinais precisam de ser revistos

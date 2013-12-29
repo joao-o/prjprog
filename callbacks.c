@@ -18,6 +18,7 @@ cfg_event (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
+
   gtk_widget_queue_draw(pdat->window);
   return FALSE;
 }
@@ -74,7 +75,6 @@ upd_adj_free (GtkWidget * widget, gpointer dat)
     }
 
   sprintf (barra->str + l, "%.3f", (GTK_ADJUSTMENT (barra->adj))->value);
-  //sprintf (barra->str + 15, "%.3f", (GTK_ADJUSTMENT (barra->adj))->value);
   gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
   gtk_widget_queue_draw(pdat->window);
 
