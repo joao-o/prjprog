@@ -17,8 +17,10 @@ main (int argc, char **argv)
 {
   progdata *pdat;
 
+  //barras e butões
   GtkWidget *button, *barlensl, *barlensr, 
-            *barfocc, *barfocd, *barangl; 
+            *barfocc, *barfocd, *barangl,
+            *lunbtn;
   
   // boxes
   GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox,
@@ -137,7 +139,11 @@ main (int argc, char **argv)
 ////////////////////////////////////////////////////////////////////////////////
   //botões
   button = gtk_button_new_with_label("\treset\t");
-  gtk_box_pack_start(GTK_BOX(optnbox), button, FALSE, FALSE ,20);
+  gtk_box_pack_start(GTK_BOX(optnbox), button, FALSE, FALSE, 20);
+
+  lunbtn = gtk_button_new_with_label("\tCriar Luneta\t");
+  gtk_box_pack_end(GTK_BOX(optnbox), lunbtn, FALSE, FALSE, 20);
+
 
   //butão toggle com cores
 
@@ -182,6 +188,9 @@ main (int argc, char **argv)
   
   g_signal_connect (G_OBJECT (button), "clicked",
 		    G_CALLBACK (set_val), pdat);
+
+  g_signal_connect (G_OBJECT (lunbtn), "clicked",
+		    G_CALLBACK (luneta), pdat);
 
   g_signal_connect (G_OBJECT (pdat->btnlock.name), "toggled",
 		    G_CALLBACK (lchange), pdat);

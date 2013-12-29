@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <math.h>
 
 // ficheiro com as CSR (callback service routines)
 
@@ -100,6 +100,35 @@ set_val (GtkWidget * widget, gpointer dat)
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
 			     "value-changed");
     }
+  return TRUE;
+}
+
+gboolean 
+erroluneta (progdata * dat)
+{
+  //mensagem de erro "ocular > objectiva"
+  return TRUE;
+}
+
+gboolean
+luneta (GtkWidget * widget, gpointer dat)
+{
+  progdata *pdat;
+  pdat = (progdata *) dat;
+  if(*pdat->lnsc.focus < fabs(*pdat->lnsd.focus))
+    {
+      erroluneta(pdat);
+    }
+  else
+    {
+     (GTK_ADJUSTMENT (pdat->barr.adj))->value = *pdat->lnsc.pos + 
+       (*pdat->lnsc.focus - fabs(*pdat->lnsd.focus) );
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj), 
+			     "changed");
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
+			     "value-changed");
+    }
+
   return TRUE;
 }
 

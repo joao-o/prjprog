@@ -50,7 +50,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
   cr = gdk_cairo_create (pdat->window->window);
 
-  cairo_set_source_rgb (cr, 1., 1., 1.);
+  cairo_set_source_rgb (cr, 0.5, 0.5, 0.5);
   cairo_set_line_width (cr, 2);
   cairo_move_to (cr, 0, 3. * pdat->drawbox->allocation.height / 5.);
   cairo_line_to (cr, pdat->drawbox->allocation.width,
@@ -122,17 +122,19 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
     }
   else
     {
+      //tenho de rever esta fórmula
       pos4 = fc + pos1;
-      pos5 = pos3 + fconj(-fd, (- pos3 + pos4));
+      pos5 = pos3 + fconj(-fd, -(pos3 - pos4));
       flens = pos1;
       slens = pos3;
     }
 
-  if (pos4 > pdat->drawbox->allocation.width)
+  //buggado
+  /*if (pos4 > pdat->drawbox->allocation.width)
     pos4 = pdat->drawbox->allocation.width;
 
   if (pos5 > pdat->drawbox->allocation.width)
-    pos5 = pdat->drawbox->allocation.width;
+  pos5 = pdat->drawbox->allocation.width;*/
 
   // prototipo raios
   
@@ -144,8 +146,8 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
  
   //infinito
   mx[0]=0;
-  ly[0]= - flens*tan(ang) + pos2 - (ylen)/2;
-  uy[0]= ly[0] - (ylen+15)/2;
+  ly[0]= pos2 - flens*tan(ang);
+  uy[0]= ly[0] - (ylen)/2;
 
   //lente convergente
   ly[1]= pos2;
