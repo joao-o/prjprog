@@ -40,9 +40,9 @@ draw_varrow (double x, double y, double hgt, double focus, cairo_t * cr)
     {
       cairo_move_to (cr, x, y - hgt);
       cairo_line_to (cr,
-		     x + i * (-0.05 * focus + 10),
+		     x + i * (-0.02 * focus + 10),
 		     y - hgt + 
-                       (0.05 * focus + 10) * dsign (focus) * dsign (hgt));
+                       (0.02 * focus + 10) * dsign (focus) * dsign (hgt));
       // numeros mágicos acima controlam o ajuste de curvatura
       // é do tipo y=mx+b
       cairo_stroke (cr);
@@ -86,9 +86,9 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   cairo_set_source_rgb (cr, 1., 0.55, 0.);
 
   draw_varrow (*(pdat->lnsd.pos),
-	       midref, pdat->lensdata.ylen, *(pdat->lnsd.focus), cr);
+	       midref, pdat->lensdata.ylen, -*(pdat->lnsd.focus), cr);
   draw_varrow (*(pdat->lnsd.pos),
-	       midref, -pdat->lensdata.ylen, *(pdat->lnsd.focus), cr);
+	       midref, -pdat->lensdata.ylen, -*(pdat->lnsd.focus), cr);
 
   //verifica primeira lente
   if (*(pdat->lnsc.pos) < *(pdat->lnsd.pos))
@@ -101,17 +101,28 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
       lens1 = &(pdat->lnsd);
       lens2 = &(pdat->lnsc);
     }
+
   calcs (&(pdat->pts), lens1, lens2);
 
   cairo_set_source_rgb (cr, 1., 1., 0.);
+  cairo_set_line_width (cr, 1);
 
-  for (i=0;i<3;i++){
+  for (i=0;i<5;i++){
     draw_line(cr,pdat->pts.px[i],pdat->pts.pye[i],
              pdat->pts.px[i+1],pdat->pts.pye[i+1]);
 
     draw_line(cr,pdat->pts.px[i],pdat->pts.pyp[i],
              pdat->pts.px[i+1],pdat->pts.pyp[i+1]);
   }
+  
+  cairo_set_source_rgb (cr, 0., 0., 1.);
+
+  draw_varrow (pdat->pts.px[3],
+	       midref, midref-pdat->pts.pyp[3],50, cr);
+  draw_varrow (pdat->pts.px[5],
+	       midref, midref-pdat->pts.pyp[5],50, cr);
+
+
   cairo_destroy (cr);
   return FALSE;
 

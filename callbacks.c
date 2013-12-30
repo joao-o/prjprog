@@ -91,12 +91,10 @@ set_val (GtkWidget * widget, gpointer dat)
   if (!pdat->btnlock.state)
     {
       (GTK_ADJUSTMENT (pdat->barl.adj))->value = 25.;
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj), "changed");
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
 			     "value-changed");
 
       (GTK_ADJUSTMENT (pdat->barr.adj))->value = 50.;
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj), "changed");
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
 			     "value-changed");
     }

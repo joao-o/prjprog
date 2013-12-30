@@ -2,14 +2,12 @@
 #include <cairo.h>
 
 #include <stdio.h>
-#include <math.h>
 #include <string.h>
 #include <stdlib.h>
 
 #include <structs.h>
 #include <callbacks.h>
 #include <prjcairo.h>
-#include <phys.h>
 #include <cairofunc.h>
 
 int
@@ -36,16 +34,10 @@ main (int argc, char **argv)
   strcpy (pdat->barfc.str, "focal length=\n 0.000");
   strcpy (pdat->barfd.str, "focal length=\n 0.000");
   strcpy (pdat->barang.str, "angulo= 0.000");
-<<<<<<< HEAD
-  pdat->btnlock.state=0;
-  sprintf(pdat->btnlock.label," Unlocked ");
-  
-=======
 
   pdat->btnlock.state = 0;
   sprintf (pdat->btnlock.label, " Unlocked ");
 
->>>>>>> dbf37a11a124ee8c3da9044d3a8fe58dd52af602
   gtk_init (&argc, &argv);
 
   pdat->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -110,8 +102,8 @@ main (int argc, char **argv)
   pdat->barr.lbl = gtk_label_new (pdat->barr.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barr.lbl, TRUE, TRUE, 0);
 
-  pdat->barfc.adj = gtk_adjustment_new (100.0, 1.0, 101.0, 0.1, 1.0, 1.0);
-  pdat->barfd.adj = gtk_adjustment_new (-50.0, -101.0, -1.0, 0.1, 1.0, 1.0);
+  pdat->barfc.adj = gtk_adjustment_new (300.0, 1.0, 301.0, 0.1, 1.0, 1.0);
+  pdat->barfd.adj = gtk_adjustment_new (150.0, 0.0, 301.0, 0.1, 1.0, 1.0);
 
   barfocc = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barfc.adj));
   gtk_box_pack_start (GTK_BOX (notebp2), barfocc, FALSE, TRUE, 0);
@@ -143,14 +135,8 @@ main (int argc, char **argv)
   button = gtk_button_new_with_label ("\treset\t");
   gtk_box_pack_start (GTK_BOX (optnbox), button, FALSE, FALSE, 20);
 
-<<<<<<< HEAD
   lunbtn = gtk_button_new_with_label("Criar Luneta");
   gtk_box_pack_end(GTK_BOX(optnbox), lunbtn, FALSE, FALSE, 20);
-=======
-  lunbtn = gtk_button_new_with_label ("\tCriar Luneta\t");
-  gtk_box_pack_end (GTK_BOX (optnbox), lunbtn, FALSE, FALSE, 20);
->>>>>>> dbf37a11a124ee8c3da9044d3a8fe58dd52af602
-
 
   //butão toggle com cores
 
@@ -214,13 +200,8 @@ main (int argc, char **argv)
   g_signal_connect (G_OBJECT (pdat->barang.adj), "value-changed",
 		    G_CALLBACK (upd_adj_free), pdat);
 
-<<<<<<< HEAD
   g_signal_connect (pdat->window, "expose-event", 
 		    G_CALLBACK (expose_ev), pdat);
-=======
-  g_signal_connect (pdat->window, "expose-event",
-		    G_CALLBACK (expose_evv), pdat);
->>>>>>> dbf37a11a124ee8c3da9044d3a8fe58dd52af602
 
   // neste caso o configure-event é accionado por mudança no tamanho da janela
   g_signal_connect (pdat->window, "configure-event",

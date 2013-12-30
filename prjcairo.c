@@ -106,7 +106,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
   // Desenho das imagens (alpha) 
 
-  fd = - gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfd.adj));
+  fd = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfd.adj));
   fc = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj));
   ang = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barang.adj));
   ang = ang*(M_PI/180); 
@@ -240,9 +240,6 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       cairo_stroke (cr);
     }
 
-
   cairo_destroy (cr);
   return FALSE;
 }
-
-
