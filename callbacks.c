@@ -91,13 +91,19 @@ set_val (GtkWidget * widget, gpointer dat)
   pdat = (progdata *) dat;
   if (!pdat->btnlock.state)
     {
-      (GTK_ADJUSTMENT (pdat->barl.adj))->value = 25.;
+      *(pdat->lnsc.pos) = 100.;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
 			     "value-changed");
-
-      (GTK_ADJUSTMENT (pdat->barr.adj))->value = 50.;
+      *(pdat->lnsc.focus) = 300;   
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barfc.adj),
+			     "value-changed");
+      *(pdat->lnsd.focus) = 149.97;   
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barfd.adj),
+			     "value-changed");
+      *(pdat->lnsd.pos) = 250.;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
 			     "value-changed");
+
     }
   return TRUE;
 }
