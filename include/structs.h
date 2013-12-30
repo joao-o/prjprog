@@ -61,6 +61,16 @@ typedef struct
   double ang,ylen;
 } draw;
 
+//struct com coisas do rato
+typedef struct
+{
+  char trap; //trap = 1 rato clicado, 0 otherwise
+  double nestx;
+  double nesty; //posição x e y onde é clicado
+  double path1;
+  double path2;
+} rodent;
+
 // struct principal com os dados do programa
 typedef struct
 {
@@ -72,6 +82,7 @@ typedef struct
   lens lnsc,lnsd;
   physdata lensvalue;
   char virt; //raios virtuais 1 = On 0 = Off
+  rodent mouse;
 } progdata;
 
 //tentar manter as coisas modulares e nao acrescentar coisas do tipo adj1,adj1 .

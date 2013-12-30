@@ -169,11 +169,16 @@ main (int argc, char **argv)
   pdat->lensdata.headwid1 = 7;
   pdat->lensdata.headwid2 = 7;
   pdat->virt = 1;
+  pdat->mouse.trap = 0;
 ////////////////////////////////////////////////////////////////////////////////
   //sinais e callbacks
 
   gtk_widget_add_events (pdat->window, GDK_BUTTON_PRESS_MASK);
 
+  gtk_widget_set_events (pdat->window, 
+			 GDK_POINTER_MOTION_MASK | 
+			 GDK_BUTTON_PRESS_MASK | 
+			 GDK_BUTTON_RELEASE_MASK);
 
   g_signal_connect_swapped (G_OBJECT (pdat->window), "destroy",
 			    G_CALLBACK (gtk_main_quit), NULL);
@@ -201,7 +206,16 @@ main (int argc, char **argv)
 		    G_CALLBACK (upd_adj_free), pdat);
 
   g_signal_connect (pdat->window, "expose-event", 
-		    G_CALLBACK (expose_evv), pdat);
+		    G_CALLBACK (expose_ev), pdat);
+
+  g_signal_connect (pdat->window, "motion-notify-event", 
+		    G_CALLBACK (titanmouse), pdat);
+
+  g_signal_connect (pdat->window, "button_press_event", 
+		    G_CALLBACK (titanmouse), pdat);
+
+  g_signal_connect (pdat->window, "button_release_event", 
+		    G_CALLBACK (titanmouse), pdat);
 
   // neste caso o configure-event é accionado por mudança no tamanho da janela
   g_signal_connect (pdat->window, "configure-event",

@@ -95,6 +95,7 @@ set_val (GtkWidget * widget, gpointer dat)
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
 			     "value-changed");
 
+
       (GTK_ADJUSTMENT (pdat->barr.adj))->value = 50.;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
 			     "value-changed");
@@ -147,5 +148,50 @@ lchange (GtkWidget * widget, gpointer dat)
       gtk_button_set_label (GTK_BUTTON (btnlock->name), btnlock->label);
       btnlock->state = 0;
     }
+  return TRUE;
+}
+
+//callback quando rato é usado para mexer coisas
+
+gboolean
+titanmouse (GtkWidget * widget, GdkEvent   *event  , gpointer dat)
+{
+  progdata *pdat;
+  pdat = (progdata *) dat;
+
+  if (event->type == GDK_MOTION_NOTIFY)
+    {
+      pdat->mouse.nestx = ((GdkEventMotion *)event)->x;
+
+      if (pdat->mouse.trap == 1)
+        {
+	  (GTK_ADJUSTMENT (pdat->barl.adj))->value = pdat->mouse.nestx + pdat->mouse.path1;
+	  (GTK_ADJUSTMENT (pdat->barr.adj))->value = pdat->mouse.nestx + pdat->mouse.path2;
+	}
+
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
+			     "value-changed");
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
+			     "value-changed");
+    }
+  else if (event->type == GDK_BUTTON_PRESS)
+    {
+      pdat->mouse.nestx = ((GdkEventButton *)event)->x;
+      pdat->mouse.trap = 1;
+
+      pdat->mouse.path1 = (GTK_ADJUSTMENT (pdat->barl.adj))->value - pdat->mouse.nestx;
+      (GTK_ADJUSTMENT (pdat->barl.adj))->value = pdat->mouse.nestx + pdat->mouse.path1;
+      pdat->mouse.path2 = (GTK_ADJUSTMENT (pdat->barr.adj))->value - pdat->mouse.nestx;
+      (GTK_ADJUSTMENT (pdat->barr.adj))->value = pdat->mouse.nestx + pdat->mouse.path2;
+
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
+			     "value-changed");
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
+			     "value-changed");
+    }
+  else if (event->type == GDK_BUTTON_RELEASE)
+    pdat->mouse.trap = 0;
+
+  gtk_widget_queue_draw(pdat->window);
   return TRUE;
 }
