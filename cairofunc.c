@@ -23,7 +23,6 @@ draw_line (cairo_t * cr, double x0, double y0, double x1, double y1)
 {
   cairo_move_to (cr, x0, y0);
   cairo_line_to (cr, x1, y1);
-  cairo_stroke (cr);
   return;
 }
 
@@ -35,7 +34,6 @@ draw_varrow (double x, double y, double hgt, double focus, cairo_t * cr)
   cairo_set_line_width (cr, 2);
   cairo_move_to (cr, x, y);
   cairo_line_to (cr, x, y - hgt);
-  cairo_stroke (cr);
   for (i = -1; i <= 1; i += 2)
     {
       cairo_move_to (cr, x, y - hgt);
@@ -45,7 +43,6 @@ draw_varrow (double x, double y, double hgt, double focus, cairo_t * cr)
                        (0.02 * focus + 10) * dsign (focus) * dsign (hgt));
       // numeros mágicos acima controlam o ajuste de curvatura
       // é do tipo y=mx+b
-      cairo_stroke (cr);
     }
 }
 
@@ -72,8 +69,8 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   cr = gdk_cairo_create (pdat->drawbox->window);
 
   cairo_set_source_rgb (cr, 1., 1., 1.);
-  draw_line (cr, TOL, midref, pdat->drawbox->allocation.width - TOL, midref);
-
+  draw_line (cr, 0, midref, pdat->drawbox->allocation.width, midref);
+  cairo_stroke(cr);
   //desenha lente convergente
   cairo_set_source_rgb (cr, 1., 0.55, 0.);
 
@@ -89,6 +86,7 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 	       midref, pdat->lensdata.ylen, -*(pdat->lnsd.focus), cr);
   draw_varrow (*(pdat->lnsd.pos),
 	       midref, -pdat->lensdata.ylen, -*(pdat->lnsd.focus), cr);
+  cairo_stroke(cr);
 
   //verifica primeira lente
   if (*(pdat->lnsc.pos) < *(pdat->lnsd.pos))
@@ -114,7 +112,8 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
     draw_line(cr,pdat->pts.px[i],pdat->pts.pyp[i],
              pdat->pts.px[i+1],pdat->pts.pyp[i+1]);
   }
-  
+  cairo_stroke(cr);
+  //desenha imagens
   cairo_set_source_rgb (cr, 0., 0., 1.);
 
   draw_varrow (pdat->pts.px[3],
@@ -122,7 +121,7 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   draw_varrow (pdat->pts.px[5],
 	       midref, midref-pdat->pts.pyp[5],50, cr);
 
-
+  cairo_stroke(cr);
   cairo_destroy (cr);
   return FALSE;
 

@@ -78,7 +78,6 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_line_to (cr, pos1 + hwid1, pos2 + (ylen)/2 - 15);
 
   cairo_fill (cr);
-  cairo_stroke (cr);
 
   cairo_set_source_rgb (cr, 0.21, 0.21, 1);
 
@@ -101,7 +100,6 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_line_to (cr, pos3 + hwid1, pos2 + (ylen)/2 );
 
   cairo_fill (cr);
-  cairo_stroke (cr);
 
 
   // Desenho das imagens (alpha) 
@@ -137,8 +135,6 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
   // prototipo raios
   
-  cairo_set_source_rgb (cr, 0.90, 0.90, 0.00);
-
   // determina os pontos onde tem de passar os raios
 
   //infinito
@@ -220,11 +216,10 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 	{
 	  cairo_move_to (cr, mx[i], ly[i]);
 	  cairo_line_to (cr, mx[i+1], ly[i+1]);
-	  cairo_stroke (cr);
 
 	  cairo_move_to (cr, mx[i], uy[i]);
 	  cairo_line_to (cr, mx[i+1], uy[i+1]);
-	  cairo_stroke (cr);
+          cairo_stroke(cr);
 	}
     }
       
@@ -233,7 +228,6 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       cairo_set_source_rgb (cr, 0.7, 1, 1);
       cairo_move_to (cr, mx[3], ly[3]);
       cairo_line_to (cr, mx[5], ly[5]);
-      cairo_stroke (cr);
 
       cairo_move_to (cr, mx[3], uy[3]);
       cairo_line_to (cr, mx[5], uy[5]);
