@@ -3,6 +3,7 @@
 
 #include <structs.h>
 #include <prjcairo.h>
+#include <phys.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -98,13 +99,6 @@ set_val (GtkWidget * widget, gpointer dat)
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
 			     "value-changed");
     }
-  return TRUE;
-}
-
-gboolean 
-erroluneta (progdata * dat)
-{
-  //mensagem de erro "ocular > objectiva"
   return TRUE;
 }
 

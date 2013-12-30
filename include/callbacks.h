@@ -8,6 +8,5 @@ extern gboolean cfg_event   (GtkWidget*, gpointer);
 extern gboolean set_val     (GtkWidget*, gpointer);
 extern gboolean lchange     (GtkWidget*, gpointer);
 extern gboolean luneta      (GtkWidget*, gpointer);
-extern gboolean erroluneta  (progdata*);
 
 #endif
