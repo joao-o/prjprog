@@ -14,14 +14,13 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   int width, height, i;
   double pos1, pos2, pos3, pos4, pos5, flens, slens;
   double uy[7], ly[7], mx[7];
-  double ylen, xwid, ang, fc, fd, hwid1, hwid2;
+  double ylen, xwid, ang, fc, fd, hwid1;
 
   pdat = (progdata*) dat;
 
   ylen = pdat->lensdata.ylen;
   xwid = pdat->lensdata.xwid;
   hwid1 = pdat->lensdata.headwid1;
-  hwid2 = pdat->lensdata.headwid2;
 ///////////////////////////////////////////////////////////////////////////////
 
   gtk_window_get_size (GTK_WINDOW (pdat->window), &width, &height);

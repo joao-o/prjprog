@@ -38,53 +38,27 @@ alin (double x1, double y1, double x2, double y2, double y3)
 void
 calcs (draw * pts, lens * lens1, lens * lens2)
 {
-  pts->px[0]=0;
-  pts->px[1]=*(lens1->pos);
+  pts->px[0] = 0;
+  pts->px[1] = *(lens1->pos);
 
-  pts->pye[1]=*(pts->ldn)/2;
-  pts->pye[0]=(pts->pye[1])-(tan(pts->ang)*pts->px[1]);
+  pts->pye[1] = *(pts->ldn) / 2;
+  pts->pye[0] = (pts->pye[1]) - (tan (pts->ang) * pts->px[1]);
 
-  pts->px[2]=*(lens2->pos);
-  pts->px[3]=pts->px[1]+*(lens1->focus);
+  pts->px[2] = *(lens2->pos);
+  pts->px[3] = pts->px[1] + *(lens1->focus);
 
-  pts->pye[2]=(tan(pts->ang))*pts->px[2]+pts->pye[0];
-  pts->pye[3]=(tan(pts->ang))*pts->px[3]+pts->pye[0];
-  pts->pyp[4]=pts->pyp[3]=pts->pyp[2]=pts->pyp[1]=pts->pye[3];
-  pts->pyp[0]=(pts->pyp[1])-(tan(pts->ang)*pts->px[1]);
+  pts->pye[2] = (tan (pts->ang)) * pts->px[2] + pts->pye[0];
+  pts->pye[3] = (tan (pts->ang)) * pts->px[3] + pts->pye[0];
+  pts->pyp[4] = pts->pyp[3] = pts->pyp[2] = pts->pyp[1] = pts->pye[3];
+  pts->pyp[0] = (pts->pyp[1]) - (tan (pts->ang) * pts->px[1]);
 
-  pts->px[4]=pts->px[2];
-  pts->pye[4]=pts->pye[1];
-  pts->px[5]=*(lens2->pos)+(pts->px[3]-pts->px[2])*(-*(lens2->focus))/
-             (-*(lens2->focus)+pts->px[3]-pts->px[2]);
-  pts->pye[5]=lin(pts->px[3],pts->pye[3],pts->px[2],pts->pye[1],pts->px[5]);
-  pts->pyp[5]=lin(pts->px[2],pts->pyp[2],
-              *(lens2->pos)-*(lens2->focus),pts->pye[1],pts->px[5]);
+  pts->px[4] = pts->px[2];
+  pts->pye[4] = pts->pye[1];
+  pts->px[5] = *(lens2->pos) + (pts->px[3] - pts->px[2]) * (-*(lens2->focus)) / 
+    (-*(lens2->focus) + pts->px[3] - pts->px[2]);
+  pts->pye[5] = lin (pts->px[3], pts->pye[3],
+     pts->px[2], pts->pye[1], pts->px[5]);
+  pts->pyp[5] = lin (pts->px[2], pts->pyp[2], *(lens2->pos) - *(lens2->focus),
+	 pts->pye[1], pts->px[5]);
   return;
-}
-
-void 
-erroluneta (progdata * dat)
-{
-  progdata *pdat;
-  pdat = (progdata *) dat;
-  GtkWidget *dialog, *label;
-  char *message = "A criação de uma luneta FALHOU.\n\n"
-    "Para formar uma luneta terrestre\n"
-    "assegure que a distância focal da lente convergente\n"
-    "é maior que a distância focal da lente divergente.";
-
-  dialog = gtk_dialog_new_with_buttons ("ERRO a criar luneta",
-                                         GTK_WINDOW(pdat->window),
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_OK,
-                                         GTK_RESPONSE_NONE,
-                                         NULL);
-   gtk_window_set_default_size (GTK_WINDOW(dialog), 400, 150);
-   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-   label = gtk_label_new (message);
-  
-   g_signal_connect_swapped (dialog, "response", G_CALLBACK (gtk_widget_destroy), dialog);
-
-   gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), label);
-   gtk_widget_show_all (dialog);
 }

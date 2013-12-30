@@ -8,7 +8,7 @@
 typedef struct
 {
   char label[15];
-  gint state;			// 0 = Unlocked 1 = Locked
+  char state;			// 0 = Unlocked 1 = Locked
   GdkColor coloron;
   GdkColor coloroff;
   GdkColor colorhigh;

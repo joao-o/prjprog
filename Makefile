@@ -16,8 +16,8 @@ RM = /bin/rm
 
 TARGET = proj
 INCLUDE =
-PROGS  = proj.c callbacks.c prjcairo.c phys.c cairofunc.c
-OBJECT = proj.o callbacks.o prjcairo.o phys.o cairofunc.o
+PROGS  = proj.c callbacks.c prjcairo.c phys.c cairofunc.c miscui.c
+OBJECT = proj.o callbacks.o prjcairo.o phys.o cairofunc.o miscui.o
 TESTE = cairotest.c
 
 all: comp link
@@ -29,6 +29,9 @@ optimus: all
 debug: CFLAGS += $(DB_FLAGS)
 debug: LFLAGS += $(DB_FLAGS)	
 debug: all
+
+edit:
+	vim Makefile
 
 link: $(TARGET)
 
@@ -44,6 +47,9 @@ prjcairo.o: prjcairo.c
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
 phys.o: phys.c
+	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
+
+miscui.o: miscui.c
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
 cairofunc.o: cairofunc.c
