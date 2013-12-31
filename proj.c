@@ -172,7 +172,7 @@ main (int argc, char **argv)
   pdat->lensdata.xwid = 3;
   pdat->lensdata.headwid1 = 7;
   pdat->lensdata.headwid2 = 7;
-  pdat->virt = 0;
+  pdat->virt = 1;
   pdat->mouse.trap = 0;
 ////////////////////////////////////////////////////////////////////////////////
   //sinais e callbacks

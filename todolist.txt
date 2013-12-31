@@ -24,7 +24,7 @@ Coisas a fazer
 Ideias soltas:
 [ ] permitir mudar a natureza das lentes (em termos de contas é fácil, 
     o prjcairo só precisa de uma ligeira adaptação e o cairofunc também me
-    parece que sim)(do estilo alterar de convergente para divergente? )
+    parece que sim)(do estilo alterar de convergente para divergente? )(sim)
 [ ] Guardar definições num ficheiro e o programa abre esse ficheiro sempre que inicia
 [ ] Guardar configurações em ficheiro e o programa consegue abrir esses
     ficheiros ( fácil se quiseres apenas uma caixa em que escreves o nome do
