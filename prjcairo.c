@@ -11,7 +11,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 {
   progdata *pdat;
   cairo_t *cr;
-  int width, height, i;
+  int width, height, i, j, t;
   double pos1, pos2, pos3, pos4, pos5, flens, slens;
   double uy[7], ly[7], mx[7];
   double ylen, xwid, ang, fc, fd, hwid1;
@@ -206,12 +206,55 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   //desenha
   for(i=0;i<4;i++)
     {
+      t = 0;
+
       if(mx[i]<mx[i+1])
 	cairo_set_source_rgb (cr, 0.90, 0.90, 0.00);
       else
 	cairo_set_source_rgb (cr, 0.7, 1, 1);
-	  
-      if(mx[i]<mx[i+1] || pdat->virt == 1)
+      
+      //Detecta se deve partir o raio em raio virtual/real)
+
+      if(mx[i]<mx[i+1])                          //quando os raios são à partida reais
+	{
+	  for(j=1;j<4;j+=2)                      //e houver uma lente (1 ou 3)
+	    if( (j != i && j != i+1)                //que não é a origem/destino dos raios
+	       && (mx[i]<mx[j] && mx[j]<mx[i+1]) )        //mas está entre eles
+	      {
+		t = 1;
+		mx[6]=mx[j];
+		ly[6]=lin(mx[i],ly[i],mx[i+1],ly[i+1],mx[6]);
+		uy[6]=lin(mx[i],uy[i],mx[i+1],uy[i+1],mx[6]);
+		
+		if( j > i+1 || pdat->virt == 1)
+		  {
+		    if( j > i+1 )
+		      cairo_set_source_rgb (cr, 0.90, 0.90, 0.00);
+		    else
+		      cairo_set_source_rgb (cr, 0.7, 1, 1);
+
+		    cairo_move_to (cr, mx[i], ly[i]);
+		    cairo_line_to (cr, mx[6], ly[6]);
+		    cairo_move_to (cr, mx[i], uy[i]);
+		    cairo_line_to (cr, mx[6], uy[6]);
+		  }
+
+		if( j < i || pdat->virt == 1 )
+		  {
+		    if( j < i )
+		      cairo_set_source_rgb (cr, 0.90, 0.90, 0.00);
+		    else
+		      cairo_set_source_rgb (cr, 0.7, 1, 1);
+
+		    cairo_move_to (cr, mx[6], ly[6]);
+		    cairo_line_to (cr, mx[i+1], ly[i+1]);
+		    cairo_move_to (cr, mx[6], uy[6]);
+		    cairo_line_to (cr, mx[i+1], uy[i+1]);
+		  }
+	      }
+	}
+	
+	  if((mx[i]<mx[i+1] || pdat->virt == 1) && t == 0)
 	{
 	  cairo_move_to (cr, mx[i], ly[i]);
 	  cairo_line_to (cr, mx[i+1], ly[i+1]);
