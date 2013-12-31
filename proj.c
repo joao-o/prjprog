@@ -10,6 +10,10 @@
 #include <prjcairo.h>
 #include <cairofunc.h>
 
+#ifndef RENDER
+#define RENDER expose_ev
+#endif
+
 int
 main (int argc, char **argv)
 {
@@ -206,7 +210,7 @@ main (int argc, char **argv)
 		    G_CALLBACK (upd_adj_free), pdat);
 
   g_signal_connect (pdat->window, "expose-event", 
-		    G_CALLBACK (expose_ev), pdat);
+		    G_CALLBACK (RENDER), pdat);
 
   g_signal_connect (pdat->window, "motion-notify-event", 
 		    G_CALLBACK (titanmouse), pdat);

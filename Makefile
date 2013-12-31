@@ -30,8 +30,9 @@ debug: CFLAGS += $(DB_FLAGS)
 debug: LFLAGS += $(DB_FLAGS)	
 debug: all
 
-edit:
-	vim Makefile
+joao: CFLAGS += -DRENDER=expose_evv
+joao: LFLAGS += -DRENDER=expose_evv
+joao: all
 
 link: $(TARGET)
 
@@ -57,6 +58,9 @@ cairofunc.o: cairofunc.c
 
 $(TARGET): $(OBJECT)
 	$(CC) $(LFLAGS) -o $@ $^ $(LINK_LIBS)
+
+edit:
+	vim Makefile
 
 clean: 
 	$(RM) -f *~ *.o $(TARGET) 
