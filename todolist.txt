@@ -1,0 +1,16 @@
+
+Coisas a fazer
+- Eixos e escala variável (diminuir escala yy mantendo xx pode ser muito util e é obrigatorio pelo enunciado)
+- Casos limites de posição
+-- Possível resolução: Desenhar numa surface na memória sem restrições e passar com clip para a window
+-- Também limitar acção do rato no arraste (fácil)
+- Ajustar escalas (as distancias focais permitem distancias muito grandes. Se bem que ter a escala dos eixos ajustáveis resolve o problema)
+- Identificar raios virtuais. Ter opção de não mostrar ou mostra em tracejado (prjcairo já apanha a maior parte deles, estou a trabalhar numa ligeira alteração ao ciclo para resolver os restantes)
+- Janela para mudar cor das coisas (lentes, primeira imagem, segunda imagem, ...)
+
+
+Ideias soltas:
+- permitir mudar a natureza das lentes (em termos de contas é fácil, o prjcairo só precisa de uma ligeira adaptação e o cairofunc também me parece que sim)
+- Guardar definições num ficheiro e o programa abre esse ficheiro sempre que inicia
+- Guardar configurações em ficheiro e o programa consegue abrir esses ficheiros
+
