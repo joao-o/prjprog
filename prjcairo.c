@@ -225,12 +225,11 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 		    else
 		      cairo_set_source_rgb (cr, 0.7, 1.00, 1.00);
 
-		    cairo_set_source_rgb (cr, 0.90, 0.00, 0.00);//for bug testing
-
 		    cairo_move_to (cr, mx[i], ly[i]);
 		    cairo_line_to (cr, mx[6], ly[6]);
 		    cairo_move_to (cr, mx[i], uy[i]);
 		    cairo_line_to (cr, mx[6], uy[6]);
+                    cairo_stroke(cr);
 		  }
 
 		if( j < i || pdat->virt == 1 )
@@ -240,12 +239,11 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 		    else
 		      cairo_set_source_rgb (cr, 0.7, 1.00, 1.00);
 
-		    cairo_set_source_rgb (cr, 0.00, 0.00, 0.00);//for bug testing
-
 		    cairo_move_to (cr, mx[6], ly[6]);
 		    cairo_line_to (cr, mx[i+1], ly[i+1]);
 		    cairo_move_to (cr, mx[6], uy[6]);
 		    cairo_line_to (cr, mx[i+1], uy[i+1]);
+                    cairo_stroke(cr);
 		  }
 	      }
 	}

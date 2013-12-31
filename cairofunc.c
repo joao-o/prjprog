@@ -58,6 +58,7 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   pdat = (progdata *) dat;
   midref = *(pdat->pts.ldn) / 2;
   (pdat->pts.ang) = (M_PI/180)* (GTK_ADJUSTMENT (pdat->barang.adj))->value;
+  *(pdat->lnsd.focus)= -*(pdat->lnsd.focus); 
 
   if ((*(pdat->pts.lrt) - TOL) < *(pdat->lnsc.pos))
     *(pdat->lnsc.pos) = *(pdat->pts.lrt) - TOL;
@@ -83,9 +84,9 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   cairo_set_source_rgb (cr, 1., 0.55, 0.);
 
   draw_varrow (*(pdat->lnsd.pos),
-	       midref, pdat->lensdata.ylen, -*(pdat->lnsd.focus), cr);
+	       midref, pdat->lensdata.ylen, *(pdat->lnsd.focus), cr);
   draw_varrow (*(pdat->lnsd.pos),
-	       midref, -pdat->lensdata.ylen, -*(pdat->lnsd.focus), cr);
+	       midref, -pdat->lensdata.ylen, *(pdat->lnsd.focus), cr);
   cairo_stroke(cr);
 
   //verifica primeira lente
@@ -102,10 +103,10 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 
   calcs (&(pdat->pts), lens1, lens2);
 
-  cairo_set_source_rgb (cr, 1., 1., 0.);
   cairo_set_line_width (cr, 1);
+  cairo_set_source_rgb (cr, 1., 1., 0);
 
-  for (i=0;i<5;i++){
+  for (i=0;i<2;i++){
     draw_line(cr,pdat->pts.px[i],pdat->pts.pye[i],
              pdat->pts.px[i+1],pdat->pts.pye[i+1]);
 
@@ -113,6 +114,16 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
              pdat->pts.px[i+1],pdat->pts.pyp[i+1]);
   }
   cairo_stroke(cr);
+
+  for (;i<6;i++){
+    draw_line(cr,pdat->pts.px[i],pdat->pts.pye[i],
+             pdat->pts.px[i+1],pdat->pts.pye[i+1]);
+
+    draw_line(cr,pdat->pts.px[i],pdat->pts.pyp[i],
+             pdat->pts.px[i+1],pdat->pts.pyp[i+1]);
+  }
+  cairo_stroke(cr);
+
   //desenha imagens
   cairo_set_source_rgb (cr, 0., 0., 1.);
 
@@ -123,6 +134,8 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 
   cairo_stroke(cr);
   cairo_destroy (cr);
+  *(pdat->lnsd.focus)= -*(pdat->lnsd.focus); 
+
   return FALSE;
 
 }

@@ -54,11 +54,19 @@ calcs (draw * pts, lens * lens1, lens * lens2)
 
   pts->px[4] = pts->px[2];
   pts->pye[4] = pts->pye[1];
-  pts->px[5] = *(lens2->pos) + (pts->px[3] - pts->px[2]) * (-*(lens2->focus)) / 
-    (-*(lens2->focus) + pts->px[3] - pts->px[2]);
+
+  pts->px[5] = *(lens2->pos) + (pts->px[3] - pts->px[2]) * (*(lens2->focus)) / 
+    (*(lens2->focus) + pts->px[3] - pts->px[2]);
   pts->pye[5] = lin (pts->px[3], pts->pye[3],
      pts->px[2], pts->pye[1], pts->px[5]);
-  pts->pyp[5] = lin (pts->px[2], pts->pyp[2], *(lens2->pos) - *(lens2->focus),
+  pts->pyp[5] = lin (pts->px[2], pts->pyp[2], *(lens2->pos) + *(lens2->focus),
 	 pts->pye[1], pts->px[5]);
+
+  pts->px[6] =(double) *(pts->lrt);
+  pts->pye[6] = lin (pts->px[3], pts->pye[3],
+     pts->px[2], pts->pye[1], pts->px[6]);
+  pts->pyp[6] = lin (pts->px[4], pts->pyp[4],
+     pts->px[5], pts->pyp[5], pts->px[6]);
+
   return;
 }
