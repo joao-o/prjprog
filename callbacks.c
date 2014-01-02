@@ -166,6 +166,15 @@ lchange (GtkWidget * widget, gpointer dat)
   return TRUE;
 }
 
+gboolean
+virtchange (GtkWidget * widget, gpointer dat)
+{
+  progdata *pdat;
+  pdat = (progdata *) dat;
+  pdat->virt = !pdat->virt;
+  gtk_widget_queue_draw (pdat->window);
+  return TRUE;
+}
 //callback quando rato é usado para mexer coisas
 
 gboolean

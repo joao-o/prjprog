@@ -21,7 +21,8 @@ main (int argc, char **argv)
 
   //barras e butões
   GtkWidget *button, *barlensl, *barlensr,
-    *barfocc, *barfocd, *barangl, *lunbtn;
+    *barfocc, *barfocd, *barangl, *lunbtn,
+    *virtbtn;
 
   // boxes
   GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox,
@@ -142,6 +143,10 @@ main (int argc, char **argv)
   lunbtn = gtk_button_new_with_label("Criar Luneta");
   gtk_box_pack_end(GTK_BOX(optnbox), lunbtn, FALSE, FALSE, 20);
 
+  virtbtn = gtk_check_button_new_with_label("Ver Raios Virtuais");
+  gtk_box_pack_end(GTK_BOX(optnbox), virtbtn, FALSE, FALSE, 20);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (virtbtn), TRUE);
+
   //butão toggle com cores
 
   gdk_color_parse ("red", &pdat->btnlock.coloron);
@@ -187,6 +192,7 @@ main (int argc, char **argv)
   g_signal_connect_swapped (G_OBJECT (pdat->window), "destroy",
 			    G_CALLBACK (gtk_main_quit), NULL);
 
+  //callbacks butões
   g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (set_val), pdat);
 
   g_signal_connect (G_OBJECT (lunbtn), "clicked", G_CALLBACK (luneta), pdat);
@@ -194,6 +200,10 @@ main (int argc, char **argv)
   g_signal_connect (G_OBJECT (pdat->btnlock.name), "toggled",
 		    G_CALLBACK (lchange), pdat);
 
+ g_signal_connect (G_OBJECT (virtbtn), "toggled",
+		    G_CALLBACK (virtchange), pdat);
+
+ //callbacks barras
   g_signal_connect (G_OBJECT (pdat->barl.adj), "value-changed",
 		    G_CALLBACK (upd_adj), pdat);
 
@@ -209,6 +219,7 @@ main (int argc, char **argv)
   g_signal_connect (G_OBJECT (pdat->barang.adj), "value-changed",
 		    G_CALLBACK (upd_adj_free), pdat);
 
+  //callbacks cairo
   g_signal_connect (pdat->window, "expose-event", 
 		    G_CALLBACK (RENDER), pdat);
 
