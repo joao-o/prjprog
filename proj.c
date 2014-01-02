@@ -29,15 +29,16 @@ main (int argc, char **argv)
     *noteb, *notebp1, *notebp2, *notebp3, *optnbox, *statusbox;
 
   //frames
-  GtkWidget *dtbfrm, *drwfrm;
+  GtkWidget *dtbfrm, *drwfrm, 
+    *blcfrm, *bldfrm, *bfcfrm, *bfdfrm, *bangfrm;
 
   //setup inicial e criação da janela principal
   pdat = calloc (1, sizeof (progdata));
 
   strcpy (pdat->barl.str, "value= 0.000");
   strcpy (pdat->barr.str, "value= 0.000");
-  strcpy (pdat->barfc.str, "focal length=\n 0.000");
-  strcpy (pdat->barfd.str, "focal length=\n 0.000");
+  strcpy (pdat->barfc.str, "focal length= 0.000");
+  strcpy (pdat->barfd.str, "focal length= 0.000");
   strcpy (pdat->barang.str, "angulo= 0.000");
 
   pdat->btnlock.state = 0;
@@ -72,7 +73,7 @@ main (int argc, char **argv)
   pdat->drawbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (midbox), pdat->drawbox, TRUE, TRUE, 0);
 
-  drwfrm = gtk_frame_new ("main");
+  drwfrm = gtk_frame_new ("");
   gtk_container_add (GTK_CONTAINER (pdat->drawbox), drwfrm);
 
   notebp1 = gtk_vbox_new (FALSE, 0);
@@ -92,14 +93,19 @@ main (int argc, char **argv)
 
 ////////////////////////////////////////////////////////////////////////////////
   // adjusts e barras
+  //posição lentes
   pdat->barl.adj = gtk_adjustment_new (200.0, 20.0, 101.0, 0.1, 1.0, 1.0);
   pdat->barr.adj = gtk_adjustment_new (250.0, 20.0, 101.0, 0.1, 1.0, 1.0);
 
+  blcfrm = gtk_frame_new ("Posição da Lente Convergente");
+  gtk_container_add (GTK_CONTAINER (notebp1), blcfrm);
   barlensl = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barl.adj));
-  gtk_box_pack_start (GTK_BOX (notebp1), barlensl, FALSE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (blcfrm), barlensl);
 
+  bldfrm = gtk_frame_new ("Posição da Lente Divergente");
+  gtk_container_add (GTK_CONTAINER (notebp1), bldfrm);
   barlensr = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barr.adj));
-  gtk_box_pack_start (GTK_BOX (notebp1), barlensr, FALSE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (bldfrm), barlensr);
 
   pdat->barl.lbl = gtk_label_new (pdat->barl.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barl.lbl, TRUE, TRUE, 0);
@@ -107,14 +113,19 @@ main (int argc, char **argv)
   pdat->barr.lbl = gtk_label_new (pdat->barr.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barr.lbl, TRUE, TRUE, 0);
 
+  //distancia focal
   pdat->barfc.adj = gtk_adjustment_new (300.0, 1.0, 301.0, 0.1, 1.0, 1.0);
   pdat->barfd.adj = gtk_adjustment_new (150.0, 0.0, 301.0, 0.1, 1.0, 1.0);
 
+  bfcfrm = gtk_frame_new ("Distância Focal da Lente Convergente");
+  gtk_container_add (GTK_CONTAINER (notebp2), bfcfrm);
   barfocc = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barfc.adj));
-  gtk_box_pack_start (GTK_BOX (notebp2), barfocc, FALSE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (bfcfrm), barfocc);
 
+  bfdfrm = gtk_frame_new ("Distância Focal da Lente Divergente");
+  gtk_container_add (GTK_CONTAINER (notebp2), bfdfrm);
   barfocd = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barfd.adj));
-  gtk_box_pack_start (GTK_BOX (notebp2), barfocd, FALSE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (bfdfrm), barfocd);
 
   pdat->barfc.lbl = gtk_label_new (pdat->barfc.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barfc.lbl, TRUE, TRUE, 0);
@@ -122,10 +133,13 @@ main (int argc, char **argv)
   pdat->barfd.lbl = gtk_label_new (pdat->barfd.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barfd.lbl, TRUE, TRUE, 0);
 
+  //angulo
   pdat->barang.adj = gtk_adjustment_new (20, -89.0, 90.0, 0.1, 1.0, 1.0);
 
+  bangfrm = gtk_frame_new ("Ângulo de Incidência");
+  gtk_container_add (GTK_CONTAINER (notebp3), bangfrm);
   barangl = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barang.adj));
-  gtk_box_pack_start (GTK_BOX (notebp3), barangl, FALSE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (bangfrm), barangl);
 
   pdat->barang.lbl = gtk_label_new (pdat->barang.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barang.lbl, TRUE, TRUE, 0);
@@ -137,18 +151,18 @@ main (int argc, char **argv)
 
 ////////////////////////////////////////////////////////////////////////////////
   //botões
-  button = gtk_button_new_with_label ("\treset\t");
-  gtk_box_pack_start (GTK_BOX (optnbox), button, FALSE, FALSE, 20);
+  button = gtk_button_new_with_label ("\tRecomeçar\t");
+  gtk_box_pack_end (GTK_BOX (optnbox), button, FALSE, FALSE, 5);
 
   lunbtn = gtk_button_new_with_label("Criar Luneta");
-  gtk_box_pack_end(GTK_BOX(optnbox), lunbtn, FALSE, FALSE, 20);
+  gtk_box_pack_end(GTK_BOX(optnbox), lunbtn, FALSE, FALSE, 5);
 
   virtbtn = gtk_check_button_new_with_label("Ver Raios Virtuais");
-  gtk_box_pack_end(GTK_BOX(optnbox), virtbtn, FALSE, FALSE, 20);
+  gtk_box_pack_start(GTK_BOX(optnbox), virtbtn, FALSE, FALSE, 5);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (virtbtn), TRUE);
 
   distbtn = gtk_check_button_new_with_label("Fixar Distância entre Lentes");
-  gtk_box_pack_end(GTK_BOX(optnbox), distbtn, FALSE, FALSE, 20);
+  gtk_box_pack_start(GTK_BOX(optnbox), distbtn, FALSE, FALSE, 5);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (distbtn), FALSE);
 
   //butão toggle com cores

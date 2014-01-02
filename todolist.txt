@@ -1,6 +1,6 @@
 
 Coisas a fazer
-[ ] Eixos e escala variável 
+[ ] Eixos e escala variável
 	tr(diminuir escala yy mantendo xx pode ser
     	muito util e é obrigatorio pelo enunciado)
 
@@ -11,10 +11,10 @@ Coisas a fazer
 
 [ ] Também limitar acção do rato no arraste 
 	tr(fácil)
-	jo(fazer com que posas
-    	 arrastar as lentes independentemente )
-	tr(right click-> conjunto left click-> lente?)
-        jo(por mim ok)
+	[x]jo(fazer com que posas
+    	 	    arrastar as lentes independentemente )
+		    tr(right click-> conjunto left click-> lente?)
+       jo(por mim ok)
 
 [ ] pequnas caixas para por valores directamete
 
@@ -34,6 +34,7 @@ Coisas a fazer
 	jo(menu para alterar estilo
 	   dos raios?? espessura do stroke/cor?)
         jo(imagens também a tracejado?)
+	tr(done o importante)
 
 [ ] Janela para mudar cor das coisas 
 	tr(lentes, primeira imagem, segunda imagem,...) 
@@ -65,7 +66,7 @@ Ideias soltas:
     ficheiros 
 	jo( fácil se quiseres apenas uma caixa em que escreves o nome do ficheiro ).
 
-[ ] alterar distâcias focais com o rato
+[x] alterar distâcias focais com o rato
 	jo(hell yes!)
 	tr(Puxar as lentes para cima e para baixo? 
           O eixo dos yy não serve de nada
@@ -73,6 +74,7 @@ Ideias soltas:
           assim é mais intuitivo)
         jo(sim estava a pensar copiar desenvergonhadamente isso da simulação
           de berkley).
+	tr(done)
 
 btw: 
 projecto do carlos/leonel
