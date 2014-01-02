@@ -5,9 +5,6 @@
 #include <phys.h>
 #include <math.h>
 
-const double dsh[]={5.0, 10.0};
-const double nodsh[]={1};
-
 // é na realidade uma CSR para espose events está aqui porque desenha principalmente
 gboolean
 expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
@@ -16,25 +13,14 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_t *cr;
   int width, height, i, j, t;
   double pos1, pos2, pos3, pos4, pos5, flens, slens;
-  double uy[7], ly[7], mx[7], rgbr[3], rgbv[3];
+  double uy[7], ly[7], mx[7];
   double ylen, xwid, ang, fc, fd, hwid1;
-  int dshlen  = sizeof(dsh) / sizeof(dsh[0]);
 
   pdat = (progdata*) dat;
 
   ylen = pdat->lensdata.ylen;
   xwid = pdat->lensdata.xwid;
   hwid1 = pdat->lensdata.headwid1;
-  
-  rgbr[0] = 0.90;
-  rgbr[1] = 0.90;
-  rgbr[2] = 0.00;
-
-  rgbv[0] = 0.10;
-  rgbv[1] = 0.50;
-  rgbv[2] = 0.70;
-
-
 ///////////////////////////////////////////////////////////////////////////////
 
   gtk_window_get_size (GTK_WINDOW (pdat->window), &width, &height);
@@ -220,11 +206,11 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
       //Detecta se deve partir o raio em raio virtual/real)
 
-      if(mx[i]<mx[i+1])                  //quando os raios são à partida reais
+      if(mx[i]<mx[i+1])                                       //quando os raios são à partida reais
 	{
-	  for(j=1;j<4;j+=2)              //e houver uma lente (1 ou 3)
-	    if( (j != i && j != i+1)     //que não é a origem/destino dos raios
-	       && (mx[i] < mx[j] && mx[j] < mx[i+1]) ) //mas está entre eles
+	  for(j=1;j<4;j+=2)                                   //e houver uma lente (1 ou 3)
+	    if( (j != i && j != i+1)                          //que não é a origem/destino dos raios
+	       && (mx[i] < mx[j] && mx[j] < mx[i+1]) )        //mas está entre eles
 	      {
 		t = 1;
 
@@ -235,41 +221,37 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 		if( j > i+1 || pdat->virt == 1)
 		  {
 		    if( j > i+1 )
-		      {
-			cairo_set_dash(cr,nodsh,0,0);
-			cairo_set_source_rgb (cr, rgbr[0], rgbr[1], rgbr[2]);
-		      }
+		      cairo_set_source_rgb (cr, 0.90, 0.90, 0.00);
 		    else
-		      {
-			cairo_set_source_rgb (cr, rgbv[0], rgbv[1], rgbv[2]);
-			cairo_set_dash(cr,dsh,dshlen,0);
-		      }
+		      cairo_set_source_rgb (cr, 0.7, 1.00, 1.00);
 
 		    cairo_move_to (cr, mx[i], ly[i]);
 		    cairo_line_to (cr, mx[6], ly[6]);
 		    cairo_move_to (cr, mx[i], uy[i]);
 		    cairo_line_to (cr, mx[6], uy[6]);
+<<<<<<< HEAD
 		    cairo_stroke(cr);
+=======
+                    cairo_stroke(cr);
+>>>>>>> 6d3d5f25bc6170672b2238fbf8e5aee62ac27e53
 		  }
 
 		if( j < i || pdat->virt == 1 )
 		  {
 		    if( j < i )
-		      {
-			cairo_set_dash(cr,nodsh,0,0);
-			cairo_set_source_rgb (cr, rgbr[0], rgbr[1], rgbr[2]);
-		      }
+		      cairo_set_source_rgb (cr, 0.90, 0.90, 0.00);
 		    else
-		      {
-			cairo_set_source_rgb (cr, rgbv[0], rgbv[1], rgbv[2]);
-			cairo_set_dash(cr,dsh,dshlen,0);
-		      }
+		      cairo_set_source_rgb (cr, 0.7, 1.00, 1.00);
 
 		    cairo_move_to (cr, mx[6], ly[6]);
 		    cairo_line_to (cr, mx[i+1], ly[i+1]);
 		    cairo_move_to (cr, mx[6], uy[6]);
 		    cairo_line_to (cr, mx[i+1], uy[i+1]);
+<<<<<<< HEAD
+		    cairo_stroke(cr);
+=======
                     cairo_stroke(cr);
+>>>>>>> 6d3d5f25bc6170672b2238fbf8e5aee62ac27e53
 		  }
 	      }
 	}
@@ -279,15 +261,12 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 	  {
 	    if(mx[i] <= mx[i+1])
 	      {
-		cairo_set_dash(cr,nodsh,0,0);
-		cairo_set_source_rgb (cr, rgbr[0], rgbr[1], rgbr[2]);
+		cairo_set_source_rgb (cr, 0.9, 0.9, 0.00);
 	      }
 	    if(mx[i+1] < mx[i])
 	      {
-		cairo_set_source_rgb (cr, rgbv[0], rgbv[1], rgbv[2]);
-		cairo_set_dash(cr,dsh,dshlen,0);
+		cairo_set_source_rgb (cr, 0.7, 1.00, 1.00);
 	      }
-
 
 	    cairo_move_to (cr, mx[i], ly[i]);
 	    cairo_line_to (cr, mx[i+1], ly[i+1]);
@@ -300,10 +279,9 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       
   if(pdat->virt == 1 && pos5 < pos3)
     {
-
-      cairo_set_source_rgb (cr, rgbv[0], rgbv[1], rgbv[2]);
-      cairo_set_dash(cr,dsh,dshlen,0);
-
+      cairo_set_line_style(cr,LINE_ON_OFF_DASH);
+      cairo_set_source_rgb (cr, 0.7, 1, 1);
+      
       cairo_move_to (cr, mx[3], ly[3]);
       cairo_line_to (cr, mx[5], ly[5]);
 
