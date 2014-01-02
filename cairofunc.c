@@ -11,8 +11,9 @@
 
 #define NPTS 7
 
-const double dash[]={5.,5.};
-const double nodash[]={1};
+const double dash[] = { 5., 5. };
+const double nodash[] = { 1 };
+
 //função sinal
 double
 dsign (double x)
@@ -41,8 +42,8 @@ draw_varrow (double x, double y, double hgt, double focus, cairo_t * cr)
       cairo_move_to (cr, x, y - hgt);
       cairo_line_to (cr,
 		     x + i * (-0.02 * focus + 10),
-		     y - hgt + 
-                       (0.02 * focus + 10) * dsign (focus) * dsign (hgt));
+		     y - hgt +
+		     (0.02 * focus + 10) * dsign (focus) * dsign (hgt));
       // numeros mágicos acima controlam o ajuste de curvatura
       // é do tipo y=mx+b
     }
@@ -59,8 +60,8 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 
   pdat = (progdata *) dat;
   midref = *(pdat->pts.ldn) / 2;
-  (pdat->pts.ang) = (M_PI/180)* (GTK_ADJUSTMENT (pdat->barang.adj))->value;
-  *(pdat->lnsd.focus)= -*(pdat->lnsd.focus); 
+  (pdat->pts.ang) = (M_PI / 180) * (GTK_ADJUSTMENT (pdat->barang.adj))->value;
+  *(pdat->lnsd.focus) = -*(pdat->lnsd.focus);
 
   if ((*(pdat->pts.lrt) - TOL) < *(pdat->lnsc.pos))
     *(pdat->lnsc.pos) = *(pdat->pts.lrt) - TOL;
@@ -73,7 +74,7 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 
   cairo_set_source_rgb (cr, 1., 1., 1.);
   draw_line (cr, 0, midref, pdat->drawbox->allocation.width, midref);
-  cairo_stroke(cr);
+  cairo_stroke (cr);
   //desenha lente convergente
   cairo_set_source_rgb (cr, 1., 0.55, 0.);
 
@@ -89,9 +90,10 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 	       midref, pdat->lensdata.ylen, *(pdat->lnsd.focus), cr);
   draw_varrow (*(pdat->lnsd.pos),
 	       midref, -pdat->lensdata.ylen, *(pdat->lnsd.focus), cr);
-  cairo_stroke(cr);
+  cairo_stroke (cr);
 
   //verifica primeira lente
+
   if (*(pdat->lnsc.pos) < *(pdat->lnsd.pos))
     {
       lens1 = &(pdat->lnsc);
@@ -108,22 +110,25 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   cairo_set_line_width (cr, 1);
   cairo_set_source_rgb (cr, 1., 1., 0);
 
-  for (i=0;i<6;i++){
+  for (i = 0; i < 6; i++)
+    {
 
-    if(pdat->pts.px[i] > pdat->pts.px[i+1])
-        cairo_set_dash(cr,dash,1,0);
-    else
-        cairo_set_dash(cr,nodash,0,0);
+      if (pdat->pts.px[i] > pdat->pts.px[i + 1])
+	cairo_set_dash (cr, dash, 1, 0);
+      else
+	cairo_set_dash (cr, nodash, 0, 0);
 
-    draw_line(cr,pdat->pts.px[i],pdat->pts.pye[i],
-             pdat->pts.px[i+1],pdat->pts.pye[i+1]);
+      draw_line (cr, pdat->pts.px[i], pdat->pts.pye[i],
+		 pdat->pts.px[i + 1], pdat->pts.pye[i + 1]);
 
-    draw_line(cr,pdat->pts.px[i],pdat->pts.pyp[i],
-             pdat->pts.px[i+1],pdat->pts.pyp[i+1]);
-    cairo_stroke(cr);
-  }
+      draw_line (cr, pdat->pts.px[i], pdat->pts.pyp[i],
+		 pdat->pts.px[i + 1], pdat->pts.pyp[i + 1]);
+      cairo_stroke (cr);
+    }
+
 /*
-  for (;i<6;i++){
+  for (;i<6;i++)
+  {
     draw_line(cr,pdat->pts.px[i],pdat->pts.pye[i],
              pdat->pts.px[i+1],pdat->pts.pye[i+1]);
 
@@ -136,14 +141,12 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   //desenha imagens
   cairo_set_source_rgb (cr, 0., 0., 1.);
 
-  draw_varrow (pdat->pts.px[3],
-	       midref, midref-pdat->pts.pyp[3],50, cr);
-  draw_varrow (pdat->pts.px[5],
-	       midref, midref-pdat->pts.pyp[5],50, cr);
+  draw_varrow (pdat->pts.px[3], midref, midref - pdat->pts.pyp[3], 50, cr);
+  draw_varrow (pdat->pts.px[5], midref, midref - pdat->pts.pyp[5], 50, cr);
 
-  cairo_stroke(cr);
+  cairo_stroke (cr);
   cairo_destroy (cr);
-  *(pdat->lnsd.focus)= -*(pdat->lnsd.focus); 
+  *(pdat->lnsd.focus) = -*(pdat->lnsd.focus);
 
   return FALSE;
 
