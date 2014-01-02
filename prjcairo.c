@@ -225,12 +225,11 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 		    else
 		      cairo_set_source_rgb (cr, 0.7, 1.00, 1.00);
 
-		    cairo_set_source_rgb (cr, 0.90, 0.00, 0.00);//for bug testing
-
 		    cairo_move_to (cr, mx[i], ly[i]);
 		    cairo_line_to (cr, mx[6], ly[6]);
 		    cairo_move_to (cr, mx[i], uy[i]);
 		    cairo_line_to (cr, mx[6], uy[6]);
+		    cairo_stroke(cr);
 		  }
 
 		if( j < i || pdat->virt == 1 )
@@ -240,12 +239,11 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 		    else
 		      cairo_set_source_rgb (cr, 0.7, 1.00, 1.00);
 
-		    cairo_set_source_rgb (cr, 0.00, 0.00, 0.00);//for bug testing
-
 		    cairo_move_to (cr, mx[6], ly[6]);
 		    cairo_line_to (cr, mx[i+1], ly[i+1]);
 		    cairo_move_to (cr, mx[6], uy[6]);
 		    cairo_line_to (cr, mx[i+1], uy[i+1]);
+		    cairo_stroke(cr);
 		  }
 	      }
 	}
@@ -254,9 +252,13 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 	if((mx[i] < mx[i+1] || pdat->virt == 1))
 	  {
 	    if(mx[i] <= mx[i+1])
+	      {
 		cairo_set_source_rgb (cr, 0.9, 0.9, 0.00);
+	      }
 	    if(mx[i+1] < mx[i])
+	      {
 		cairo_set_source_rgb (cr, 0.7, 1.00, 1.00);
+	      }
 
 	    cairo_move_to (cr, mx[i], ly[i]);
 	    cairo_line_to (cr, mx[i+1], ly[i+1]);
@@ -269,7 +271,9 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       
   if(pdat->virt == 1 && pos5 < pos3)
     {
+      cairo_set_line_style(cr,LINE_ON_OFF_DASH);
       cairo_set_source_rgb (cr, 0.7, 1, 1);
+      
       cairo_move_to (cr, mx[3], ly[3]);
       cairo_line_to (cr, mx[5], ly[5]);
 
