@@ -119,6 +119,26 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   ang = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barang.adj));
   ang = ang*(M_PI/180); 
 
+  //Circulos para alterar distancias focais com rato
+  cairo_set_source_rgb (cr, 0.8, 0.8, 0.8);
+  cairo_move_to (cr, pos1 + fc, pos2);
+  cairo_arc (cr, pos1 + fc, pos2, xwid*1.5, 15, 7. * M_PI);
+  cairo_fill(cr);
+  
+  cairo_move_to (cr, pos1 - fc, pos2);
+  cairo_arc (cr, pos1 - fc, pos2, xwid*1.5, 15, 7. * M_PI);
+  cairo_fill(cr);
+
+  cairo_set_source_rgb (cr, 0.8, 0.8, 0.8);
+  cairo_move_to (cr, pos3 + fd, pos2);
+  cairo_arc (cr, pos3 + fd, pos2, xwid*1.5, 15, 7. * M_PI);
+  cairo_fill(cr);
+
+  cairo_move_to (cr, pos3 - fd, pos2);
+  cairo_arc (cr, pos3 - fd, pos2, xwid*1.5, 15, 7. * M_PI);
+  cairo_fill(cr);
+
+  cairo_stroke(cr);
 
   if(pos3 < pos1)
     {

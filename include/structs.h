@@ -82,6 +82,7 @@ typedef struct
   lens lnsc,lnsd;
   physdata lensvalue;
   char virt; //raios virtuais 1 = On 0 = Off
+  char dist;
   rodent mouse;
 } progdata;
 

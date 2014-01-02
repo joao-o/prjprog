@@ -24,7 +24,7 @@ Coisas a fazer
 	tr(as distancias focais permitem distancias muito grandes. 
  	   Se bem que ter a escala dos eixos ajustáveis resolve o problema)
 
-[ ] Identificar raios virtuais. Ter opção de não mostrar
+[x] Identificar raios virtuais. Ter opção de não mostrar
 	tr(prjcairo já apanha a maior parte deles, estou a trabalhar numa ligeira
 	   alteração ao ciclo para resolver os restantes) 
 	jo(menu para alterar estilo

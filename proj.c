@@ -22,7 +22,7 @@ main (int argc, char **argv)
   //barras e butões
   GtkWidget *button, *barlensl, *barlensr,
     *barfocc, *barfocd, *barangl, *lunbtn,
-    *virtbtn;
+    *virtbtn, *distbtn;
 
   // boxes
   GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox,
@@ -147,6 +147,10 @@ main (int argc, char **argv)
   gtk_box_pack_end(GTK_BOX(optnbox), virtbtn, FALSE, FALSE, 20);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (virtbtn), TRUE);
 
+  distbtn = gtk_check_button_new_with_label("Fixar Distância entre Lentes");
+  gtk_box_pack_end(GTK_BOX(optnbox), distbtn, FALSE, FALSE, 20);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (distbtn), FALSE);
+
   //butão toggle com cores
 
   gdk_color_parse ("red", &pdat->btnlock.coloron);
@@ -200,8 +204,11 @@ main (int argc, char **argv)
   g_signal_connect (G_OBJECT (pdat->btnlock.name), "toggled",
 		    G_CALLBACK (lchange), pdat);
 
- g_signal_connect (G_OBJECT (virtbtn), "toggled",
+  g_signal_connect (G_OBJECT (virtbtn), "toggled",
 		    G_CALLBACK (virtchange), pdat);
+
+  g_signal_connect (G_OBJECT (distbtn), "toggled",
+		    G_CALLBACK (distchange), pdat);
 
  //callbacks barras
   g_signal_connect (G_OBJECT (pdat->barl.adj), "value-changed",

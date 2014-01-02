@@ -175,6 +175,16 @@ virtchange (GtkWidget * widget, gpointer dat)
   gtk_widget_queue_draw (pdat->window);
   return TRUE;
 }
+
+//ainda só funciona no rato
+gboolean
+distchange (GtkWidget * widget, gpointer dat)
+{
+  progdata *pdat;
+  pdat = (progdata *) dat;
+  pdat->dist = !pdat->dist;
+  return TRUE;
+}
 //callback quando rato é usado para mexer coisas
 
 gboolean
@@ -182,42 +192,84 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
+  double poslc, posld, axis, ldist;
+
+  poslc = GTK_ADJUSTMENT (pdat->barl.adj)->value;
+  posld = GTK_ADJUSTMENT (pdat->barr.adj)->value;
+  axis = 3. * pdat->drawbox->allocation.height / 5.;
+  ldist = poslc - posld;
 
   if (event->type == GDK_MOTION_NOTIFY)
     {
       pdat->mouse.nestx = ((GdkEventMotion *) event)->x;
-
-      if (pdat->mouse.trap == 1)
+      pdat->mouse.nesty = ((GdkEventMotion *) event)->y;
+      
+      if(pdat->mouse.trap == 1 )
 	{
 	  (GTK_ADJUSTMENT (pdat->barl.adj))->value =
 	    pdat->mouse.nestx + pdat->mouse.path1;
+	 
+	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
+				 "value-changed");
+	  if(pdat->dist)
+	    {
+	      (GTK_ADJUSTMENT (pdat->barr.adj))->value =
+		(GTK_ADJUSTMENT (pdat->barl.adj))->value - ldist;
+	 
+	      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
+				     "value-changed");
+	    }
+	}
+      else if(pdat->mouse.trap == 2 )
+	{
 	  (GTK_ADJUSTMENT (pdat->barr.adj))->value =
 	    pdat->mouse.nestx + pdat->mouse.path2;
+
+	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
+				 "value-changed");
+
+	  if(pdat->dist)
+	    {
+	      (GTK_ADJUSTMENT (pdat->barl.adj))->value =
+		(GTK_ADJUSTMENT (pdat->barr.adj))->value + ldist;
+	 
+	      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
+				     "value-changed");
+	    }
 	}
 
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
-			     "value-changed");
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
-			     "value-changed");
     }
   else if (event->type == GDK_BUTTON_PRESS)
     {
+      
       pdat->mouse.nestx = ((GdkEventButton *) event)->x;
-      pdat->mouse.trap = 1;
+      pdat->mouse.nesty = ((GdkEventMotion *) event)->y;
+   
+      if(fabs(pdat->mouse.nestx - poslc) < pdat->lensdata.headwid1 + 3 
+	 && fabs(pdat->mouse.nesty - axis) < pdat->lensdata.ylen + 3)
+	{
+	  pdat->mouse.trap = 1;  
+	  pdat->mouse.path1 =
+	    (GTK_ADJUSTMENT (pdat->barl.adj))->value - pdat->mouse.nestx;
+	  (GTK_ADJUSTMENT (pdat->barl.adj))->value =
+	    pdat->mouse.nestx + pdat->mouse.path1;
 
-      pdat->mouse.path1 =
-	(GTK_ADJUSTMENT (pdat->barl.adj))->value - pdat->mouse.nestx;
-      (GTK_ADJUSTMENT (pdat->barl.adj))->value =
-	pdat->mouse.nestx + pdat->mouse.path1;
-      pdat->mouse.path2 =
-	(GTK_ADJUSTMENT (pdat->barr.adj))->value - pdat->mouse.nestx;
-      (GTK_ADJUSTMENT (pdat->barr.adj))->value =
-	pdat->mouse.nestx + pdat->mouse.path2;
+	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
+				 "value-changed");
+	}
+      else if(fabs(pdat->mouse.nestx - posld) < pdat->lensdata.headwid1 + 3 
+	      && fabs(pdat->mouse.nesty - axis) < pdat->lensdata.ylen + 3)
+	{
+	  pdat->mouse.trap = 2;
+	  pdat->mouse.path2 =
+	    (GTK_ADJUSTMENT (pdat->barr.adj))->value - pdat->mouse.nestx;
+	  (GTK_ADJUSTMENT (pdat->barr.adj))->value =
+	    pdat->mouse.nestx + pdat->mouse.path2;
 
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
-			     "value-changed");
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
-			     "value-changed");
+	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
+				 "value-changed");
+	}
+      
     }
   else if (event->type == GDK_BUTTON_RELEASE)
     pdat->mouse.trap = 0;
