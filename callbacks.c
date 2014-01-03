@@ -316,7 +316,7 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
 				 "value-changed");
 	}
       else if(fabs(pdat->mouse.nestx - posld)
-	      < pdat->lensdata.headwid1 
+	      < pdat->lensdata.headwid2 
 	      && fabs(pdat->mouse.nesty - axis) 
 	      < pdat->lensdata.ylen)
 	{

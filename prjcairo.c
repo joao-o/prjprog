@@ -17,15 +17,18 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   int width, height, i, j, t;
   double pos1, pos2, pos3, pos4, pos5, flens, slens;
   double uy[7], ly[7], mx[7], rgbr[3], rgbv[3];
-  double ylen, xwid, ang, fc, fd, hwid1;
+  double ylen, xwid, ang, fc, fd, hwid1, hwid2;
   int dshl=sizeof(dsh)/sizeof(dsh[0]);
 
   pdat = (progdata*) dat;
 
   ylen = pdat->lensdata.ylen;
   xwid = pdat->lensdata.xwid;
-  hwid1 = pdat->lensdata.headwid1;
-  
+  hwid1 = pdat->lensdata.headwid1 = 
+    240/(gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj))+48.33) + 4.9;
+  hwid2 = pdat->lensdata.headwid2 =  
+    240/(gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfd.adj))+48.33) + 4.9;
+
   rgbr[0] = 0.90;
   rgbr[1] = 0.90;
   rgbr[2] = 0.00;
@@ -99,17 +102,17 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_line_to (cr, pos3, pos2 - (ylen)/2);
   cairo_stroke (cr);
 
-  cairo_move_to (cr, pos3 - hwid1, pos2 - (ylen)/2 );
-  cairo_line_to (cr, pos3 + hwid1, pos2 - (ylen)/2 );
+  cairo_move_to (cr, pos3 - hwid2, pos2 - (ylen)/2 );
+  cairo_line_to (cr, pos3 + hwid2, pos2 - (ylen)/2 );
   cairo_line_to (cr, pos3, pos2 - (ylen)/2 +15 );
-  cairo_line_to (cr, pos3 - hwid1, pos2 - (ylen)/2 );
-  cairo_line_to (cr, pos3 + hwid1, pos2 - (ylen)/2 );
+  cairo_line_to (cr, pos3 - hwid2, pos2 - (ylen)/2 );
+  cairo_line_to (cr, pos3 + hwid2, pos2 - (ylen)/2 );
 
-  cairo_move_to (cr, pos3 - hwid1, pos2 + (ylen)/2 );
-  cairo_line_to (cr, pos3 + hwid1, pos2 + (ylen)/2 );
+  cairo_move_to (cr, pos3 - hwid2, pos2 + (ylen)/2 );
+  cairo_line_to (cr, pos3 + hwid2, pos2 + (ylen)/2 );
   cairo_line_to (cr, pos3, pos2 + (ylen)/2 - 15);
-  cairo_line_to (cr, pos3 - hwid1, pos2 + (ylen)/2 );
-  cairo_line_to (cr, pos3 + hwid1, pos2 + (ylen)/2 );
+  cairo_line_to (cr, pos3 - hwid2, pos2 + (ylen)/2 );
+  cairo_line_to (cr, pos3 + hwid2, pos2 + (ylen)/2 );
 
   cairo_fill (cr);
 
