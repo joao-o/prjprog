@@ -1,7 +1,6 @@
 #ifndef _STRUCTSINC
 #define _STRUCTSINC
 
-#define NPTS 7
 #define TOL 20			//Distância ente eixo optico e borda da drawbox
 
 // struct com dados para butao toggle com cores que mudam 
@@ -53,12 +52,16 @@ typedef struct
 //struct c/ os pontos a desenhar
 typedef struct
 {
-  double px[NPTS],pye[NPTS],pyp[NPTS];
-  //px posição em x dos raios py1 
-  //pye posiçao em y do raio que passa no eixo
-  //pyp posiçao em y do raio que sai paralelo da lente1
+  double px1[4],pe1[4],pp1[4];
+  double px2[4],pe2[4],pp2[4];
+  //px posição em x dos raios 
+  //pe posiçao em y do raio que passa no eixo
+  //pp posiçao em y do raio que sai paralelo da lente1
+  //1 calculos da lente 1, 2 ...
   gint *lup,*ldn,*llt,*lrt;
   double ang,ylen;
+  char vmask;
+  char i;
 } draw;
 
 //struct com coisas do rato
