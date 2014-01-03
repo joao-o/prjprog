@@ -18,6 +18,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   double pos1, pos2, pos3, pos4, pos5, flens, slens;
   double uy[7], ly[7], mx[7], rgbr[3], rgbv[3];
   double ylen, xwid, ang, fc, fd, hwid1;
+  int dshl=sizeof(dsh)/sizeof(dsh[0]);
 
   pdat = (progdata*) dat;
 
@@ -133,7 +134,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_fill(cr);
 
   /*cairo_move_to (cr, pos3 - fd, pos2);
-  cairo_arc (cr, pos3 - fd, pos2, xwid*1.5, 15, 7. * M_PI);2+((pts->vmask&6)==6)
+  cairo_arc (cr, pos3 - fd, pos2, xwid*1.5, 15, 7. * M_PI);
   cairo_fill(cr);*/
 
   cairo_stroke(cr);
@@ -260,7 +261,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 		    else
 		      {
 			cairo_set_source_rgb (cr, rgbv[0], rgbv[1], rgbv[2]);
-			cairo_set_dash(cr,dsh,1,0);
+			cairo_set_dash(cr,dsh,dshl,0);
 		      }
 
 		    cairo_move_to (cr, mx[i], ly[i]);
@@ -280,7 +281,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 		    else
 		      {
 			cairo_set_source_rgb (cr, rgbv[0], rgbv[1], rgbv[2]);
-			cairo_set_dash(cr,dsh,1,0);
+			cairo_set_dash(cr,dsh,dshl,0);
 		      }
 
 		    cairo_move_to (cr, mx[6], ly[6]);
@@ -303,7 +304,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 	    if(mx[i+1] < mx[i])
 	      {
 		cairo_set_source_rgb (cr, rgbv[0], rgbv[1], rgbv[2]);
-		cairo_set_dash(cr,dsh,1,0);
+		cairo_set_dash(cr,dsh,dshl,0);
 	      }
 
 
@@ -320,7 +321,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
     {
 
       cairo_set_source_rgb (cr, rgbv[0], rgbv[1], rgbv[2]);
-      cairo_set_dash(cr,dsh,1,0);
+      cairo_set_dash(cr,dsh,dshl,0);
 
       cairo_move_to (cr, mx[3], ly[3]);
       cairo_line_to (cr, mx[5], ly[5]);

@@ -67,7 +67,7 @@ typedef struct
 //struct com coisas do rato
 typedef struct
 {
-  char trap; //trap = 1 rato clicado, 0 otherwise
+  char trap; //trap = [1,4] rato clicado, 0 otherwise
   double nestx;
   double nesty; //posição x e y onde é clicado
   double path1;

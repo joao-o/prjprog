@@ -13,6 +13,9 @@
 #define NPTS 7
 
 const double dash[] = { 8., 8. };
+//tr: Recomendo o tracejado com x2 mais off que on
+//   È mais agradável à vista e impede que a sobreposição de duas
+//   linhas pareça não ter tracejado
 const double nodash[] = { 1 };
 
 //função sinal

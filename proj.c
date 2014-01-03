@@ -151,7 +151,7 @@ main (int argc, char **argv)
 
 ////////////////////////////////////////////////////////////////////////////////
   //botões
-  button = gtk_button_new_with_label ("\tRecomeçar\t");
+  button = gtk_button_new_with_label ("Recomeçar");
   gtk_box_pack_end (GTK_BOX (optnbox), button, FALSE, FALSE, 5);
 
   lunbtn = gtk_button_new_with_label("Criar Luneta");
