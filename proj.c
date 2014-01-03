@@ -115,7 +115,7 @@ main (int argc, char **argv)
 
   //distancia focal
   pdat->barfc.adj = gtk_adjustment_new (300.0, 1.0, 301.0, 0.1, 1.0, 1.0);
-  pdat->barfd.adj = gtk_adjustment_new (150.0, 0.0, 301.0, 0.1, 1.0, 1.0);
+  pdat->barfd.adj = gtk_adjustment_new (150.0, 1.0, 301.0, 0.1, 1.0, 1.0);
 
   bfcfrm = gtk_frame_new ("Distância Focal da Lente Convergente");
   gtk_container_add (GTK_CONTAINER (notebp2), bfcfrm);
@@ -157,11 +157,11 @@ main (int argc, char **argv)
   lunbtn = gtk_button_new_with_label("Criar Luneta");
   gtk_box_pack_end(GTK_BOX(optnbox), lunbtn, FALSE, FALSE, 5);
 
-  virtbtn = gtk_check_button_new_with_label("Ver Raios Virtuais");
+  virtbtn = gtk_check_button_new_with_label("Raios Virtuais");
   gtk_box_pack_start(GTK_BOX(optnbox), virtbtn, FALSE, FALSE, 5);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (virtbtn), TRUE);
 
-  distbtn = gtk_check_button_new_with_label("Fixar Distância entre Lentes");
+  distbtn = gtk_check_button_new_with_label("Fixar Distância\nentre Lentes");
   gtk_box_pack_start(GTK_BOX(optnbox), distbtn, FALSE, FALSE, 5);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (distbtn), FALSE);
 
@@ -169,7 +169,7 @@ main (int argc, char **argv)
 
   gdk_color_parse ("red", &pdat->btnlock.coloron);
   gdk_color_parse ("green", &pdat->btnlock.coloroff);
-  gdk_color_parse ("cyan", &pdat->btnlock.colorhigh);
+  gdk_color_parse ("orange", &pdat->btnlock.colorhigh);
   pdat->btnlock.name = gtk_toggle_button_new_with_label (pdat->btnlock.label);
 
   gtk_box_pack_start (GTK_BOX (optnbox), pdat->btnlock.name, FALSE, FALSE, 2);

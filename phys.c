@@ -38,35 +38,42 @@ alin (double x1, double y1, double x2, double y2, double y3)
 void
 calcs (draw * pts, lens * lens1, lens * lens2)
 {
-  pts->px[0] = 0;
-  pts->px[1] = *(lens1->pos);
+  // bits da vmask em 1 implica que o raio é virtual
+  double temp;
+  pts->px1[0] = 0;
+  pts->px1[1] = *(lens1->pos);
 
-  pts->pye[1] = *(pts->ldn) / 2;
-  pts->pye[0] = (pts->pye[1]) - (tan (pts->ang) * pts->px[1]);
+  pts->pe1[1] = *(pts->ldn) / 2;
+  pts->pe1[0] = (pts->pe1[1]) - (tan (pts->ang) * pts->px1[1]);
 
-  pts->px[2] = *(lens2->pos);
-  pts->px[3] = pts->px[1] + *(lens1->focus);
+  pts->vmask = (*(lens1->focus) < 0) ? 2 : 0;
+  temp = pts->px1[1] + *(lens1->focus);
 
-  pts->pye[2] = (tan (pts->ang)) * pts->px[2] + pts->pye[0];
-  pts->pye[3] = (tan (pts->ang)) * pts->px[3] + pts->pye[0];
-  pts->pyp[4] = pts->pyp[3] = pts->pyp[2] = pts->pyp[1] = pts->pye[3];
-  pts->pyp[0] = (pts->pyp[1]) - (tan (pts->ang) * pts->px[1]);
+  if(*(lens2->pos) < temp)
+    pts->vmask |= 4;
+  pts->px1[2] = (*(lens2->pos) < temp)? *(lens2->pos) : temp;
+  pts->px1[3] = (pts->px1[2] == temp) ? *(lens2->pos): temp;
 
-  pts->px[4] = pts->px[2];
-  pts->pye[4] = pts->pye[1];
+  pts->pe1[2] = (tan (pts->ang)) * pts->px1[2] + pts->pe1[0];
+  pts->pe1[3] = (tan (pts->ang)) * pts->px1[3] + pts->pe1[0];
+  pts->pp1[3] = pts->pp1[2] = pts->pp1[1] =  
+    pts->pe1[2+((pts->vmask & 4)==4)];
+  pts->pp1[0] = (pts->pp1[1]) - (tan (pts->ang) * pts->px1[1]);
+/*   
+  pts->px2[4] = *(lens2->pos) + (pts->px1[3] - pts->px1[2]) * (*(lens2->focus)) / 
+    (*(lens2->focus) + pts->px1[3] - pts->px1[2]);
 
-  pts->px[5] = *(lens2->pos) + (pts->px[3] - pts->px[2]) * (*(lens2->focus)) / 
-    (*(lens2->focus) + pts->px[3] - pts->px[2]);
-  pts->pye[5] = lin (pts->px[3], pts->pye[3],
-     pts->px[2], pts->pye[1], pts->px[5]);
-  pts->pyp[5] = lin (pts->px[2], pts->pyp[2], *(lens2->pos) + *(lens2->focus),
-	 pts->pye[1], pts->px[5]);
-
-  pts->px[6] =(double) *(pts->lrt);
-  pts->pye[6] = lin (pts->px[3], pts->pye[3],
-     pts->px[2], pts->pye[1], pts->px[6]);
-  pts->pyp[6] = lin (pts->px[4], pts->pyp[4],
-     pts->px[5], pts->pyp[5], pts->px[6]);
-
+  pts->pye2[4] = lin (pts->px1[3], pts->pe1[3],
+     pts->px1[2], pts->pe1[1], pts->px1[5]);
+  pts->pyp2[4] = lin (pts->px1[2], pts->pp1[2], *(lens2->pos) + *(lens2->focus),
+	 pts->pe1[1], pts->px1[5]);
+*/
+/*
+  pts->px1[6] =(double) *(pts->lrt);
+  pts->pe1[6] = lin (pts->px1[3], pts->pe1[3],
+     pts->px1[2], pts->pe1[1], pts->px1[6]);
+  pts->pp1[6] = lin (pts->px1[4], pts->pp1[4],
+     pts->px1[5], pts->pp1[5], pts->px1[6]);
+*/
   return;
 }

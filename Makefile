@@ -30,8 +30,8 @@ debug: CFLAGS += $(DB_FLAGS)
 debug: LFLAGS += $(DB_FLAGS)	
 debug: all
 
-joao: CFLAGS += -DRENDER=expose_evv
-joao: LFLAGS += -DRENDER=expose_evv
+joao: CFLAGS += -DRENDER=expose_evv $(DB_FLAGS)
+joao: LFLAGS += -DRENDER=expose_evv $(DB_FLAGS)
 joao: all
 
 link: $(TARGET)
