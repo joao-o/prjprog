@@ -35,6 +35,7 @@ alin (double x1, double y1, double x2, double y2, double y3)
   return ((x2 - x1) / (y2 - y1)) * (y3 - y2) + x2;
 }
 
+/*
 void
 calcs (draw * pts, lens * lens1, lens * lens2)
 {
@@ -59,7 +60,7 @@ calcs (draw * pts, lens * lens1, lens * lens2)
   pts->pp1[3] = pts->pp1[2] = pts->pp1[1] =  
     pts->pe1[2+((pts->vmask & 4)==4)];
   pts->pp1[0] = (pts->pp1[1]) - (tan (pts->ang) * pts->px1[1]);
-/*   
+   
   pts->px2[4] = *(lens2->pos) + (pts->px1[3] - pts->px1[2]) * (*(lens2->focus)) / 
     (*(lens2->focus) + pts->px1[3] - pts->px1[2]);
 
@@ -67,13 +68,14 @@ calcs (draw * pts, lens * lens1, lens * lens2)
      pts->px1[2], pts->pe1[1], pts->px1[5]);
   pts->pyp2[4] = lin (pts->px1[2], pts->pp1[2], *(lens2->pos) + *(lens2->focus),
 	 pts->pe1[1], pts->px1[5]);
-*/
-/*
+
+
   pts->px1[6] =(double) *(pts->lrt);
   pts->pe1[6] = lin (pts->px1[3], pts->pe1[3],
      pts->px1[2], pts->pe1[1], pts->px1[6]);
   pts->pp1[6] = lin (pts->px1[4], pts->pp1[4],
      pts->px1[5], pts->pp1[5], pts->px1[6]);
-*/
+
   return;
 }
+*/
