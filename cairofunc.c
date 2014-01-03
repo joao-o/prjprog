@@ -13,6 +13,7 @@
 #define NPTS 7
 
 const double dash[] = { 8., 8. };
+
 //tr: Recomendo o tracejado com x2 mais off que on
 //   È mais agradável à vista e impede que a sobreposição de duas
 //   linhas pareça não ter tracejado
@@ -59,25 +60,25 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   progdata *pdat;
   cairo_t *cr;
   lens *lens1, *lens2;
+  static double buffer[5];
+
   double midref;
-  draw *pts;
-  double buffer[4];
-  unsigned char i = 4;
-  char j;
 
   pdat = (progdata *) dat;
-  midref = *(pdat->pts.ldn) / 2;
-  (pdat->pts.ang) = (M_PI / 180) * (GTK_ADJUSTMENT (pdat->barang.adj))->value;
+  midref = pdat->drawbox->allocation.height / 2;
+  buffer[4] = tan((M_PI / 180) * (GTK_ADJUSTMENT (pdat->barang.adj))->value);
   *(pdat->lnsd.focus) = -*(pdat->lnsd.focus);
-  pts = &pdat->pts;
 
-  if ((*(pdat->pts.lrt) - TOL) < *(pdat->lnsc.pos))
-    *(pdat->lnsc.pos) = *(pdat->pts.lrt) - TOL;
-  (GTK_ADJUSTMENT (pdat->barl.adj))->upper = *(pdat->pts.lrt) - TOL;
+  if ((pdat->drawbox->allocation.width - TOL) < *(pdat->lnsc.pos))
+    *(pdat->lnsc.pos) = pdat->drawbox->allocation.width - TOL;
+  (GTK_ADJUSTMENT (pdat->barl.adj))->upper =
+    pdat->drawbox->allocation.width - TOL;
 
-  if ((*(pdat->pts.lrt) - TOL) < *(pdat->lnsd.pos))
-    *(pdat->lnsd.pos) = *(pdat->pts.lrt) - TOL;
-  (GTK_ADJUSTMENT (pdat->barr.adj))->upper = *(pdat->pts.lrt) - TOL;
+  if ((pdat->drawbox->allocation.width - TOL) < *(pdat->lnsd.pos))
+    *(pdat->lnsd.pos) = pdat->drawbox->allocation.width - TOL;
+  (GTK_ADJUSTMENT (pdat->barr.adj))->upper =
+    pdat->drawbox->allocation.width - TOL;
+
   cr = gdk_cairo_create (pdat->drawbox->window);
 
   cairo_set_source_rgb (cr, 1., 1., 1.);
@@ -122,23 +123,23 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   //stacks are fun
   //reminder : i = 4
 
-  buffer[0] = *lens1->pos + *lens1->focus;                //x foco lente 1
-  buffer[3] = midref - tan (pts->ang) * *(lens1->pos);     
-  buffer[1] = tan (pts->ang) * buffer[0] + buffer[3];     //y foco lente 1
-  buffer[2] = tan (pts->ang) * *(lens2->pos) + buffer[3]; //y raio paralelo lente 2
+  buffer[0] = *lens1->pos + *lens1->focus;	//x foco lente 1
+  buffer[3] = midref - buffer[4] * *(lens1->pos);
+  buffer[1] = buffer[4] * buffer[0] + buffer[3];	//y foco lente 1
+  buffer[2] = buffer[4] * *(lens2->pos) + buffer[3];	//y raio paralelo lente 2
 
   // desenha reais
 
   draw_line (cr, 0, buffer[3], *(lens1->pos), midref);
-  draw_line (cr, 0, buffer[1] - midref + buffer[--i], *lens1->pos, buffer[1]);
+  draw_line (cr, 0, buffer[1] - midref + buffer[3], *lens1->pos, buffer[1]);
   draw_line (cr, *(lens1->pos), midref, *lens2->pos, buffer[2]);
   draw_line (cr, *(lens1->pos), buffer[1], *lens2->pos, buffer[1]);
-  
-  // posição imagem lente 2
-  buffer[i++] = (buffer[0]-*lens2->pos) * *lens2->focus /
-    (*lens2->focus + buffer[0]-*lens2->pos);
 
- // if (buffer[3]>*lens2->pos)
+  // posição imagem lente 2
+  buffer[3] = (buffer[0] - *lens2->pos) * *lens2->focus /
+    (*lens2->focus + buffer[0] - *lens2->pos);
+
+  // if (buffer[3]>*lens2->pos)
 //      draw_line(cr,*lens2->pos,,buffer[3],);
 
   cairo_stroke (cr);
@@ -147,18 +148,21 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
     {
       cairo_set_dash (cr, dash, 1, 0);
       cairo_set_source_rgb (cr, 0., 1., 0);
-      if (buffer[0] > *lens2->pos)
-	{
-	  draw_line (cr, *lens2->pos, buffer[2], buffer[0], buffer[1]);
-	  draw_line (cr, *lens2->pos, buffer[1], buffer[0], buffer[1]);
-          draw_line (cr,*lens2->pos,midref,buffer[0],buffer[1]);
-	}
-      else if (*lens1->focus < 0)
+      if (*lens1->focus < 0)
 	{
 	  draw_line (cr, buffer[0], buffer[1], *lens1->pos, buffer[1]);
 	  draw_line (cr, buffer[0], buffer[1], *lens1->pos, midref);
-          //draw_line (cr,*lens1->pos,,buffer[0],buffer[1]);
+	  //draw_line (cr,*lens1->pos,,buffer[0],buffer[1]);
 	}
+      else
+       { 
+         if (buffer[0] > *lens2->pos)
+	   {
+	     draw_line (cr, *lens2->pos, buffer[2], buffer[0], buffer[1]);
+	     draw_line (cr, *lens2->pos, buffer[1], buffer[0], buffer[1]);
+	   }
+	 draw_line (cr, *lens2->pos, midref, buffer[0], buffer[1]);
+       }
     }
   cairo_stroke (cr);
 

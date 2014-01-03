@@ -86,11 +86,6 @@ main (int argc, char **argv)
   statusbox = gtk_vbox_new (FALSE, 0);
   gtk_box_pack_end (GTK_BOX (optnbox), statusbox, FALSE, FALSE, 100);
 
-  pdat->pts.lup = &(pdat->drawbox->allocation.y);
-  pdat->pts.ldn = &(pdat->drawbox->allocation.height);
-  pdat->pts.llt = &(pdat->drawbox->allocation.x);
-  pdat->pts.lrt = &(pdat->drawbox->allocation.width);
-
 ////////////////////////////////////////////////////////////////////////////////
   // adjusts e barras
   //posição lentes
@@ -191,7 +186,6 @@ main (int argc, char **argv)
 ///////////////////////////////////////////////////////////////////////
   // temporário até ser ajustável
   pdat->lensdata.ylen = 125;
-  pdat->pts.ylen = 100;
   pdat->lensdata.xwid = 3;
   pdat->lensdata.headwid1 = 7;
   pdat->lensdata.headwid2 = 7;

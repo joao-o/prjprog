@@ -15,7 +15,6 @@ CC = gcc
 RM = /bin/rm
 
 TARGET = proj
-INCLUDE =
 PROGS  = proj.c callbacks.c prjcairo.c phys.c cairofunc.c miscui.c
 OBJECT = proj.o callbacks.o prjcairo.o phys.o cairofunc.o miscui.o
 TESTE = cairotest.c
@@ -38,25 +37,25 @@ link: $(TARGET)
 
 comp: $(OBJECT)
 
-proj.o: proj.c
+proj.o: proj.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
-callbacks.o: callbacks.c
+callbacks.o: callbacks.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
-prjcairo.o: prjcairo.c
+prjcairo.o: prjcairo.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
-phys.o: phys.c
+phys.o: phys.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
-miscui.o: miscui.c
+miscui.o: miscui.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
-cairofunc.o: cairofunc.c
+cairofunc.o: cairofunc.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
-$(TARGET): $(OBJECT)
+$(TARGET): $(OBJECT) $(INCLUDE)
 	$(CC) $(LFLAGS) -o $@ $^ $(LINK_LIBS)
 
 edit:

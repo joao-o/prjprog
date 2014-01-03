@@ -49,21 +49,6 @@ typedef struct
   double imgfiny, imgfinx; //altura/posicao da imagem final
 } physdata;
 
-//struct c/ os pontos a desenhar
-typedef struct
-{
-  double px1[4],pe1[4],pp1[4];
-  double px2[4],pe2[4],pp2[4];
-  //px posição em x dos raios 
-  //pe posiçao em y do raio que passa no eixo
-  //pp posiçao em y do raio que sai paralelo da lente1
-  //1 calculos da lente 1, 2 ...
-  gint *lup,*ldn,*llt,*lrt;
-  double ang,ylen;
-  char vmask;
-  char i;
-} draw;
-
 //struct com coisas do rato
 typedef struct
 {
@@ -81,7 +66,6 @@ typedef struct
   tbtn btnlock;
   GtkWidget *window, *drawbox;
   drawdata lensdata;
-  draw pts;
   lens lnsc,lnsd;
   physdata lensvalue;
   char virt; //raios virtuais 1 = On 0 = Off
