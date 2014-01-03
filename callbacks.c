@@ -78,8 +78,19 @@ upd_adj_free (GtkWidget * widget, gpointer dat)
       barra = &pdat->barang;
       l = 8;
     }
+  else if (GTK_OBJECT (widget) == pdat->barxx.adj)
+    {
+      barra = &pdat->barxx;
+      l = 6;
+    }
+  else if (GTK_OBJECT (widget) == pdat->baryy.adj)
+    {
+      barra = &pdat->baryy;
+      l = 6;
+    }
 
-  if (l == 15 && pdat->btnlock.state&& *pdat->lnsc.focus > *pdat->lnsd.focus+20)
+  if (l == 15 && pdat->btnlock.state 
+      && *pdat->lnsc.focus > *pdat->lnsd.focus+20)
     {
       *pdat->lnsd.pos = *pdat->lnsc.pos +
 	*pdat->lnsc.focus - *pdat->lnsd.focus - 5;
@@ -183,6 +194,48 @@ distchange (GtkWidget * widget, gpointer dat)
   progdata *pdat;
   pdat = (progdata *) dat;
   pdat->dist = !pdat->dist;
+  return TRUE;
+}
+
+gboolean
+scalechange (GtkWidget * widget, gpointer dat)
+{
+  progdata *pdat;
+  pdat = (progdata *) dat;
+  if( (widget) == pdat->ampxx)
+    {
+      gtk_adjustment_configure(GTK_ADJUSTMENT (pdat->barxx.adj),
+			       1.1, 1.0, 100, 0.1, 1.,1.);
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barxx.adj),
+			     "value-changed");
+    }
+  else  if( (widget) == pdat->redxx)
+    {
+      gtk_adjustment_configure(GTK_ADJUSTMENT (pdat->barxx.adj),
+			       0.9, 0.0, 1.00, 0.01, 1.,1.);
+      /* gtk_adjustment_set_lower (GTK_ADJUSTMENT (pdat->barxx.adj),
+				0.00);
+      GTK_ADJUSTMENT (pdat->barxx.adj)->value = 0.9;
+      gtk_adjustment_set_upper (GTK_ADJUSTMENT (pdat->barxx.adj),
+      1);*/
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barxx.adj),
+			     "value-changed");
+    }
+  else  if( (widget) == pdat->ampyy)
+    {
+      gtk_adjustment_configure(GTK_ADJUSTMENT (pdat->baryy.adj),
+			       1.1, 1.0, 100, 0.1, 1.,1.);
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->baryy.adj),
+			     "value-changed");
+    }
+  else  if( (widget) == pdat->redyy)
+    {
+      gtk_adjustment_configure(GTK_ADJUSTMENT (pdat->baryy.adj),
+			       0.9, 0.0, 1.00, 0.01, 1.,1.);
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->baryy.adj),
+			     "value-changed");
+    }
+
   return TRUE;
 }
 //callback quando rato é usado para mexer coisas

@@ -22,15 +22,17 @@ main (int argc, char **argv)
   //barras e butões
   GtkWidget *button, *barlensl, *barlensr,
     *barfocc, *barfocd, *barangl, *lunbtn,
-    *virtbtn, *distbtn;
+    *virtbtn, *distbtn, *barsclx, *barscly;
 
   // boxes
   GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox,
-    *noteb, *notebp1, *notebp2, *notebp3, *optnbox, *statusbox;
+    *noteb, *notebp1, *notebp2, *notebp3, *notebp4, 
+    *optnbox, *statusbox, *noteb4xx, *noteb4yy;
 
   //frames
   GtkWidget *dtbfrm, *drwfrm, 
-    *blcfrm, *bldfrm, *bfcfrm, *bfdfrm, *bangfrm;
+    *blcfrm, *bldfrm, *bfcfrm, *bfdfrm, *bangfrm,
+    *xxfrm, *yyfrm;
 
   //setup inicial e criação da janela principal
   pdat = calloc (1, sizeof (progdata));
@@ -40,6 +42,8 @@ main (int argc, char **argv)
   strcpy (pdat->barfc.str, "focal length= 0.000");
   strcpy (pdat->barfd.str, "focal length= 0.000");
   strcpy (pdat->barang.str, "angulo= 0.000");
+  strcpy (pdat->barxx.str, "xx: 1:0000");
+  strcpy (pdat->baryy.str, "yy: 1:0000");
 
   pdat->btnlock.state = 0;
   sprintf (pdat->btnlock.label, " Unlocked ");
@@ -79,6 +83,7 @@ main (int argc, char **argv)
   notebp1 = gtk_vbox_new (FALSE, 0);
   notebp2 = gtk_vbox_new (FALSE, 0);
   notebp3 = gtk_vbox_new (FALSE, 0);
+  notebp4 = gtk_vbox_new (FALSE, 0);
 
   optnbox = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (dtbfrm), optnbox);
@@ -144,6 +149,33 @@ main (int argc, char **argv)
   pdat->barang.lbl = gtk_label_new (pdat->barang.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barang.lbl, TRUE, TRUE, 0);
 
+  
+  //escala
+  pdat->baryy.adj = gtk_adjustment_new (2, 1, 100.0, 0.1, 1.0, 1.0);
+
+  yyfrm = gtk_frame_new ("Escala dos YY");
+  gtk_container_add (GTK_CONTAINER (notebp4), yyfrm);
+  barscly = gtk_hscale_new (GTK_ADJUSTMENT (pdat->baryy.adj));
+  gtk_container_add (GTK_CONTAINER (yyfrm), barscly);
+
+  pdat->baryy.lbl = gtk_label_new (pdat->baryy.str);
+
+  noteb4yy = gtk_hbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (notebp4), noteb4yy);
+
+  pdat->barxx.adj = gtk_adjustment_new (2, 1, 100.0, 0.1, 1.0, 1.0);
+
+  xxfrm = gtk_frame_new ("Escala dos XX");
+  gtk_container_add (GTK_CONTAINER (notebp4), xxfrm);
+  barsclx = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barxx.adj));
+  gtk_container_add (GTK_CONTAINER (xxfrm), barsclx);
+
+  pdat->barxx.lbl = gtk_label_new (pdat->barxx.str);
+ 
+  noteb4xx = gtk_hbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (notebp4), noteb4xx);
+
+
   pdat->lnsc.pos = &(GTK_ADJUSTMENT (pdat->barl.adj)->value);
   pdat->lnsc.focus = &(GTK_ADJUSTMENT (pdat->barfc.adj)->value);
   pdat->lnsd.pos = &(GTK_ADJUSTMENT (pdat->barr.adj)->value);
@@ -164,6 +196,26 @@ main (int argc, char **argv)
   distbtn = gtk_check_button_new_with_label("Fixar Distância\nentre Lentes");
   gtk_box_pack_start(GTK_BOX(optnbox), distbtn, FALSE, FALSE, 5);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (distbtn), FALSE);
+
+  pdat->ampxx = gtk_radio_button_new_with_label(NULL,"Ampliar");
+  gtk_container_add (GTK_CONTAINER (noteb4xx), pdat->ampxx);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->ampxx), TRUE);
+
+  pdat->redxx = gtk_radio_button_new_with_label(gtk_radio_button_group 
+					  (GTK_RADIO_BUTTON (pdat->ampxx)),
+					  "Reduzir");
+  gtk_container_add (GTK_CONTAINER (noteb4xx), pdat->redxx);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->redxx), FALSE);
+
+  pdat->ampyy = gtk_radio_button_new_with_label(NULL,"Ampliar");
+  gtk_container_add (GTK_CONTAINER (noteb4yy), pdat->ampyy);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->ampyy), TRUE);
+
+  pdat->redyy = gtk_radio_button_new_with_label(gtk_radio_button_group 
+					  (GTK_RADIO_BUTTON (pdat->ampyy)),
+					  "Reduzir");
+  gtk_container_add (GTK_CONTAINER (noteb4yy), pdat->redyy);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->redyy), FALSE);
 
   //butão toggle com cores
 
@@ -186,9 +238,10 @@ main (int argc, char **argv)
   gtk_notebook_append_page (GTK_NOTEBOOK (noteb), notebp1, NULL);
   gtk_notebook_append_page (GTK_NOTEBOOK (noteb), notebp2, NULL);
   gtk_notebook_append_page (GTK_NOTEBOOK (noteb), notebp3, NULL);
+  gtk_notebook_append_page (GTK_NOTEBOOK (noteb), notebp4, NULL);
   gtk_box_pack_start (GTK_BOX (setbox), noteb, TRUE, TRUE, 0);
 
-///////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////
   // temporário até ser ajustável
   pdat->lensdata.ylen = 125;
   pdat->pts.ylen = 100;
@@ -224,7 +277,19 @@ main (int argc, char **argv)
   g_signal_connect (G_OBJECT (distbtn), "toggled",
 		    G_CALLBACK (distchange), pdat);
 
- //callbacks barras
+  g_signal_connect (G_OBJECT (pdat->ampxx), "toggled",
+		    G_CALLBACK (scalechange), pdat);
+
+  g_signal_connect (G_OBJECT (pdat->redxx), "toggled",
+		    G_CALLBACK (scalechange), pdat);
+
+  g_signal_connect (G_OBJECT (pdat->ampyy), "toggled",
+		    G_CALLBACK (scalechange), pdat);
+
+  g_signal_connect (G_OBJECT (pdat->redyy), "toggled",
+		    G_CALLBACK (scalechange), pdat);
+
+  //callbacks barras
   g_signal_connect (G_OBJECT (pdat->barl.adj), "value-changed",
 		    G_CALLBACK (upd_adj), pdat);
 
@@ -238,6 +303,12 @@ main (int argc, char **argv)
 		    G_CALLBACK (upd_adj_free), pdat);
 
   g_signal_connect (G_OBJECT (pdat->barang.adj), "value-changed",
+		    G_CALLBACK (upd_adj_free), pdat);
+
+  g_signal_connect (G_OBJECT (pdat->barxx.adj), "value-changed",
+		    G_CALLBACK (upd_adj_free), pdat);
+  
+  g_signal_connect (G_OBJECT (pdat->baryy.adj), "value-changed",
 		    G_CALLBACK (upd_adj_free), pdat);
 
   //callbacks cairo

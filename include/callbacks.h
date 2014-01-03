@@ -9,6 +9,7 @@ extern gboolean set_val     (GtkWidget*, gpointer);
 extern gboolean lchange     (GtkWidget*, gpointer);
 extern gboolean virtchange  (GtkWidget*, gpointer);
 extern gboolean distchange  (GtkWidget*, gpointer);
+extern gboolean scalechange (GtkWidget*, gpointer);
 extern gboolean luneta      (GtkWidget*, gpointer);
 extern gboolean titanmouse  (GtkWidget*, GdkEvent*, gpointer);
 

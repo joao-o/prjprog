@@ -77,9 +77,10 @@ typedef struct
 // struct principal com os dados do programa
 typedef struct
 {
-  barradat barl, barr, barfc, barfd, barang;
+  barradat barl, barr, barfc, barfd, barang, barxx, baryy;
   tbtn btnlock;
-  GtkWidget *window, *drawbox;
+  GtkWidget *window, *drawbox,
+     *ampxx, *redxx, *ampyy, *redyy;
   drawdata lensdata;
   draw pts;
   lens lnsc,lnsd;
