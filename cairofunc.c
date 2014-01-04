@@ -8,7 +8,7 @@
 #include <phys.h>
 #include <time.h>
 
-#define TOL 20                  //Distância ente eixo optico e borda da drawbox
+#define TOL 20			//Distância ente eixo optico e borda da drawbox
 
 #define NPTS 7
 
@@ -46,9 +46,9 @@ draw_varrow (double x, double y, double hgt, double focus, cairo_t * cr)
     {
       cairo_move_to (cr, x, y - hgt);
       cairo_line_to (cr,
-                     x + i * (-0.02 * focus + 10),
-                     y - hgt +
-                     (0.02 * focus + 10) * dsign (focus) * dsign (hgt));
+		     x + i * (-0.02 * focus + 10),
+		     y - hgt +
+		     (0.02 * focus + 10) * dsign (focus) * dsign (hgt));
       // numeros mágicos acima controlam o ajuste de curvatura
       // é do tipo y=mx+b
     }
@@ -81,25 +81,25 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 
   cr = gdk_cairo_create (pdat->drawbox->window);
 
-  cairo_set_source_rgb (cr, 1., 1., 1.);
+  cairo_set_source_rgba (cr, 1., 1., 1., 1.);
   draw_line (cr, 0, midref, pdat->drawbox->allocation.width, midref);
   cairo_stroke (cr);
 
   //desenha lente convergente
-  cairo_set_source_rgb (cr, 1., 0.55, 0.);
+  cairo_set_source_rgba (cr, 1., 0.55, 0., 1.);
 
   draw_varrow (*(pdat->lnsc.pos), midref, pdat->lensdata.ylen,
-               *(pdat->lnsc.focus), cr);
+	       *(pdat->lnsc.focus), cr);
   draw_varrow (*(pdat->lnsc.pos),
-               midref, -pdat->lensdata.ylen, *(pdat->lnsc.focus), cr);
+	       midref, -pdat->lensdata.ylen, *(pdat->lnsc.focus), cr);
 
   // desenha lente divergente
-  cairo_set_source_rgb (cr, 1., 0.55, 0.);
+  cairo_set_source_rgba (cr, 1., 0.55, 0., 1.);
 
   draw_varrow (*(pdat->lnsd.pos),
-               midref, pdat->lensdata.ylen, *(pdat->lnsd.focus), cr);
+	       midref, pdat->lensdata.ylen, *(pdat->lnsd.focus), cr);
   draw_varrow (*(pdat->lnsd.pos),
-               midref, -pdat->lensdata.ylen, *(pdat->lnsd.focus), cr);
+	       midref, -pdat->lensdata.ylen, *(pdat->lnsd.focus), cr);
   cairo_stroke (cr);
 
   //verifica primeira lente
@@ -115,17 +115,15 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
       lens2 = &(pdat->lnsc);
     }
 
-  // calcs (&(pdat->pts), lens1, lens2);
-
   cairo_set_line_width (cr, 2);
-  cairo_set_source_rgb (cr, 1., 1., 0);
+  cairo_set_source_rgba (cr, 1., 1., 0., 1.);
 
   //reminder : buffer[4] = declive recta que passa no eixo
 
-  buffer[0] = *lens1->pos + *lens1->focus;      //x foco lente 1
+  buffer[0] = *lens1->pos + *lens1->focus;	//x foco lente 1
   buffer[3] = midref - buffer[4] * *(lens1->pos);
-  buffer[1] = buffer[4] * buffer[0] + buffer[3];        //y foco lente 1
-  buffer[2] = buffer[4] * *(lens2->pos) + buffer[3];    //y raio eixo lente 2
+  buffer[1] = buffer[4] * buffer[0] + buffer[3];	//y foco lente 1
+  buffer[2] = buffer[4] * *(lens2->pos) + buffer[3];	//y raio eixo lente 2
 
   // desenha reais
 
@@ -136,133 +134,58 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 
   cairo_stroke (cr);
 
-  if (pdat->virt)               //desenha virtuais
+  if (pdat->virt)		//desenha virtuais
     {
       cairo_set_dash (cr, dash, 1, 0);
-      cairo_set_source_rgb (cr, 0., 1., 0);
+      cairo_set_source_rgba (cr, 0., 1., 0., 1.);
       if (*lens1->focus < 0)
-        {
-          draw_line (cr, buffer[0], buffer[1], *lens1->pos, buffer[1]);
-          draw_line (cr, buffer[0], buffer[1], *lens1->pos, midref);
-          //draw_line (cr,*lens1->pos,,buffer[0],buffer[1]);
-        }
+	{
+	  draw_line (cr, buffer[0], buffer[1], *lens1->pos, buffer[1]);
+	  draw_line (cr, buffer[0], buffer[1], *lens1->pos, midref);
+	  //draw_line (cr,*lens1->pos,,buffer[0],buffer[1]);
+	}
       else
-        {
-          if (buffer[0] > *lens2->pos)
-            {
-              draw_line (cr, *lens2->pos, buffer[2], buffer[0], buffer[1]);
-              draw_line (cr, *lens2->pos, buffer[1], buffer[0], buffer[1]);
-            }
-          draw_line (cr, *lens2->pos, midref, buffer[0], buffer[1]);
-        }
+	{
+	  if (buffer[0] > *lens2->pos)
+	    {
+	      draw_line (cr, *lens2->pos, buffer[2], buffer[0], buffer[1]);
+	      draw_line (cr, *lens2->pos, buffer[1], buffer[0], buffer[1]);
+	    }
+	  draw_line (cr, *lens2->pos, midref, buffer[0], buffer[1]);
+	}
+      cairo_stroke (cr);
     }
-  cairo_stroke (cr);
 
-  cairo_set_dash (cr, nodash, 0, 0);
-  cairo_set_source_rgb (cr, 0., .5, 1.);
 
-  buffer[3] = (buffer[0] - *lens2->pos);        //difrença entre fc(l1) e pos(l2)
-  buffer[0] = (buffer[1] - midref) / buffer[3]; //declive do raio eixo lente2
-  buffer[2] = *lens2->pos + (buffer[3] * *lens2->focus) / 
-    (*lens2->focus + buffer[3]);  //x img2
+  buffer[3] = (buffer[0] - *lens2->pos);	//difrença entre fc(l1) e pos(l2)
+  buffer[0] = (buffer[1] - midref) / buffer[3];	//declive do raio eixo lente2
+  buffer[2] = *lens2->pos + (buffer[3] * *lens2->focus) / (*lens2->focus + buffer[3]);	//x img2
 
-  buffer[3] = buffer[0] * (buffer[2] - *lens2->pos) + midref;   //y img2
+  buffer[3] = buffer[0] * (buffer[2] - *lens2->pos) + midref;	//y img2
   buffer[4] = pdat->drawbox->allocation.width - *lens2->pos;
-  
+
   if (pdat->virt)
     {
+      cairo_set_dash (cr, dash, 1, 0);
+      cairo_set_source_rgba (cr, 0., 1., 0, 1.);
+
       draw_line (cr, *lens2->pos, midref, buffer[2], buffer[3]);
       draw_line (cr, *lens2->pos, buffer[1], buffer[2], buffer[3]);
+      cairo_stroke (cr);
     }
+
+  cairo_set_dash (cr, nodash, 0, 0);
+  cairo_set_source_rgba (cr, 1., 1., 0., 1.);
 
   draw_line (cr, *lens2->pos, midref, pdat->drawbox->allocation.width,
-             buffer[0] * buffer[4] + midref);
+	     buffer[0] * buffer[4] + midref);
   draw_line (cr, *lens2->pos, buffer[1], pdat->drawbox->allocation.width,
-             (midref - buffer[1]) / *lens2->focus * buffer[4] + buffer[1]);
+	     (midref - buffer[1]) / *lens2->focus * buffer[4] + buffer[1]);
+
   cairo_stroke (cr);
 
-
-
-
-
-
-
-
-
-
-
-
-  // if (buffer[3]>*lens2->pos)
-  //   draw_line(cr,*lens2->pos,,buffer[3],);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-  for (i = 0, j=1; i < imax; j*=2, i++)
-    {
-      if ((pdat->pts.vmask & j ) == j)
-        continue;
-      draw_line (cr, pdat->pts.px1[i], pdat->pts.pe1[i],
-                 pdat->pts.px1[i + 1], pdat->pts.pe1[i + 1]);
-
-      draw_line (cr, pdat->pts.px1[i], pdat->pts.pp1[i],
-                 pdat->pts.px1[i + 1], pdat->pts.pp1[i + 1]);
-    }
-  cairo_stroke (cr);
-
-  cairo_set_dash (cr, dash, 1, 0);
-  cairo_set_source_rgb (cr, 0., 1., 0);
-   
-  for (i = 0, j=1; i < imax; j*=2, i++)
-    {
-      if ((pdat->pts.vmask & j ) != j)
-        continue;
-      draw_line (cr, pdat->pts.px1[i], pdat->pts.pe1[i],
-                 pdat->pts.px1[i + 1], pdat->pts.pe1[i + 1]);
-
-      draw_line (cr, pdat->pts.px1[i], pdat->pts.pp1[i],
-                 pdat->pts.px1[i + 1], pdat->pts.pp1[i + 1]);
-    }
-  cairo_stroke (cr);
-
-
-  for (;i<6;i++)
-  {
-    draw_line(cr,pdat->pts.px1[i],pdat->pts.pe1[i],
-             pdat->pts.px1[i+1],pdat->pts.pe1[i+1]);
-
-    draw_line(cr,pdat->pts.px1[i],pdat->pts.pp1[i],
-             pdat->pts.px1[i+1],pdat->pts.pp1[i+1]);
-  }
-  cairo_stroke(cr);
-*/
-/*
-  //desenha imagens
-  cairo_set_source_rgb (cr, 0., 0., 1.);
-
-  draw_varrow (pdat->pts.px1[2+((pdat->pts.vmask&4)==4)], 
-    midref, midref - pdat->pts.pp1[2+((pdat->pts.vmask&4)==4)], 50, cr);
-//draw_varrow (pdat->pts.px1[5],
-//  midref, midref - pdat->pts.pp1[5], 50, cr);
-*/
-  cairo_stroke (cr);
   cairo_destroy (cr);
   *(pdat->lnsd.focus) = -*(pdat->lnsd.focus);
 
   return FALSE;
-
 }
