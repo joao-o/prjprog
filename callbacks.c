@@ -11,6 +11,8 @@
 #include <string.h>
 #include <math.h>
 
+#define L_VAL 14
+
 // ficheiro com as CSR (callback service routines)
 
 // CSR de "configure events" (as dimensões da janela mudaram)
@@ -30,7 +32,7 @@ cfg_event (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 void
 upd_mod (barradat * barra)
 {
-  sprintf (barra->str + 7, "%.3f", (GTK_ADJUSTMENT (barra->adj))->value);
+  sprintf (barra->str + 7, "%5.1f", (GTK_ADJUSTMENT (barra->adj))->value);
   gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
   barra->save = (GTK_ADJUSTMENT (barra->adj))->value;
   return;
@@ -48,7 +50,7 @@ upd_adj (GtkWidget * widget, gpointer dat)
   else
     barra = &pdat->barr;
 
-  if (!pdat->btnlock.state)
+  if (!pdat->btnlock.name->state)
     {
       upd_mod (barra);
       gtk_widget_queue_draw (pdat->window);
@@ -66,7 +68,7 @@ upd_adj_free (GtkWidget * widget, gpointer dat)
   progdata *pdat;
   barradat *barra;
   pdat = (progdata *) dat;
-  int l=14;
+  int l=L_VAL;
 
 
   if (GTK_OBJECT (widget) == pdat->barfc.adj)
@@ -89,17 +91,17 @@ upd_adj_free (GtkWidget * widget, gpointer dat)
       l = 6;
     }
 
-  if (l == 15 && pdat->btnlock.state 
+  if (l == L_VAL && pdat->btnlock.name->state 
       && *pdat->lnsc.focus > *pdat->lnsd.focus+20)
     {
       *pdat->lnsd.pos = *pdat->lnsc.pos +
 	*pdat->lnsc.focus - *pdat->lnsd.focus - 5;
       upd_mod(&(pdat->barr));
     }
-  else if(pdat->btnlock.state)
+  else if(pdat->btnlock.name->state)
     (GTK_ADJUSTMENT (barra->adj))->value = barra->save; 
 
-  sprintf (barra->str + l, "%.3f", (GTK_ADJUSTMENT (barra->adj))->value);
+  sprintf (barra->str + l, "%4.1f", (GTK_ADJUSTMENT (barra->adj))->value);
   gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
 
   gtk_widget_queue_draw (pdat->window);
@@ -115,7 +117,7 @@ set_val (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
-  if (!pdat->btnlock.state)
+  if (!pdat->btnlock.name->state)
     {
       (GTK_ADJUSTMENT (pdat->barl.adj))->value = 100.;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
@@ -159,11 +161,10 @@ lchange (GtkWidget * widget, gpointer dat)
   progdata *pdat;
   pdat = (progdata *) dat;
   btnlock = &pdat->btnlock;
-  if (!btnlock->state)
+  if (!btnlock->name->state)
     {
       sprintf (btnlock->label, "  Locked  ");
       gtk_button_set_label (GTK_BUTTON (btnlock->name), btnlock->label);
-      btnlock->state = 1;
       pdat->barl.save = (GTK_ADJUSTMENT (pdat->barl.adj))->value;
       pdat->barr.save = (GTK_ADJUSTMENT (pdat->barr.adj))->value;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barfd.adj), "value-changed"); 
@@ -172,7 +173,6 @@ lchange (GtkWidget * widget, gpointer dat)
     {
       sprintf (btnlock->label, " Unlocked ");
       gtk_button_set_label (GTK_BUTTON (btnlock->name), btnlock->label);
-      btnlock->state = 0;
     }
   return TRUE;
 }
@@ -182,7 +182,7 @@ virtchange (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
-  pdat->virt = !pdat->virt;
+  pdat->flg.virt = !pdat->flg.virt;
   gtk_widget_queue_draw (pdat->window);
   return TRUE;
 }
@@ -193,10 +193,11 @@ distchange (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
-  pdat->dist = !pdat->dist;
+  pdat->flg.dist = !pdat->flg.dist;
   return TRUE;
 }
 
+/*
 gboolean
 scalechange (GtkWidget * widget, gpointer dat)
 {
@@ -213,11 +214,11 @@ scalechange (GtkWidget * widget, gpointer dat)
     {
       gtk_adjustment_configure(GTK_ADJUSTMENT (pdat->barxx.adj),
 			       0.9, 0.0, 1.00, 0.01, 1.,1.);
-      /* gtk_adjustment_set_lower (GTK_ADJUSTMENT (pdat->barxx.adj),
+      gtk_adjustment_set_lower (GTK_ADJUSTMENT (pdat->barxx.adj),
 				0.00);
       GTK_ADJUSTMENT (pdat->barxx.adj)->value = 0.9;
       gtk_adjustment_set_upper (GTK_ADJUSTMENT (pdat->barxx.adj),
-      1);*/
+      1);
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barxx.adj),
 			     "value-changed");
     }
@@ -238,6 +239,8 @@ scalechange (GtkWidget * widget, gpointer dat)
 
   return TRUE;
 }
+*/
+
 //callback quando rato é usado para mexer coisas
 
 gboolean
@@ -272,7 +275,7 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
 	 
 	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
 				 "value-changed");
-	  if(pdat->dist)
+	  if(pdat->flg.dist)
 	    {
 	      (GTK_ADJUSTMENT (pdat->barr.adj))->value =
 		(GTK_ADJUSTMENT (pdat->barl.adj))->value - ldist;
@@ -289,7 +292,7 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
 	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
 				 "value-changed");
 
-	  if(pdat->dist)
+	  if(pdat->flg.dist)
 	    {
 	      (GTK_ADJUSTMENT (pdat->barl.adj))->value =
 		(GTK_ADJUSTMENT (pdat->barr.adj))->value + ldist;

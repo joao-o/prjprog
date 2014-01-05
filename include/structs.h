@@ -7,7 +7,6 @@
 typedef struct
 {
   char label[15];
-  char state;			// 0 = Unlocked 1 = Locked
   GdkColor coloron;
   GdkColor coloroff;
   GdkColor colorhigh;
@@ -52,25 +51,30 @@ typedef struct
 //struct com coisas do rato
 typedef struct
 {
-  char trap; //trap = [1,4] rato clicado, 0 otherwise
+  unsigned char trap; //trap = [1,4] rato clicado, 0 otherwise
   double nestx;
   double nesty; //posição x e y onde é clicado
   double path1;
   double path2;
 } rodent;
 
+typedef struct
+{
+  unsigned char virt :1;
+  unsigned char dist :1;
+  unsigned char rem  :6;
+} flag;
+
 // struct principal com os dados do programa
 typedef struct
 {
   barradat barl, barr, barfc, barfd, barang, barxx, baryy;
   tbtn btnlock;
-  GtkWidget *window, *drawbox,
-     *ampxx, *redxx, *ampyy, *redyy;
+  GtkWidget *window, *drawbox;
   drawdata lensdata;
   lens lnsc,lnsd;
   physdata lensvalue;
-  char virt; //raios virtuais 1 = On 0 = Off
-  char dist;
+  flag flg;
   rodent mouse;
 } progdata;
 

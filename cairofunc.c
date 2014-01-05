@@ -134,7 +134,7 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 
   cairo_stroke (cr);
 
-  if (pdat->virt)		//desenha virtuais
+  if (pdat->flg.virt)		//desenha virtuais
     {
       cairo_set_dash (cr, dash, 1, 0);
       cairo_set_source_rgba (cr, 0., 1., 0., 1.);
@@ -164,7 +164,7 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   buffer[3] = buffer[0] * (buffer[2] - *lens2->pos) + midref;	//y img2
   buffer[4] = pdat->drawbox->allocation.width - *lens2->pos;
 
-  if (pdat->virt)
+  if (pdat->flg.virt)
     {
       cairo_set_dash (cr, dash, 1, 0);
       cairo_set_source_rgba (cr, 0., 1., 0, 1.);

@@ -22,7 +22,8 @@ main (int argc, char **argv)
   //barras e butões
   GtkWidget *button, *barlensl, *barlensr,
     *barfocc, *barfocd, *barangl, *lunbtn,
-    *virtbtn, *distbtn, *barsclx, *barscly;
+    *virtbtn, *distbtn, *barsclx, *barscly,
+    *ampxx, *ampyy, *redxx, *redyy;
 
   // boxes
   GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox,
@@ -37,15 +38,14 @@ main (int argc, char **argv)
   //setup inicial e criação da janela principal
   pdat = calloc (1, sizeof (progdata));
 
-  strcpy (pdat->barl.str, "value= 0.000");
-  strcpy (pdat->barr.str, "value= 0.000");
-  strcpy (pdat->barfc.str, "focal length= 0.000");
-  strcpy (pdat->barfd.str, "focal length= 0.000");
-  strcpy (pdat->barang.str, "angulo= 0.000");
+  strcpy (pdat->barl.str, "value= 0000.0");
+  strcpy (pdat->barr.str, "value= 0000.0");
+  strcpy (pdat->barfc.str, "focal length= 000.0");
+  strcpy (pdat->barfd.str, "focal length= 000.0");
+  strcpy (pdat->barang.str, "angulo= 00.0");
   strcpy (pdat->barxx.str, "xx: 1:0000");
   strcpy (pdat->baryy.str, "yy: 1:0000");
 
-  pdat->btnlock.state = 0;
   sprintf (pdat->btnlock.label, " Unlocked ");
 
   gtk_init (&argc, &argv);
@@ -192,25 +192,29 @@ main (int argc, char **argv)
   gtk_box_pack_start(GTK_BOX(optnbox), distbtn, FALSE, FALSE, 5);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (distbtn), FALSE);
 
-  pdat->ampxx = gtk_radio_button_new_with_label(NULL,"Ampliar");
-  gtk_container_add (GTK_CONTAINER (noteb4xx), pdat->ampxx);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->ampxx), TRUE);
+  //radio x
 
-  pdat->redxx = gtk_radio_button_new_with_label(gtk_radio_button_group 
-					  (GTK_RADIO_BUTTON (pdat->ampxx)),
+  ampxx = gtk_radio_button_new_with_label(NULL,"Ampliar");
+  gtk_container_add (GTK_CONTAINER (noteb4xx), ampxx);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ampxx), TRUE);
+
+  redxx = gtk_radio_button_new_with_label(gtk_radio_button_group 
+					  (GTK_RADIO_BUTTON (ampxx)),
 					  "Reduzir");
-  gtk_container_add (GTK_CONTAINER (noteb4xx), pdat->redxx);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->redxx), FALSE);
+  gtk_container_add (GTK_CONTAINER (noteb4xx), redxx);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (redxx), FALSE);
+  
+  //radio y
 
-  pdat->ampyy = gtk_radio_button_new_with_label(NULL,"Ampliar");
-  gtk_container_add (GTK_CONTAINER (noteb4yy), pdat->ampyy);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->ampyy), TRUE);
+  ampyy = gtk_radio_button_new_with_label(NULL,"Ampliar");
+  gtk_container_add (GTK_CONTAINER (noteb4yy), ampyy);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ampyy), TRUE);
 
-  pdat->redyy = gtk_radio_button_new_with_label(gtk_radio_button_group 
-					  (GTK_RADIO_BUTTON (pdat->ampyy)),
+  redyy = gtk_radio_button_new_with_label(gtk_radio_button_group 
+					  (GTK_RADIO_BUTTON (ampyy)),
 					  "Reduzir");
-  gtk_container_add (GTK_CONTAINER (noteb4yy), pdat->redyy);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->redyy), FALSE);
+  gtk_container_add (GTK_CONTAINER (noteb4yy), redyy);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (redyy), FALSE);
 
   //butão toggle com cores
 
@@ -236,13 +240,13 @@ main (int argc, char **argv)
   gtk_notebook_append_page (GTK_NOTEBOOK (noteb), notebp4, NULL);
   gtk_box_pack_start (GTK_BOX (setbox), noteb, TRUE, TRUE, 0);
 
-  ///////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
   // temporário até ser ajustável
   pdat->lensdata.ylen = 125;
   pdat->lensdata.xwid = 3;
   //  pdat->lensdata.headwid1 = 7;
   //  pdat->lensdata.headwid2 = 7;
-  pdat->virt = 1;
+  pdat->flg.virt = 1;
   pdat->mouse.trap = 0;
 ////////////////////////////////////////////////////////////////////////////////
   //sinais e callbacks
@@ -270,7 +274,7 @@ main (int argc, char **argv)
 
   g_signal_connect (G_OBJECT (distbtn), "toggled",
 		    G_CALLBACK (distchange), pdat);
-
+/*
   g_signal_connect (G_OBJECT (pdat->ampxx), "toggled",
 		    G_CALLBACK (scalechange), pdat);
 
@@ -282,6 +286,7 @@ main (int argc, char **argv)
 
   g_signal_connect (G_OBJECT (pdat->redyy), "toggled",
 		    G_CALLBACK (scalechange), pdat);
+*/
 
   //callbacks barras
   g_signal_connect (G_OBJECT (pdat->barl.adj), "value-changed",
@@ -305,7 +310,7 @@ main (int argc, char **argv)
   g_signal_connect (G_OBJECT (pdat->baryy.adj), "value-changed",
 		    G_CALLBACK (upd_adj_free), pdat);
 
-  //callbacks cairo
+  //callbaacks janela / Xwindows
   g_signal_connect (pdat->window, "expose-event", 
 		    G_CALLBACK (RENDER), pdat);
 

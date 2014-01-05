@@ -254,7 +254,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 		ly[6]=lin(mx[i],ly[i],mx[i+1],ly[i+1],mx[6]);
 		uy[6]=lin(mx[i],uy[i],mx[i+1],uy[i+1],mx[6]);
 		
-		if( j > i+1 || pdat->virt == 1)
+		if( j > i+1 || pdat->flg.virt == 1)
 		  {
 		    if( j > i+1 )
 		      {
@@ -274,7 +274,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 		    cairo_stroke(cr);
 		  }
 
-		if( j < i || pdat->virt == 1 )
+		if( j < i || pdat->flg.virt == 1 )
 		  {
 		    if( j < i )
 		      {
@@ -297,7 +297,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 	}
 	
       if(t == 0)
-	if((mx[i] < mx[i+1] || pdat->virt == 1))
+	if((mx[i] < mx[i+1] || pdat->flg.virt == 1))
 	  {
 	    if(mx[i] <= mx[i+1])
 	      {
@@ -320,7 +320,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 	  }
     }
       
-  if(pdat->virt == 1 && pos5 < pos3)
+  if(pdat->flg.virt == 1 && pos5 < pos3)
     {
 
       cairo_set_source_rgb (cr, rgbv[0], rgbv[1], rgbv[2]);
