@@ -15,7 +15,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   progdata *pdat;
   cairo_t *cr;
   int width, height, i, j, t;
-  double pos1, pos2, pos3, pos4, pos5, flens, slens;
+  double pos1, pos2, pos3, pos4, pos5, flens, slens, scl;
   double uy[7], ly[7], mx[7], rgbr[3], rgbv[3];
   double ylen, xwid, ang, fc, fd, hwid1, hwid2;
   int dshl=sizeof(dsh)/sizeof(dsh[0]);
@@ -24,15 +24,25 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
   ylen = pdat->lensdata.ylen;
   xwid = pdat->lensdata.xwid;
-  hwid1 = pdat->lensdata.headwid1 = 
-    240/(gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj))+48.33) + 4.9;
-  hwid2 = pdat->lensdata.headwid2 =  
-    240/(gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfd.adj))+48.33) + 4.9;
 
+  hwid1 = pdat->lensdata.headwid1 = 
+    240/(fabs(gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj))) 
+	 + 48.33) 
+    + 4.9; //fórmula mágica concedida pelo Grande Xamã Fit-Eha-Ya;
+
+  hwid2 = pdat->lensdata.headwid2 =  
+    240/(fabs(gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfd.adj)))
+	 + 48.33) 
+    + 4.9;
+
+  scl = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barxx.adj));
+  
+  //cor dos raios reais
   rgbr[0] = 0.90;
   rgbr[1] = 0.90;
   rgbr[2] = 0.00;
 
+  //cor dos raios virtuais
   rgbv[0] = 0.10;
   rgbv[1] = 0.50;
   rgbv[2] = 0.70;
@@ -41,25 +51,27 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
   gtk_window_get_size (GTK_WINDOW (pdat->window), &width, &height);
 
-  pos1 = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barl.adj));
+  pos1 = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barl.adj))/scl;
 
   if (pos1 > pdat->drawbox->allocation.width)
     {
       pos1 = pdat->drawbox->allocation.width;
       gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->barl.adj), pos1);
     }
-  gtk_adjustment_set_upper (GTK_ADJUSTMENT (pdat->barl.adj),
-			    pdat->drawbox->allocation.width);
 
-  pos3 = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barr.adj));
+  gtk_adjustment_set_upper (GTK_ADJUSTMENT (pdat->barl.adj),
+			    (pdat->drawbox->allocation.width)*scl);
+
+  pos3 = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barr.adj))/scl;
 
   if (pos3 > pdat->drawbox->allocation.width)
     {
       pos3 = pdat->drawbox->allocation.width;
       gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->barr.adj), pos3);
     }
+
   gtk_adjustment_set_upper (GTK_ADJUSTMENT (pdat->barr.adj),
-			    pdat->drawbox->allocation.width);
+			    (pdat->drawbox->allocation.width)*scl);
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -116,8 +128,8 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
   cairo_fill (cr);
 
-  fd = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfd.adj));
-  fc = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj));
+  fd = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfd.adj))/scl;
+  fc = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj))/scl;
   ang = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barang.adj));
   ang = ang*(M_PI/180); 
 

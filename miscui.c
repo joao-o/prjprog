@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Funções de UI não associadas directamente a callbacks
+
 void 
 erroluneta (progdata * dat)
 {

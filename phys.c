@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-/* Funcoes internas e funcoes fisicas */
+/* Funcoes fisicas/matemáticas */
 
 //Funcao dos focos conjugados
 
@@ -16,7 +16,10 @@ double
 fconj (double a, double b)
 {
   /* (1/c) = (1/a) + (1/b) retorna f */
-  return 1 / (1 / a + 1 / b);
+  if((1 / a + 1 / b) == 0)
+    return (1000*(a+b)); //"infinito"
+  else
+    return 1 / (1 / a + 1 / b);
 }
 
 //Para uma recta que passa em (x1,y1) e (x2,y2) dá y3 de um x3

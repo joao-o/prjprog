@@ -157,6 +157,8 @@ main (int argc, char **argv)
   noteb4xx = gtk_hbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (notebp4), noteb4xx);
 
+  pdat->barxx.lbl = gtk_label_new (pdat->barxx.str);
+  gtk_container_add (GTK_CONTAINER (noteb4xx), pdat->barxx.lbl);
 
   pdat->lnsc.pos = &(GTK_ADJUSTMENT (pdat->barl.adj)->value);
   pdat->lnsc.focus = &(GTK_ADJUSTMENT (pdat->barfc.adj)->value);
