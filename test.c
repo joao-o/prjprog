@@ -4,6 +4,6 @@
 
 int main ()
 {
-printf("%lu\t%lu\n",sizeof(progdata),sizeof(flag));
-return 0;
+  printf("%lu\t%lu\n",sizeof(progdata),sizeof(flag));
+  return 0;
 }

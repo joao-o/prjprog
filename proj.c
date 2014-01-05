@@ -22,18 +22,18 @@ main (int argc, char **argv)
   //barras e butões
   GtkWidget *button, *barlensl, *barlensr,
     *barfocc, *barfocd, *barangl, *lunbtn,
-    *virtbtn, *distbtn, *barsclx, *barscly,
-    *ampxx, *ampyy, *redxx, *redyy;
+    *virtbtn, *distbtn, *barsclx,
+    *ampxx, *redxx;
 
   // boxes
   GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox,
     *noteb, *notebp1, *notebp2, *notebp3, *notebp4, 
-    *optnbox, *statusbox, *noteb4xx, *noteb4yy;
+    *optnbox, *statusbox, *noteb4xx;
 
   //frames
   GtkWidget *dtbfrm, *drwfrm, 
     *blcfrm, *bldfrm, *bfcfrm, *bfdfrm, *bangfrm,
-    *xxfrm, *yyfrm;
+    *xxfrm;
 
   //setup inicial e criação da janela principal
   pdat = calloc (1, sizeof (progdata));
@@ -43,8 +43,7 @@ main (int argc, char **argv)
   strcpy (pdat->barfc.str, "focal length= 000.0");
   strcpy (pdat->barfd.str, "focal length= 000.0");
   strcpy (pdat->barang.str, "angulo= 00.0");
-  strcpy (pdat->barxx.str, "xx: 1:0000");
-  strcpy (pdat->baryy.str, "yy: 1:0000");
+  strcpy (pdat->barxx.str, "1:0000");
 
   sprintf (pdat->btnlock.label, " Unlocked ");
 
@@ -146,21 +145,9 @@ main (int argc, char **argv)
 
   
   //escala
-  pdat->baryy.adj = gtk_adjustment_new (2, 1, 100.0, 0.1, 1.0, 1.0);
-
-  yyfrm = gtk_frame_new ("Escala dos YY");
-  gtk_container_add (GTK_CONTAINER (notebp4), yyfrm);
-  barscly = gtk_hscale_new (GTK_ADJUSTMENT (pdat->baryy.adj));
-  gtk_container_add (GTK_CONTAINER (yyfrm), barscly);
-
-  pdat->baryy.lbl = gtk_label_new (pdat->baryy.str);
-
-  noteb4yy = gtk_hbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (notebp4), noteb4yy);
-
   pdat->barxx.adj = gtk_adjustment_new (2, 1, 100.0, 0.1, 1.0, 1.0);
 
-  xxfrm = gtk_frame_new ("Escala dos XX");
+  xxfrm = gtk_frame_new ("Escala");
   gtk_container_add (GTK_CONTAINER (notebp4), xxfrm);
   barsclx = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barxx.adj));
   gtk_container_add (GTK_CONTAINER (xxfrm), barsclx);
@@ -203,18 +190,6 @@ main (int argc, char **argv)
 					  "Reduzir");
   gtk_container_add (GTK_CONTAINER (noteb4xx), redxx);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (redxx), FALSE);
-  
-  //radio y
-
-  ampyy = gtk_radio_button_new_with_label(NULL,"Ampliar");
-  gtk_container_add (GTK_CONTAINER (noteb4yy), ampyy);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ampyy), TRUE);
-
-  redyy = gtk_radio_button_new_with_label(gtk_radio_button_group 
-					  (GTK_RADIO_BUTTON (ampyy)),
-					  "Reduzir");
-  gtk_container_add (GTK_CONTAINER (noteb4yy), redyy);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (redyy), FALSE);
 
   //butão toggle com cores
 
@@ -274,19 +249,9 @@ main (int argc, char **argv)
 
   g_signal_connect (G_OBJECT (distbtn), "toggled",
 		    G_CALLBACK (distchange), pdat);
-/*
-  g_signal_connect (G_OBJECT (pdat->ampxx), "toggled",
-		    G_CALLBACK (scalechange), pdat);
 
-  g_signal_connect (G_OBJECT (pdat->redxx), "toggled",
+  g_signal_connect (G_OBJECT (ampxx), "toggled",
 		    G_CALLBACK (scalechange), pdat);
-
-  g_signal_connect (G_OBJECT (pdat->ampyy), "toggled",
-		    G_CALLBACK (scalechange), pdat);
-
-  g_signal_connect (G_OBJECT (pdat->redyy), "toggled",
-		    G_CALLBACK (scalechange), pdat);
-*/
 
   //callbacks barras
   g_signal_connect (G_OBJECT (pdat->barl.adj), "value-changed",

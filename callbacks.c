@@ -42,7 +42,8 @@ gboolean
 upd_adj (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
-  barradat *barra;
+  barradat *barra, *barra2;
+  double d;
   pdat = (progdata *) dat;
 
   if (GTK_OBJECT (widget) == pdat->barl.adj)
@@ -52,11 +53,26 @@ upd_adj (GtkWidget * widget, gpointer dat)
 
   if (!pdat->btnlock.name->state)
     {
+      if(pdat->flg.dist)
+	{
+	  if (GTK_OBJECT (widget) == pdat->barl.adj)
+	    barra2 = &pdat->barr;
+	  else
+	    barra2 = &pdat->barl;
+	  
+	  d= GTK_ADJUSTMENT(barra2->adj)->value - barra->save;
+	  GTK_ADJUSTMENT(barra2->adj)->value = 
+	    GTK_ADJUSTMENT(barra->adj)->value + d;
+
+	  upd_mod(barra2);
+	}
+
       upd_mod (barra);
       gtk_widget_queue_draw (pdat->window);
     }
   else
     (GTK_ADJUSTMENT (barra->adj))->value = barra->save;
+
   return TRUE;
 }
 
@@ -83,12 +99,7 @@ upd_adj_free (GtkWidget * widget, gpointer dat)
   else if (GTK_OBJECT (widget) == pdat->barxx.adj)
     {
       barra = &pdat->barxx;
-      l = 6;
-    }
-  else if (GTK_OBJECT (widget) == pdat->baryy.adj)
-    {
-      barra = &pdat->baryy;
-      l = 6;
+      l = 2;
     }
 
   if (l == L_VAL && pdat->btnlock.name->state 
@@ -161,6 +172,7 @@ lchange (GtkWidget * widget, gpointer dat)
   progdata *pdat;
   pdat = (progdata *) dat;
   btnlock = &pdat->btnlock;
+
   if (!btnlock->name->state)
     {
       sprintf (btnlock->label, "  Locked  ");
@@ -174,6 +186,7 @@ lchange (GtkWidget * widget, gpointer dat)
       sprintf (btnlock->label, " Unlocked ");
       gtk_button_set_label (GTK_BUTTON (btnlock->name), btnlock->label);
     }
+
   return TRUE;
 }
 
@@ -197,49 +210,32 @@ distchange (GtkWidget * widget, gpointer dat)
   return TRUE;
 }
 
-/*
+
 gboolean
 scalechange (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
-  if( (widget) == pdat->ampxx)
+ 
+  if( gtk_adjustment_get_upper(GTK_ADJUSTMENT (pdat->barxx.adj)) < 2)
     {
       gtk_adjustment_configure(GTK_ADJUSTMENT (pdat->barxx.adj),
-			       1.1, 1.0, 100, 0.1, 1.,1.);
+			       1.1, 1.0, 100, 0.1, 0, 0);
+
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barxx.adj),
 			     "value-changed");
     }
-  else  if( (widget) == pdat->redxx)
+  else  if( gtk_adjustment_get_upper(GTK_ADJUSTMENT (pdat->barxx.adj)) > 2)
     {
       gtk_adjustment_configure(GTK_ADJUSTMENT (pdat->barxx.adj),
-			       0.9, 0.0, 1.00, 0.01, 1.,1.);
-      gtk_adjustment_set_lower (GTK_ADJUSTMENT (pdat->barxx.adj),
-				0.00);
-      GTK_ADJUSTMENT (pdat->barxx.adj)->value = 0.9;
-      gtk_adjustment_set_upper (GTK_ADJUSTMENT (pdat->barxx.adj),
-      1);
+			       0.9, 0.0, 1.00, 0.01, 0, 0);
+  
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barxx.adj),
-			     "value-changed");
-    }
-  else  if( (widget) == pdat->ampyy)
-    {
-      gtk_adjustment_configure(GTK_ADJUSTMENT (pdat->baryy.adj),
-			       1.1, 1.0, 100, 0.1, 1.,1.);
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->baryy.adj),
-			     "value-changed");
-    }
-  else  if( (widget) == pdat->redyy)
-    {
-      gtk_adjustment_configure(GTK_ADJUSTMENT (pdat->baryy.adj),
-			       0.9, 0.0, 1.00, 0.01, 1.,1.);
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->baryy.adj),
-			     "value-changed");
+			     "value-changed"); 
     }
 
   return TRUE;
 }
-*/
 
 //callback quando rato é usado para mexer coisas
 
@@ -260,7 +256,7 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
   /*
     Prioridade do rato:
     D Focal > Lente (Lente é maior)
-    Div > Conv (Arbitrário)
+    Conv > Div (Arbitrário)
   */
 
   if (event->type == GDK_MOTION_NOTIFY)
