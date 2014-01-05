@@ -273,11 +273,8 @@ main (int argc, char **argv)
 
   g_signal_connect (G_OBJECT (pdat->barxx.adj), "value-changed",
 		    G_CALLBACK (upd_adj_free), pdat);
-  
-  g_signal_connect (G_OBJECT (pdat->baryy.adj), "value-changed",
-		    G_CALLBACK (upd_adj_free), pdat);
 
-  //callbaacks janela / Xwindows
+  //callbacks janela / Xwindows
   g_signal_connect (pdat->window, "expose-event", 
 		    G_CALLBACK (RENDER), pdat);
 
