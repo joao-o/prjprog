@@ -15,7 +15,7 @@ CC = gcc
 RM = /bin/rm
 
 TARGET = proj
-PROGS  = proj.c callbacks.c prjcairo.c phys.c cairofunc.c miscui.c
+PROGS  = proj.c callbacks.c prjcairo.c phys.c cairofunc.c miscui.c 
 OBJECT = proj.o callbacks.o prjcairo.o phys.o cairofunc.o miscui.o
 TESTE = cairotest.c
 
@@ -55,6 +55,9 @@ miscui.o: miscui.c $(INCLUDE)
 cairofunc.o: cairofunc.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
+test: test.c
+	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $^ $(INC_FLAGS) $(LINK_LIBS)
+
 $(TARGET): $(OBJECT) $(INCLUDE)
 	$(CC) $(LFLAGS) -o $@ $^ $(LINK_LIBS)
 
@@ -62,4 +65,4 @@ edit:
 	vim Makefile
 
 clean: 
-	$(RM) -f *~ *.o $(TARGET) 
+	$(RM) -f *~ *.o $(TARGET) test

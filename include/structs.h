@@ -19,7 +19,7 @@ typedef struct
 {
   GtkObject *adj;
   GtkWidget *nome, *lbl;
-  char str[40];
+  char str[20];
   double save;
 } barradat;
 
