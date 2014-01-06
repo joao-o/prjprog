@@ -54,12 +54,19 @@ draw_varrow (double x, double y, double hgt, double focus, cairo_t * cr)
     }
 }
 
+void make_mask()
+{
+
+}
+
 gboolean
 expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 {
-  progdata *pdat;
   cairo_t *cr;
   lens *lens1, *lens2;
+  progdata *pdat = (progdata*) dat;
+  int *wwidth = &pdat->drawbox->allocation.width;
+
   static double buffer[5];
 
   double midref;
@@ -69,20 +76,20 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   buffer[4] = tan ((M_PI / 180) * (GTK_ADJUSTMENT (pdat->barang.adj))->value);
   *(pdat->lnsd.focus) = -*(pdat->lnsd.focus);
 
-  if ((pdat->drawbox->allocation.width - TOL) < *(pdat->lnsc.pos))
-    *(pdat->lnsc.pos) = pdat->drawbox->allocation.width - TOL;
-  (GTK_ADJUSTMENT (pdat->barl.adj))->upper =
-    pdat->drawbox->allocation.width - TOL;
+  if ((*wwidth - TOL) < *(pdat->lnsc.pos))
+    *(pdat->lnsc.pos) = *wwidth - TOL;
+  (GTK_ADJUSTMENT (pdat->barl.adj))->upper = *wwidth - TOL;
 
-  if ((pdat->drawbox->allocation.width - TOL) < *(pdat->lnsd.pos))
-    *(pdat->lnsd.pos) = pdat->drawbox->allocation.width - TOL;
-  (GTK_ADJUSTMENT (pdat->barr.adj))->upper =
-    pdat->drawbox->allocation.width - TOL;
+  if ((*wwidth - TOL) < *(pdat->lnsd.pos))
+    *(pdat->lnsd.pos) = *wwidth - TOL;
+  (GTK_ADJUSTMENT (pdat->barr.adj))->upper = *wwidth - TOL;
 
   cr = gdk_cairo_create (pdat->drawbox->window);
+  cairo_rectangle(cr, 0, 0,(double)*wwidth,(double) pdat->drawbox->allocation.height);
+  cairo_clip(cr);
 
   cairo_set_source_rgba (cr, 1., 1., 1., 1.);
-  draw_line (cr, 0, midref, pdat->drawbox->allocation.width, midref);
+  draw_line (cr, 0, midref, *wwidth, midref);
   cairo_stroke (cr);
 
   //desenha lente convergente
@@ -156,13 +163,13 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
       cairo_stroke (cr);
     }
 
-
   buffer[3] = (buffer[0] - *lens2->pos);	//difrença entre fc(l1) e pos(l2)
   buffer[0] = (buffer[1] - midref) / buffer[3];	//declive do raio eixo lente2
-  buffer[2] = *lens2->pos + (buffer[3] * *lens2->focus) / (*lens2->focus + buffer[3]);	//x img2
+  buffer[2] = *lens2->pos + (buffer[3] * *lens2->focus) / (*lens2->focus + buffer[3]);
+  //x img2
 
   buffer[3] = buffer[0] * (buffer[2] - *lens2->pos) + midref;	//y img2
-  buffer[4] = pdat->drawbox->allocation.width - *lens2->pos;
+  buffer[4] = *wwidth - *lens2->pos;
 
   if (pdat->flg.virt)
     {
@@ -177,14 +184,15 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   cairo_set_dash (cr, nodash, 0, 0);
   cairo_set_source_rgba (cr, 1., 1., 0., 1.);
 
-  draw_line (cr, *lens2->pos, midref, pdat->drawbox->allocation.width,
+  draw_line (cr, *lens2->pos, midref, *wwidth,
 	     buffer[0] * buffer[4] + midref);
-  draw_line (cr, *lens2->pos, buffer[1], pdat->drawbox->allocation.width,
+  draw_line (cr, *lens2->pos, buffer[1], *wwidth,
 	     (midref - buffer[1]) / *lens2->focus * buffer[4] + buffer[1]);
 
   cairo_stroke (cr);
 
   cairo_destroy (cr);
+
   *(pdat->lnsd.focus) = -*(pdat->lnsd.focus);
 
   return FALSE;

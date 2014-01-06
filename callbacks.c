@@ -43,7 +43,7 @@ upd_adj (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
   barradat *barra, *barra2;
-  double d;
+  static double d;
   pdat = (progdata *) dat;
 
   if (GTK_OBJECT (widget) == pdat->barl.adj)
@@ -151,7 +151,8 @@ luneta (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
-  if (*pdat->lnsc.focus < *pdat->lnsd.focus)
+
+  if (*pdat->lnsc.focus < *pdat->lnsd.focus || pdat->flg.dist)
     erroluneta (pdat);
   else
     {
