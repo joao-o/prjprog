@@ -147,8 +147,15 @@ luneta (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
+  unsigned char t = 0;
 
-  if (*pdat->lnsc.focus < *pdat->lnsd.focus || pdat->flg.dist)
+  if(pdat->flg.dist)
+    {
+      pdat->flg.dist=!pdat->flg.dist;
+      t = 1;
+    }
+
+  if (*pdat->lnsc.focus < *pdat->lnsd.focus)
     erroluneta (pdat);
   else
     {
@@ -157,6 +164,10 @@ luneta (GtkWidget * widget, gpointer dat)
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj), "value-changed"); 
     }
 
+  if(t == 1)
+    {
+      pdat->flg.dist=!pdat->flg.dist;
+    }
   return TRUE;
 }
 
@@ -261,11 +272,20 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
     {
       pdat->mouse.nestx = ((GdkEventMotion *) event)->x;
       pdat->mouse.nesty = ((GdkEventMotion *) event)->y;
-      
+
       if(pdat->mouse.trap == 1 )
 	{
-	  (GTK_ADJUSTMENT (pdat->barl.adj))->value =
-	    (pdat->mouse.nestx + pdat->mouse.path1)*scl;
+	  if(pdat->mouse.nestx + pdat->mouse.path1 
+	     > pdat->drawbox->allocation.width)
+	    (GTK_ADJUSTMENT (pdat->barl.adj))->value 
+	      = pdat->drawbox->allocation.width*scl;
+	  else if(pdat->mouse.nestx + pdat->mouse.path1 - ldist 
+		  > pdat->drawbox->allocation.width)
+	    (GTK_ADJUSTMENT (pdat->barl.adj))->value 
+	      = (pdat->drawbox->allocation.width + ldist)*scl;
+	  else
+	    (GTK_ADJUSTMENT (pdat->barl.adj))->value =
+	      (pdat->mouse.nestx + pdat->mouse.path1)*scl;
 	 
 	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
 				 "value-changed");
@@ -280,8 +300,17 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
 	}
       else if(pdat->mouse.trap == 2 )
 	{
-	  (GTK_ADJUSTMENT (pdat->barr.adj))->value =
-	    (pdat->mouse.nestx + pdat->mouse.path2)*scl;
+	  if(pdat->mouse.nestx + pdat->mouse.path1 
+	     > pdat->drawbox->allocation.width)
+	    (GTK_ADJUSTMENT (pdat->barr.adj))->value = 
+	      pdat->drawbox->allocation.width*scl;
+	  else if(pdat->mouse.nestx + pdat->mouse.path1 + ldist 
+		  > pdat->drawbox->allocation.width)
+	    (GTK_ADJUSTMENT (pdat->barr.adj))->value 
+	      = (pdat->drawbox->allocation.width - ldist)*scl;
+	  else
+	    (GTK_ADJUSTMENT (pdat->barr.adj))->value =
+	      (pdat->mouse.nestx + pdat->mouse.path2)*scl;
 
 	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
 				 "value-changed");
@@ -297,16 +326,22 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
 	}
       else if(pdat->mouse.trap == 3 )
 	{
-	  (GTK_ADJUSTMENT (pdat->barfc.adj))->value =
-	    (pdat->mouse.nestx + pdat->mouse.path1)*scl;
+	  if(pdat->mouse.nestx + pdat->mouse.path1 > pdat->drawbox->allocation.width)
+	    (GTK_ADJUSTMENT (pdat->barfc.adj))->value = pdat->drawbox->allocation.width*scl;
+	  else
+	    (GTK_ADJUSTMENT (pdat->barfc.adj))->value =
+	      (pdat->mouse.nestx + pdat->mouse.path1)*scl;
 	 
 	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barfc.adj),
 				 "value-changed");
 	}
       else if(pdat->mouse.trap == 4 )
 	{
-	  (GTK_ADJUSTMENT (pdat->barfd.adj))->value =
-	    (pdat->mouse.nestx + pdat->mouse.path1)*scl;
+	  if(pdat->mouse.nestx + pdat->mouse.path1 > pdat->drawbox->allocation.width)
+	    (GTK_ADJUSTMENT (pdat->barfd.adj))->value = pdat->drawbox->allocation.width*scl;
+	  else
+	    (GTK_ADJUSTMENT (pdat->barfd.adj))->value =
+	      (pdat->mouse.nestx + pdat->mouse.path1)*scl;
 	 
 	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barfd.adj),
 				 "value-changed");
@@ -387,3 +422,5 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
   gtk_widget_queue_draw (pdat->window);
   return TRUE;
 }
+
+
