@@ -73,11 +73,11 @@ main (int argc, char **argv)
   dtbfrm = gtk_frame_new ("Opções");
   gtk_box_pack_start (GTK_BOX (datbox), dtbfrm, TRUE, TRUE, 0);
 
+  drwfrm = gtk_frame_new ("");
+  gtk_container_add (GTK_CONTAINER (midbox), drwfrm);
+
   pdat->drawbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (midbox), pdat->drawbox, TRUE, TRUE, 0);
-
-  drwfrm = gtk_frame_new ("");
-  gtk_container_add (GTK_CONTAINER (pdat->drawbox), drwfrm);
 
   notebp1 = gtk_vbox_new (FALSE, 0);
   notebp2 = gtk_vbox_new (FALSE, 0);
