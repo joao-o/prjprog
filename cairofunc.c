@@ -25,6 +25,7 @@ dsign (double x)
 {
   return (x > 0) - (x < 0);
 }
+// ^ ...
 
 void
 draw_line (cairo_t * cr, double x0, double y0, double x1, double y1)
@@ -41,22 +42,16 @@ draw_varrow (double x, double y, double hgt, double focus, cairo_t * cr)
 
   cairo_set_line_width (cr, 3);
   cairo_move_to (cr, x, y);
-  cairo_line_to (cr, x, y - hgt);
+  cairo_rel_line_to (cr, 0, hgt);
   for (i = -1; i <= 1; i += 2)
     {
       cairo_move_to (cr, x, y - hgt);
-      cairo_line_to (cr,
-		     x + i * (-0.02 * focus + 10),
-		     y - hgt +
-		     (0.02 * focus + 10) * dsign (focus) * dsign (hgt));
+      cairo_rel_line_to (cr,
+		         i * (-0.02 * focus + 10),
+		         (0.02 * focus + 10) * dsign (focus) * dsign (hgt));
       // numeros mágicos acima controlam o ajuste de curvatura
       // é do tipo y=mx+b
     }
-}
-
-void make_mask()
-{
-
 }
 
 gboolean
@@ -85,6 +80,8 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   (GTK_ADJUSTMENT (pdat->barr.adj))->upper = *wwidth - TOL;
 
   cr = gdk_cairo_create (pdat->drawbox->window);
+
+  // é aqui que a magia acontece 
   cairo_rectangle(cr, 0, 0,(double)*wwidth,(double) pdat->drawbox->allocation.height);
   cairo_clip(cr);
 
@@ -134,10 +131,10 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 
   // desenha reais
 
-  draw_line (cr, 0, buffer[3], *(lens1->pos), midref);
-  draw_line (cr, 0, buffer[1] - midref + buffer[3], *lens1->pos, buffer[1]);
-  draw_line (cr, *(lens1->pos), midref, *lens2->pos, buffer[2]);
-  draw_line (cr, *(lens1->pos), buffer[1], *lens2->pos, buffer[1]);
+  draw_line (cr, 0, buffer[3], *(lens1->pos), midref); //e
+  draw_line (cr, 0, buffer[1] - midref + buffer[3], *lens1->pos, buffer[1]);//p
+  draw_line (cr, *(lens1->pos), midref, *lens2->pos, buffer[2]);//e
+  draw_line (cr, *(lens1->pos), buffer[1], *lens2->pos, buffer[1]);//p
 
   cairo_stroke (cr);
 
@@ -147,8 +144,8 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
       cairo_set_source_rgba (cr, 0., 1., 0., 1.);
       if (*lens1->focus < 0)
 	{
-	  draw_line (cr, buffer[0], buffer[1], *lens1->pos, buffer[1]);
-	  draw_line (cr, buffer[0], buffer[1], *lens1->pos, midref);
+	  draw_line (cr, buffer[0], buffer[1], *lens1->pos, buffer[1]);//e
+	  draw_line (cr, buffer[0], buffer[1], *lens1->pos, midref);//p
 	  //draw_line (cr,*lens1->pos,,buffer[0],buffer[1]);
 	}
       else

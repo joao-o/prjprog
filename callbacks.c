@@ -30,7 +30,7 @@ cfg_event (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 // callback que muda coisas quando os ajust mudam (lockable)
 
 void
-upd_mod (barradat * barra)
+upd_mod (bardat * barra)
 {
   sprintf (barra->str + 7, "%5.1f", (GTK_ADJUSTMENT (barra->adj))->value);
   gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
@@ -41,10 +41,9 @@ upd_mod (barradat * barra)
 gboolean
 upd_adj (GtkWidget * widget, gpointer dat)
 {
-  progdata *pdat;
-  barradat *barra, *barra2;
+  progdata *pdat = (progdata *) dat;
+  bardat *barra;
   static double d;
-  pdat = (progdata *) dat;
 
   if (GTK_OBJECT (widget) == pdat->barl.adj)
     barra = &pdat->barl;
@@ -56,15 +55,10 @@ upd_adj (GtkWidget * widget, gpointer dat)
       if(pdat->flg.dist)
 	{
 	  if (GTK_OBJECT (widget) == pdat->barl.adj)
-	    barra2 = &pdat->barr;
-	  else
-	    barra2 = &pdat->barl;
-	  
-	  d= GTK_ADJUSTMENT(barra2->adj)->value - barra->save;
-	  GTK_ADJUSTMENT(barra2->adj)->value = 
-	    GTK_ADJUSTMENT(barra->adj)->value + d;
-
-	  upd_mod(barra2);
+	      *pdat->lnsd.pos = *pdat->lnsc.pos +d;
+          else
+	      *pdat->lnsc.pos = *pdat->lnsd.pos -d;
+	  upd_mod(barra->alt);
 	}
 
       upd_mod (barra);
@@ -72,6 +66,8 @@ upd_adj (GtkWidget * widget, gpointer dat)
     }
   else
     (GTK_ADJUSTMENT (barra->adj))->value = barra->save;
+
+  d = *pdat->lnsd.pos-*pdat->lnsc.pos;
 
   return TRUE;
 }
@@ -82,7 +78,7 @@ gboolean
 upd_adj_free (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
-  barradat *barra;
+  bardat *barra;
   pdat = (progdata *) dat;
   int l=L_VAL;
 

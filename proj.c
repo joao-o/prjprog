@@ -162,6 +162,8 @@ main (int argc, char **argv)
 
   pdat->lnsc.pos = &(GTK_ADJUSTMENT (pdat->barl.adj)->value);
   pdat->lnsc.focus = &(GTK_ADJUSTMENT (pdat->barfc.adj)->value);
+  pdat->barl.alt = &pdat->barr;
+  pdat->barr.alt = &pdat->barl;
   pdat->lnsd.pos = &(GTK_ADJUSTMENT (pdat->barr.adj)->value);
   pdat->lnsd.focus = &(GTK_ADJUSTMENT (pdat->barfd.adj)->value);
 

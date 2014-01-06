@@ -2,7 +2,7 @@
 #define _CALLBACKS_PROG
 
 extern gboolean upd_adj     (GtkWidget*, gpointer);
-extern void     upd_mod     (barradat*);
+extern void     upd_mod     (bardat*);
 extern gboolean upd_adj_free(GtkWidget*, gpointer);
 extern gboolean cfg_event   (GtkWidget*, gpointer);
 extern gboolean set_val     (GtkWidget*, gpointer);

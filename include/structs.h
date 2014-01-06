@@ -1,10 +1,11 @@
 #ifndef _STRUCTSINC
 #define _STRUCTSINC
 
+#include <stdint.h> 
 #define TOL 20			//Distância ente eixo optico e borda da drawbox
 
 // struct com dados para butao toggle com cores que mudam 
-typedef struct
+typedef struct tbtn
 {
   char label[15];
   GdkColor coloron;
@@ -15,18 +16,20 @@ typedef struct
 
 //struct com dados de uma barra de ajuste com label associada
 
-typedef struct
+typedef struct bardat bardat;
+struct bardat
 {
   GtkObject *adj;
   GtkWidget *nome, *lbl;
   char str[20];
   double save;
-} barradat;
+  bardat *alt;
+};
 
 
 //struct com dados do desenho das lentes
 
-typedef struct
+typedef struct drawdata
 {
   double ylen; //altura das lentes
   double xwid; //espessura das lentes
@@ -34,22 +37,13 @@ typedef struct
 } drawdata;
 
 //stuct com dados das lentes
-typedef struct
+typedef struct lens
 {
   double *pos,*focus;
 } lens;
 
-//struct com valores físicos do programa
-typedef struct
-{
-  double focalc; //distancia focal da lente convergente
-  double focald; //distancia focal da lente divergente (em modulo)
-  double imgmidy, imgmidx; //altura/posicao da imagem intermédia
-  double imgfiny, imgfinx; //altura/posicao da imagem final
-} physdata;
-
 //struct com coisas do rato
-typedef struct
+typedef struct rodent
 {
   unsigned char trap; //trap = [1,4] rato clicado, 0 otherwise
   double nestx;
@@ -58,22 +52,21 @@ typedef struct
   double path2;
 } rodent;
 
-typedef struct
+typedef struct flag
 {
-  unsigned char virt :1;
-  unsigned char dist :1;
-  unsigned char rem  :6;
+  uint8_t virt :1;
+  uint8_t dist :1;
+  uint8_t rem  :6;
 } flag;
 
 // struct principal com os dados do programa
-typedef struct
+typedef struct progdata
 {
-  barradat barl, barr, barfc, barfd, barang, barxx, baryy;
+  bardat barl, barr, barfc, barfd, barang, barxx;
   tbtn btnlock;
   GtkWidget *window, *drawbox;
   drawdata lensdata;
   lens lnsc,lnsd;
-  physdata lensvalue;
   flag flg;
   rodent mouse;
 } progdata;
