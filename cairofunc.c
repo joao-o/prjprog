@@ -86,6 +86,9 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
           (double)*wwidth,(double) pdat->drawbox->allocation.height);
   cairo_clip(cr);
 
+  cairo_set_source_rgba (cr, 0., 0., 0., 1.);
+  cairo_paint(cr);
+
   cairo_set_source_rgba (cr, 1., 1., 1., 1.);
   draw_line (cr, 0, midref, *wwidth, midref);
   cairo_stroke (cr);
@@ -120,7 +123,7 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
       lens2 = &(pdat->lnsc);
     }
 
-  cairo_set_line_width (cr, 2);
+  cairo_set_line_width (cr, 1);
   cairo_set_source_rgba (cr, 1., 1., 0., 1.);
 
   //reminder : buffer[4] = declive recta que passa no eixo
@@ -188,9 +191,7 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 	     (midref - buffer[1]) / *lens2->focus * buffer[4] + buffer[1]);
 
   cairo_stroke (cr);
-
   cairo_destroy (cr);
-
   *(pdat->lnsd.focus) = -*(pdat->lnsd.focus);
 
   return FALSE;

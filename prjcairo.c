@@ -84,6 +84,9 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 		  (double) pdat->drawbox->allocation.height);
   cairo_clip(cr);
 
+  cairo_set_source_rgba (cr, 0., 0., 0., 1.);
+  cairo_paint(cr);
+
   cairo_set_source_rgb (cr, 0.5, 0.5, 0.5);
   cairo_set_line_width (cr, 2);
   cairo_move_to (cr, 0, 3. * pdat->drawbox->allocation.height / 5.);
