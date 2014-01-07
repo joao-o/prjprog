@@ -17,13 +17,10 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   int width, height, i, j, t;
   double pos1, pos2, pos3, pos4, pos5, flens, slens, scl;
   double uy[7], ly[7], mx[7], rgbr[3], rgbv[3];
-  double ylen, xwid, ang, fc, fd, hwid1, hwid2;
+  double ang, fc, fd, hwid1, hwid2;
   int dshl=sizeof(dsh)/sizeof(dsh[0]);
 
   pdat = (progdata*) dat;
-
-  ylen = pdat->lensdata.ylen;
-  xwid = pdat->lensdata.xwid;
 
   hwid1 = pdat->lensdata.headwid1 = 
     240/(fabs(gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj))) 
@@ -96,45 +93,45 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
   cairo_set_source_rgb (cr, 1, 0.55, 0);
 
-  cairo_set_line_width (cr, xwid);
+  cairo_set_line_width (cr, pdat->lensdata.xwid);
   pos2 = 3. * pdat->drawbox->allocation.height / 5.;
-  cairo_move_to (cr, pos1, pos2 + (ylen)/2 - 3);
-  cairo_line_to (cr, pos1, pos2 - (ylen)/2 + 3);
+  cairo_move_to (cr, pos1, pos2 + (pdat->lensdata.ylen)/2 - 3);
+  cairo_line_to (cr, pos1, pos2 - (pdat->lensdata.ylen)/2 + 3);
   cairo_stroke (cr);
 
-  cairo_move_to (cr, pos1 - hwid1, pos2 - (ylen)/2 + 15);
-  cairo_line_to (cr, pos1 + hwid1, pos2 - (ylen)/2 + 15);
-  cairo_line_to (cr, pos1, pos2 - (ylen)/2);
-  cairo_line_to (cr, pos1 - hwid1, pos2 - (ylen)/2 + 15);
-  cairo_line_to (cr, pos1 + hwid1, pos2 - (ylen)/2 + 15);
+  cairo_move_to (cr, pos1 - hwid1, pos2 - (pdat->lensdata.ylen)/2 + 15);
+  cairo_line_to (cr, pos1 + hwid1, pos2 - (pdat->lensdata.ylen)/2 + 15);
+  cairo_line_to (cr, pos1, pos2 - (pdat->lensdata.ylen)/2);
+  cairo_line_to (cr, pos1 - hwid1, pos2 - (pdat->lensdata.ylen)/2 + 15);
+  cairo_line_to (cr, pos1 + hwid1, pos2 - (pdat->lensdata.ylen)/2 + 15);
 
-  cairo_move_to (cr, pos1 - hwid1, pos2 + (ylen)/2 - 15);
-  cairo_line_to (cr, pos1 + hwid1, pos2 + (ylen)/2 - 15);
-  cairo_line_to (cr, pos1, pos2 + (ylen)/2);
-  cairo_line_to (cr, pos1 - hwid1, pos2 + (ylen)/2 - 15);
-  cairo_line_to (cr, pos1 + hwid1, pos2 + (ylen)/2 - 15);
+  cairo_move_to (cr, pos1 - hwid1, pos2 + (pdat->lensdata.ylen)/2 - 15);
+  cairo_line_to (cr, pos1 + hwid1, pos2 + (pdat->lensdata.ylen)/2 - 15);
+  cairo_line_to (cr, pos1, pos2 + (pdat->lensdata.ylen)/2);
+  cairo_line_to (cr, pos1 - hwid1, pos2 + (pdat->lensdata.ylen)/2 - 15);
+  cairo_line_to (cr, pos1 + hwid1, pos2 + (pdat->lensdata.ylen)/2 - 15);
 
   cairo_fill (cr);
 
   cairo_set_source_rgb (cr, 0.21, 0.21, 1);
 
-  cairo_set_line_width (cr, xwid);
+  cairo_set_line_width (cr, pdat->lensdata.xwid);
 
-  cairo_move_to (cr, pos3, pos2 + (ylen)/2);
-  cairo_line_to (cr, pos3, pos2 - (ylen)/2);
+  cairo_move_to (cr, pos3, pos2 + (pdat->lensdata.ylen)/2);
+  cairo_line_to (cr, pos3, pos2 - (pdat->lensdata.ylen)/2);
   cairo_stroke (cr);
 
-  cairo_move_to (cr, pos3 - hwid2, pos2 - (ylen)/2 );
-  cairo_line_to (cr, pos3 + hwid2, pos2 - (ylen)/2 );
-  cairo_line_to (cr, pos3, pos2 - (ylen)/2 +15 );
-  cairo_line_to (cr, pos3 - hwid2, pos2 - (ylen)/2 );
-  cairo_line_to (cr, pos3 + hwid2, pos2 - (ylen)/2 );
+  cairo_move_to (cr, pos3 - hwid2, pos2 - (pdat->lensdata.ylen)/2 );
+  cairo_line_to (cr, pos3 + hwid2, pos2 - (pdat->lensdata.ylen)/2 );
+  cairo_line_to (cr, pos3, pos2 - (pdat->lensdata.ylen)/2 +15 );
+  cairo_line_to (cr, pos3 - hwid2, pos2 - (pdat->lensdata.ylen)/2 );
+  cairo_line_to (cr, pos3 + hwid2, pos2 - (pdat->lensdata.ylen)/2 );
 
-  cairo_move_to (cr, pos3 - hwid2, pos2 + (ylen)/2 );
-  cairo_line_to (cr, pos3 + hwid2, pos2 + (ylen)/2 );
-  cairo_line_to (cr, pos3, pos2 + (ylen)/2 - 15);
-  cairo_line_to (cr, pos3 - hwid2, pos2 + (ylen)/2 );
-  cairo_line_to (cr, pos3 + hwid2, pos2 + (ylen)/2 );
+  cairo_move_to (cr, pos3 - hwid2, pos2 + (pdat->lensdata.ylen)/2 );
+  cairo_line_to (cr, pos3 + hwid2, pos2 + (pdat->lensdata.ylen)/2 );
+  cairo_line_to (cr, pos3, pos2 + (pdat->lensdata.ylen)/2 - 15);
+  cairo_line_to (cr, pos3 - hwid2, pos2 + (pdat->lensdata.ylen)/2 );
+  cairo_line_to (cr, pos3 + hwid2, pos2 + (pdat->lensdata.ylen)/2 );
 
   cairo_fill (cr);
 
@@ -146,20 +143,20 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   //Circulos para alterar distancias focais com rato
   cairo_set_source_rgb (cr, 1, 0.55, 0);
   cairo_move_to (cr, pos1 + fc, pos2);
-  cairo_arc (cr, pos1 + fc, pos2, xwid*1.5, 15, 7. * M_PI);
+  cairo_arc (cr, pos1 + fc, pos2, pdat->lensdata.xwid*1.5, 15, 7. * M_PI);
   cairo_fill(cr);
   
   /*cairo_move_to (cr, pos1 - fc, pos2);
-  cairo_arc (cr, pos1 - fc, pos2, xwid*1.5, 15, 7. * M_PI);
+  cairo_arc (cr, pos1 - fc, pos2, pdat->lensdata.xwid*1.5, 15, 7. * M_PI);
   cairo_fill(cr);*/
 
   cairo_set_source_rgb (cr, 0.21, 0.21, 1);
   cairo_move_to (cr, pos3 + fd, pos2);
-  cairo_arc (cr, pos3 + fd, pos2, xwid*1.5, 15, 7. * M_PI);
+  cairo_arc (cr, pos3 + fd, pos2, pdat->lensdata.xwid*1.5, 15, 7. * M_PI);
   cairo_fill(cr);
 
   /*cairo_move_to (cr, pos3 - fd, pos2);
-  cairo_arc (cr, pos3 - fd, pos2, xwid*1.5, 15, 7. * M_PI);
+  cairo_arc (cr, pos3 - fd, pos2, pdat->lensdata.xwid*1.5, 15, 7. * M_PI);
   cairo_fill(cr);*/
 
   cairo_stroke(cr);
@@ -218,14 +215,14 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
     
   cairo_set_source_rgb (cr, 0.44, 1.00, 0.22);
 
-  cairo_set_line_width (cr, xwid/2);
+  cairo_set_line_width (cr, pdat->lensdata.xwid/2);
   cairo_move_to (cr, pos4, pos2);
   cairo_line_to (cr, pos4, ly[2]);
   cairo_stroke (cr);
 
   cairo_set_source_rgb (cr, 0.55, 0.00, 0.55);
 
-  cairo_set_line_width (cr, xwid/2);
+  cairo_set_line_width (cr, pdat->lensdata.xwid/2);
   cairo_move_to (cr, pos5, pos2);
   cairo_line_to (cr, pos5, ly[5]);
   cairo_stroke (cr);
@@ -256,7 +253,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
     uy[i] = 0;
     }*/
 
-  cairo_set_line_width (cr, xwid/3);
+  cairo_set_line_width (cr, pdat->lensdata.xwid/3);
   //desenha
   for(i=0;i<4;i++)
     {
