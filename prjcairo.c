@@ -79,7 +79,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cr = gdk_cairo_create (pdat->window->window);
 
   cairo_rectangle(cr, 0, 
-		  0, 
+		  10, 
 		  (double) pdat->drawbox->allocation.width,
 		  (double) pdat->drawbox->allocation.height);
   cairo_clip(cr);

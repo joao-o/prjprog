@@ -83,7 +83,7 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 
   // é aqui que a magia acontece 
   cairo_rectangle(cr, 0, 10,
-          (double)*wwidth,(double) pdat->drawbox->allocation.height-10);
+          (double)*wwidth,(double) pdat->drawbox->allocation.height);
   cairo_clip(cr);
 
   cairo_set_source_rgba (cr, 1., 1., 1., 1.);
