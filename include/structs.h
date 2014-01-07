@@ -59,6 +59,16 @@ typedef struct flag
   uint8_t rem  :6;
 } flag;
 
+typedef struct physdata
+{
+  double poslc;
+  double posld;
+  double fc;
+  double fd;
+  double axis;
+  double ldist;
+} physdata;
+
 // struct principal com os dados do programa
 typedef struct progdata
 {
@@ -69,6 +79,7 @@ typedef struct progdata
   lens lnsc,lnsd;
   flag flg;
   rodent mouse;
+  physdata physdata;
 } progdata;
 
 //tentar manter as coisas modulares e nao acrescentar coisas do tipo adj1,adj1 .
