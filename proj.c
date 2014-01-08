@@ -23,7 +23,7 @@ main (int argc, char **argv)
   GtkWidget *button, *barlensl, *barlensr,
     *barfocc, *barfocd, *barangl, *lunbtn,
     *virtbtn, *distbtn, *barsclx,
-    *ampxx, *redxx, *lenstype2;
+    *ampxx, *redxx,*lenstype2;
 
   // boxes
   GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox,
@@ -242,8 +242,7 @@ main (int argc, char **argv)
   // temporário até ser ajustável
   pdat->lensdata.ylen = 175;
   pdat->lensdata.xwid = 3;
-  //  pdat->lensdata.headwid1 = 7;
-  //  pdat->lensdata.headwid2 = 7;
+  set_val(pdat->window, pdat);
   pdat->flg.virt = 1;
   pdat->mouse.trap = 0;
 ////////////////////////////////////////////////////////////////////////////////
@@ -277,7 +276,7 @@ main (int argc, char **argv)
 		    G_CALLBACK (scalechange), pdat);
 
   g_signal_connect (G_OBJECT (lenstype2), "toggled",
-		    G_CALLBACK (cfg_event), pdat);
+		    G_CALLBACK (typechange), pdat);
 
   //callbacks barras
   g_signal_connect (G_OBJECT (pdat->barl.adj), "value-changed",

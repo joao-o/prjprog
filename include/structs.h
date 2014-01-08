@@ -39,7 +39,7 @@ typedef struct drawdata
 //stuct com dados das lentes
 typedef struct lens
 {
-  double *pos,*focus;
+  double *pos, *focus;
 } lens;
 
 //struct com coisas do rato
@@ -72,7 +72,10 @@ typedef struct physdata
 // struct principal com os dados do programa
 typedef struct progdata
 {
-  bardat barl, barr, barfc, barfd, barang, barxx;
+  bardat barl, barr;
+  bardat barfc, barfd;
+  bardat barang;
+  bardat barxx;
   tbtn btnlock;
   GtkWidget *window, *drawbox, *lenstype;
   drawdata lensdata;
