@@ -22,18 +22,6 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   int dshl=sizeof(dsh)/sizeof(dsh[0]);
 
   pdat = (progdata*) dat;
-
-  hwid1 = pdat->lensdata.headwid1 = 
-    240/(fabs(gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj))) 
-	 + 48.33) 
-    + 4.9; //fórmula mágica concedida pelo Grande Xamã Fit-Eha-Ya
-           //               será que quis dizer: ^mago^ ?
-
-  hwid2 = pdat->lensdata.headwid2 =  
-    240/(fabs(gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfd.adj)))
-	 + 48.33) 
-    + 4.9;
-
   scl = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barxx.adj));
   
   //cor dos raios reais
@@ -104,6 +92,18 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
   if(pdat->lenstype->state)
     {
+      
+      hwid1 = pdat->lensdata.headwid1 = 
+	240/(fabs(gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj))) 
+	     + 48.33) 
+	+ 4.9; //fórmula mágica concedida pelo Grande Xamã Fit-Eha-Ya
+      //               será que quis dizer: ^mago^ ?
+
+      hwid2 = pdat->lensdata.headwid2 =  
+	240/(fabs(gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfd.adj)))
+	     + 48.33) 
+	+ 4.9;
+
       cairo_move_to (cr, pos1, pos2 + (pdat->lensdata.ylen)/2 - 3);
       cairo_line_to (cr, pos1, pos2 - (pdat->lensdata.ylen)/2 + 3);
       cairo_stroke (cr);
@@ -149,10 +149,11 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       cairo_set_line_width (cr, 1);
       cairo_set_source_rgb (cr, 0.55, 0.55, 0.55);
 
-      rd = 12*fc;
+      rd = 2*fc + pdat->lensdata.ylen + 200;
       cc = (rd*rd - (pdat->lensdata.ylen)*(pdat->lensdata.ylen)*0.25);
       cc = sqrt(cc);
       opn = asin((pdat->lensdata.ylen)/(2*rd));
+      pdat->lensdata.headwid1 = rd - cc;
 
       cairo_arc (cr,  pos1 + cc, pos2, 
 		 rd, M_PI - opn,
@@ -168,22 +169,22 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       cairo_stroke_preserve(cr);
       cairo_fill (cr);
      
-      rd = 12*fd;
+      rd =  2*fd + pdat->lensdata.ylen + 200;
       cc = (rd*rd - (pdat->lensdata.ylen)*(pdat->lensdata.ylen)*0.25);
       cc = sqrt(cc);
       opn = asin((pdat->lensdata.ylen)/(2*rd));
-      esp = 2*(rd - cc);
+      pdat->lensdata.headwid2 = 2*(rd - cc);
 
-      cairo_arc (cr,  pos3 + cc + esp, pos2, 
+      cairo_arc (cr,  pos3 + cc + pdat->lensdata.headwid2, pos2, 
 		 rd, M_PI - opn,
 		 M_PI + opn);
-      cairo_arc (cr,  pos3 - cc - esp, pos2, 
+      cairo_arc (cr,  pos3 - cc - pdat->lensdata.headwid2, pos2, 
 		 rd, - opn,
 		  + opn);
-      cairo_move_to (cr, pos3 + esp, pos2 - (pdat->lensdata.ylen)/2);
-      cairo_line_to (cr, pos3 - esp, pos2 - (pdat->lensdata.ylen)/2);
-      cairo_move_to (cr, pos3 + esp, pos2 + (pdat->lensdata.ylen)/2);
-      cairo_line_to (cr, pos3 - esp, pos2 + (pdat->lensdata.ylen)/2);
+      cairo_move_to (cr, pos3 + pdat->lensdata.headwid2, pos2 - (pdat->lensdata.ylen)/2);
+      cairo_line_to (cr, pos3 - pdat->lensdata.headwid2, pos2 - (pdat->lensdata.ylen)/2);
+      cairo_move_to (cr, pos3 + pdat->lensdata.headwid2, pos2 + (pdat->lensdata.ylen)/2);
+      cairo_line_to (cr, pos3 - pdat->lensdata.headwid2, pos2 + (pdat->lensdata.ylen)/2);
       
       cairo_fill (cr);
 
