@@ -74,7 +74,7 @@ typedef struct progdata
 {
   bardat barl, barr, barfc, barfd, barang, barxx;
   tbtn btnlock;
-  GtkWidget *window, *drawbox;
+  GtkWidget *window, *drawbox, *lenstype;
   drawdata lensdata;
   lens lnsc,lnsd;
   flag flg;

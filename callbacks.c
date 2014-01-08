@@ -21,18 +21,26 @@ gboolean
 upd_phys (progdata *dat)
 {
   progdata *pdat = (progdata *) dat; 
+
   pdat->physdata.poslc = GTK_ADJUSTMENT (pdat->barl.adj)->value
-    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;;
+    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
+
   pdat->physdata.fc = *pdat->lnsc.focus
-    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;;
+    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
+
   pdat->physdata.posld = GTK_ADJUSTMENT (pdat->barr.adj)->value
-    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;;
+    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
+
   pdat->physdata.fd = *pdat->lnsd.focus
-    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;;
+    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
+
   pdat->physdata.axis = 3. * pdat->drawbox->allocation.height / 5.;
+
   pdat->physdata.ldist = pdat->physdata.poslc - pdat->physdata.posld;
+
   return TRUE; 
 }
+
 gboolean
 cfg_event (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 {
@@ -48,6 +56,13 @@ cfg_event (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 void
 upd_mod (bardat * barra)
 {
+  if( (GTK_ADJUSTMENT(barra->adj))->value 
+      > (GTK_ADJUSTMENT(barra->adj))->upper)
+    (GTK_ADJUSTMENT(barra->adj))->value = (GTK_ADJUSTMENT(barra->adj))->upper;
+  if( (GTK_ADJUSTMENT(barra->adj))->value 
+      < (GTK_ADJUSTMENT(barra->adj))->lower)
+    (GTK_ADJUSTMENT(barra->adj))->value = (GTK_ADJUSTMENT(barra->adj))->lower;
+
   sprintf (barra->str + 7, "%5.1f", (GTK_ADJUSTMENT (barra->adj))->value);
   gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
   barra->save = (GTK_ADJUSTMENT (barra->adj))->value;
@@ -71,9 +86,9 @@ upd_adj (GtkWidget * widget, gpointer dat)
       if(pdat->flg.dist)
 	{
 	  if (GTK_OBJECT (widget) == pdat->barl.adj)
-	      *pdat->lnsd.pos = *pdat->lnsc.pos +d;
+	      *pdat->lnsd.pos = *pdat->lnsc.pos + d;
           else
-	      *pdat->lnsc.pos = *pdat->lnsd.pos -d;
+	      *pdat->lnsc.pos = *pdat->lnsd.pos - d;
 	  upd_mod(barra->alt);
 	}
 
@@ -235,7 +250,6 @@ distchange (GtkWidget * widget, gpointer dat)
   return TRUE;
 }
 
-
 gboolean
 scalechange (GtkWidget * widget, gpointer dat)
 {
@@ -253,7 +267,7 @@ scalechange (GtkWidget * widget, gpointer dat)
   else  if( gtk_adjustment_get_upper(GTK_ADJUSTMENT (pdat->barxx.adj)) > 2)
     {
       gtk_adjustment_configure(GTK_ADJUSTMENT (pdat->barxx.adj),
-			       0.9, 0.0, 1.00, 0.001, 0, 0);
+			       0.9, 0.1, 1.00, 0.001, 0, 0);
   
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barxx.adj),
 			     "value-changed"); 
@@ -281,36 +295,36 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
       pdat->mouse.nestx = ((GdkEventMotion *) event)->x;
       pdat->mouse.nesty = ((GdkEventMotion *) event)->y;
       
-      if(pdat->mouse.nestx > pdat->drawbox->allocation.width - TOL - 10
-	 || pdat->mouse.nestx < TOL + 10)
+      if(pdat->mouse.nestx > pdat->drawbox->allocation.width - TOL
+	 || pdat->mouse.nestx < TOL)
 	return FALSE;
       
       if(pdat->mouse.trap == 1 )
 	{
 	  if(pdat->mouse.nestx + pdat->mouse.path1 
-	     > pdat->drawbox->allocation.width - TOL - 10)
+	     > pdat->drawbox->allocation.width - TOL)
 
 	    (GTK_ADJUSTMENT (pdat->barl.adj))->value 
-	      = (pdat->drawbox->allocation.width - TOL - 10)
+	      = (pdat->drawbox->allocation.width - TOL)
 	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
 
 	  else if(pdat->mouse.nestx + pdat->mouse.path1 - pdat->physdata.ldist 
-		  > pdat->drawbox->allocation.width - TOL - 10 
+		  > pdat->drawbox->allocation.width - TOL 
 		  && pdat->flg.dist)
 
 	    (GTK_ADJUSTMENT (pdat->barl.adj))->value 
-	      = (pdat->drawbox->allocation.width - TOL - 10 
+	      = (pdat->drawbox->allocation.width - TOL 
 		 + pdat->physdata.ldist)
 	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
 	  
-	  else if(pdat->mouse.nestx + pdat->mouse.path1 < TOL + 10)
+	  else if(pdat->mouse.nestx + pdat->mouse.path1 < TOL)
 	    (GTK_ADJUSTMENT (pdat->barl.adj))->value 
-	      = (TOL + 10);
+	      = (TOL);
 
 	  else if (pdat->mouse.nestx + pdat->mouse.path1 - pdat->physdata.ldist 
-		  < (TOL + 10) && pdat->flg.dist)
+		  < (TOL) && pdat->flg.dist)
 	     (GTK_ADJUSTMENT (pdat->barl.adj))->value 
-	       = ((TOL + 10) + pdat->physdata.ldist)
+	       = ((TOL) + pdat->physdata.ldist)
 	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
 
 	  else
@@ -334,28 +348,28 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
       else if(pdat->mouse.trap == 2 )
 	{
 	  if(pdat->mouse.nestx + pdat->mouse.path1 
-	     > pdat->drawbox->allocation.width - (TOL + 10))
+	     > pdat->drawbox->allocation.width - (TOL))
 
 	    (GTK_ADJUSTMENT (pdat->barr.adj))->value = 
-	      (pdat->drawbox->allocation.width - (TOL + 10))
+	      (pdat->drawbox->allocation.width - (TOL))
 	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
 
-	  else if(pdat->mouse.nestx + pdat->mouse.path1 < (TOL + 10))
+	  else if(pdat->mouse.nestx + pdat->mouse.path1 < (TOL))
 	    (GTK_ADJUSTMENT (pdat->barr.adj))->value 
-	      = (TOL + 10);
+	      = (TOL);
 
 	  else if (pdat->mouse.nestx + pdat->mouse.path1 + pdat->physdata.ldist 
-		   < (TOL + 10) && pdat->flg.dist)
+		   < (TOL) && pdat->flg.dist)
 	    (GTK_ADJUSTMENT (pdat->barr.adj))->value 
-	      = ((TOL + 10) - pdat->physdata.ldist)
+	      = ((TOL) - pdat->physdata.ldist)
 	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
 
 	  else if(pdat->mouse.nestx + pdat->mouse.path1 
 		  + pdat->physdata.ldist 
-		  > pdat->drawbox->allocation.width - (TOL + 10))
+		  > pdat->drawbox->allocation.width - (TOL))
 
 	    (GTK_ADJUSTMENT (pdat->barr.adj))->value 
-	      = (pdat->drawbox->allocation.width - (TOL + 10) 
+	      = (pdat->drawbox->allocation.width - (TOL) 
 		 - pdat->physdata.ldist)
 	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
 
@@ -381,10 +395,10 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
       else if(pdat->mouse.trap == 3 )
 	{
 	  if(pdat->mouse.nestx + pdat->mouse.path1 >
-	     pdat->drawbox->allocation.width - (TOL + 10))
+	     pdat->drawbox->allocation.width - (TOL))
 
 	    (GTK_ADJUSTMENT (pdat->barfc.adj))->value 
-	      = (pdat->drawbox->allocation.width - (TOL + 10))
+	      = (pdat->drawbox->allocation.width - (TOL))
 	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
 	  
 	  else if(pdat->mouse.nestx + pdat->mouse.path1
@@ -405,10 +419,10 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
       else if(pdat->mouse.trap == 4 )
 	{
 	  if(pdat->mouse.nestx + pdat->mouse.path1 
-	     > pdat->drawbox->allocation.width - (TOL + 10))
+	     > pdat->drawbox->allocation.width - (TOL))
 
 	    (GTK_ADJUSTMENT (pdat->barfd.adj))->value 
-	      = (pdat->drawbox->allocation.width - (TOL + 10))
+	      = (pdat->drawbox->allocation.width - (TOL))
 	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
 	  
 	  else if(pdat->mouse.nestx + pdat->mouse.path1
@@ -434,8 +448,8 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
       pdat->mouse.nestx = ((GdkEventButton *) event)->x;
       pdat->mouse.nesty = ((GdkEventMotion *) event)->y;
    
-      if(pdat->mouse.nestx > pdat->drawbox->allocation.width - TOL - 10
-	 || pdat->mouse.nestx < TOL + 10)
+      if(pdat->mouse.nestx > pdat->drawbox->allocation.width - TOL
+	 || pdat->mouse.nestx < TOL)
 	return FALSE;
 
       if(((pdat->mouse.nestx - pdat->physdata.poslc) 
