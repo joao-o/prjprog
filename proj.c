@@ -22,17 +22,18 @@ main (int argc, char **argv)
   //barras e butões
   GtkWidget *button, *barlensl, *barlensr,
     *barfocc, *barfocd, *barangl, *lunbtn,
-    *barsclx, *ampxx, *redxx;
+    *virtbtn, *distbtn, *barsclx,
+    *ampxx, *redxx,*lenstype2;
 
   // boxes
   GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox,
     *noteb, *notebp1, *notebp2, *notebp3, *notebp4, 
-    *optnbox, *statusbox, *noteb4xx;
+    *optnbox, *statusbox, *noteb4xx, *rlbox;
 
   //frames
   GtkWidget *dtbfrm, *drwfrm, 
     *blcfrm, *bldfrm, *bfcfrm, *bfdfrm, *bangfrm,
-    *xxfrm;
+    *xxfrm, *lensfrm;
 
   //setup inicial e criação da janela principal
   pdat = calloc (1, sizeof (progdata));
@@ -88,6 +89,12 @@ main (int argc, char **argv)
 
   statusbox = gtk_vbox_new (FALSE, 0);
   gtk_box_pack_end (GTK_BOX (optnbox), statusbox, FALSE, FALSE, 100);
+
+  lensfrm = gtk_frame_new ("Tipo de Lentes");
+  gtk_box_pack_end (GTK_BOX (optnbox), lensfrm, TRUE, TRUE, 0);
+  
+  rlbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (lensfrm), rlbox);
 
 ////////////////////////////////////////////////////////////////////////////////
   // adjusts e barras
@@ -174,13 +181,13 @@ main (int argc, char **argv)
   lunbtn = gtk_button_new_with_label("Criar Luneta");
   gtk_box_pack_end(GTK_BOX(optnbox), lunbtn, FALSE, FALSE, 5);
 
-  pdat->virtbtn = gtk_check_button_new_with_label("Raios Virtuais");
-  gtk_box_pack_start(GTK_BOX(optnbox), pdat->virtbtn, FALSE, FALSE, 5);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->virtbtn), TRUE);
+  virtbtn = gtk_check_button_new_with_label("Raios Virtuais");
+  gtk_box_pack_start(GTK_BOX(optnbox), virtbtn, FALSE, FALSE, 5);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (virtbtn), TRUE);
 
-  pdat->distbtn = gtk_check_button_new_with_label("Fixar Distância\nentre Lentes");
-  gtk_box_pack_start(GTK_BOX(optnbox), pdat->distbtn, FALSE, FALSE, 5);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->distbtn), FALSE);
+  distbtn = gtk_check_button_new_with_label("Fixar Distância\nentre Lentes");
+  gtk_box_pack_start(GTK_BOX(optnbox), distbtn, FALSE, FALSE, 5);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (distbtn), FALSE);
 
   //radio x
 
@@ -193,6 +200,19 @@ main (int argc, char **argv)
 					  "Reduzir");
   gtk_container_add (GTK_CONTAINER (noteb4xx), redxx);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (redxx), FALSE);
+
+  //radio type
+
+  pdat->lenstype = gtk_radio_button_new_with_label(NULL,
+						   "Lentes Esquemáticas");
+  gtk_container_add (GTK_CONTAINER (rlbox), pdat->lenstype);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->lenstype), TRUE);
+
+  lenstype2 = gtk_radio_button_new_with_label(gtk_radio_button_group 
+					  (GTK_RADIO_BUTTON (pdat->lenstype)),
+					  "Lentes Desenhadas");
+  gtk_container_add (GTK_CONTAINER (rlbox), lenstype2);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (lenstype2), FALSE);
 
   //butão toggle com cores
 
@@ -220,11 +240,9 @@ main (int argc, char **argv)
 
 /////////////////////////////////////////////////////////////////////////
   // temporário até ser ajustável
-  pdat->lensdata.ylen = 125;
+  pdat->lensdata.ylen = 175;
   pdat->lensdata.xwid = 3;
-  pdat->flg.virt=1;
-  //  pdat->lensdata.headwid1 = 7;
-  //  pdat->lensdata.headwid2 = 7;
+  pdat->flg.virt = 1;
   pdat->mouse.trap = 0;
 ////////////////////////////////////////////////////////////////////////////////
   //sinais e callbacks
@@ -247,11 +265,17 @@ main (int argc, char **argv)
   g_signal_connect (G_OBJECT (pdat->btnlock.name), "toggled",
 		    G_CALLBACK (lchange), pdat);
 
-  g_signal_connect (G_OBJECT (pdat->virtbtn), "toggled",
+  g_signal_connect (G_OBJECT (virtbtn), "toggled",
 		    G_CALLBACK (virtchange), pdat);
+
+  g_signal_connect (G_OBJECT (distbtn), "toggled",
+		    G_CALLBACK (distchange), pdat);
 
   g_signal_connect (G_OBJECT (ampxx), "toggled",
 		    G_CALLBACK (scalechange), pdat);
+
+  g_signal_connect (G_OBJECT (lenstype2), "toggled",
+		    G_CALLBACK (typechange), pdat);
 
   //callbacks barras
   g_signal_connect (G_OBJECT (pdat->barl.adj), "value-changed",
