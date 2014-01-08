@@ -22,8 +22,7 @@ main (int argc, char **argv)
   //barras e butões
   GtkWidget *button, *barlensl, *barlensr,
     *barfocc, *barfocd, *barangl, *lunbtn,
-    *virtbtn, *distbtn, *barsclx,
-    *ampxx, *redxx;
+    *barsclx, *ampxx, *redxx;
 
   // boxes
   GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox,
@@ -175,13 +174,13 @@ main (int argc, char **argv)
   lunbtn = gtk_button_new_with_label("Criar Luneta");
   gtk_box_pack_end(GTK_BOX(optnbox), lunbtn, FALSE, FALSE, 5);
 
-  virtbtn = gtk_check_button_new_with_label("Raios Virtuais");
-  gtk_box_pack_start(GTK_BOX(optnbox), virtbtn, FALSE, FALSE, 5);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (virtbtn), TRUE);
+  pdat->virtbtn = gtk_check_button_new_with_label("Raios Virtuais");
+  gtk_box_pack_start(GTK_BOX(optnbox), pdat->virtbtn, FALSE, FALSE, 5);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->virtbtn), TRUE);
 
-  distbtn = gtk_check_button_new_with_label("Fixar Distância\nentre Lentes");
-  gtk_box_pack_start(GTK_BOX(optnbox), distbtn, FALSE, FALSE, 5);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (distbtn), FALSE);
+  pdat->distbtn = gtk_check_button_new_with_label("Fixar Distância\nentre Lentes");
+  gtk_box_pack_start(GTK_BOX(optnbox), pdat->distbtn, FALSE, FALSE, 5);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->distbtn), FALSE);
 
   //radio x
 
@@ -223,9 +222,9 @@ main (int argc, char **argv)
   // temporário até ser ajustável
   pdat->lensdata.ylen = 125;
   pdat->lensdata.xwid = 3;
+  pdat->flg.virt=1;
   //  pdat->lensdata.headwid1 = 7;
   //  pdat->lensdata.headwid2 = 7;
-  pdat->flg.virt = 1;
   pdat->mouse.trap = 0;
 ////////////////////////////////////////////////////////////////////////////////
   //sinais e callbacks
@@ -248,11 +247,8 @@ main (int argc, char **argv)
   g_signal_connect (G_OBJECT (pdat->btnlock.name), "toggled",
 		    G_CALLBACK (lchange), pdat);
 
-  g_signal_connect (G_OBJECT (virtbtn), "toggled",
+  g_signal_connect (G_OBJECT (pdat->virtbtn), "toggled",
 		    G_CALLBACK (virtchange), pdat);
-
-  g_signal_connect (G_OBJECT (distbtn), "toggled",
-		    G_CALLBACK (distchange), pdat);
 
   g_signal_connect (G_OBJECT (ampxx), "toggled",
 		    G_CALLBACK (scalechange), pdat);

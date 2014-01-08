@@ -26,7 +26,6 @@ struct bardat
   bardat *alt;
 };
 
-
 //struct com dados do desenho das lentes
 
 typedef struct drawdata
@@ -74,7 +73,8 @@ typedef struct progdata
 {
   bardat barl, barr, barfc, barfd, barang, barxx;
   tbtn btnlock;
-  GtkWidget *window, *drawbox;
+  GtkWidget *window,   *drawbox, 
+            *lenstype, *distbtn, *virtbtn;
   drawdata lensdata;
   lens lnsc,lnsd;
   flag flg;
