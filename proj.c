@@ -242,7 +242,6 @@ main (int argc, char **argv)
   // temporário até ser ajustável
   pdat->lensdata.ylen = 175;
   pdat->lensdata.xwid = 3;
-  set_val(pdat->window, pdat);
   pdat->flg.virt = 1;
   pdat->mouse.trap = 0;
 ////////////////////////////////////////////////////////////////////////////////

@@ -148,7 +148,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
     {
       //Modo "desenhadas"
       cairo_set_line_width (cr, 1);
-      cairo_set_source_rgb (cr, 0.55, 0.60, 0.65);
+      cairo_set_source_rgba (cr, 0.55, 0.60, 0.65, 0.6);
 
       rd = 2*fc + pdat->lensdata.ylen + 200;
       cc = (rd*rd - (pdat->lensdata.ylen)*(pdat->lensdata.ylen)*0.25);
@@ -159,15 +159,9 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       cairo_arc (cr,  pos1 + cc, pos2, 
 		 rd, M_PI - opn,
 		 M_PI + opn);
-      cairo_close_path (cr);
-      cairo_stroke_preserve(cr);
-      cairo_fill (cr);
-
-      cairo_arc (cr,  pos1 - cc, pos2, 
+     cairo_arc (cr,  pos1 - cc, pos2, 
 		 rd, - opn,
 		 + opn);
-      cairo_close_path (cr);
-      cairo_stroke_preserve(cr);
       cairo_fill (cr);
      
       rd =  2*fd + pdat->lensdata.ylen + 200;
@@ -201,7 +195,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
   cairo_set_line_width (cr, pdat->lensdata.xwid);
 
-  cairo_set_source_rgb (cr, 1, 0.55, 0);
+  cairo_set_source_rgba (cr, 1, 0.55, 0, 1);
   cairo_move_to (cr, pos1 + fc, pos2);
   cairo_arc (cr, pos1 + fc, pos2, pdat->lensdata.xwid*1.5, 15, 7. * M_PI);
   cairo_fill(cr);
