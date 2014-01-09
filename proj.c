@@ -114,9 +114,11 @@ main (int argc, char **argv)
 
   pdat->barl.lbl = gtk_label_new (pdat->barl.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barl.lbl, TRUE, TRUE, 0);
+  gtk_label_set_justify(GTK_LABEL(pdat->barl.lbl), GTK_JUSTIFY_LEFT);
 
   pdat->barr.lbl = gtk_label_new (pdat->barr.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barr.lbl, TRUE, TRUE, 0);
+  gtk_label_set_justify(GTK_LABEL(pdat->barr.lbl), GTK_JUSTIFY_LEFT);
 
   //distancia focal
   pdat->barfc.adj = gtk_adjustment_new (300.0, 1.0, 301.0, 0.1, 1.0, 1.0);
@@ -134,9 +136,11 @@ main (int argc, char **argv)
 
   pdat->barfc.lbl = gtk_label_new (pdat->barfc.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barfc.lbl, TRUE, TRUE, 0);
+  gtk_label_set_justify(GTK_LABEL(pdat->barfc.lbl), GTK_JUSTIFY_LEFT);
 
   pdat->barfd.lbl = gtk_label_new (pdat->barfd.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barfd.lbl, TRUE, TRUE, 0);
+  gtk_label_set_justify(GTK_LABEL(pdat->barfd.lbl), GTK_JUSTIFY_LEFT);
 
   //angulo
   pdat->barang.adj = gtk_adjustment_new (20, -89.0, 90.0, 0.1, 1.0, 1.0);
@@ -148,7 +152,7 @@ main (int argc, char **argv)
 
   pdat->barang.lbl = gtk_label_new (pdat->barang.str);
   gtk_box_pack_start (GTK_BOX (statusbox), pdat->barang.lbl, TRUE, TRUE, 0);
-
+  gtk_label_set_justify(GTK_LABEL(pdat->barang.lbl), GTK_JUSTIFY_LEFT);
   
   //escala
   pdat->barxx.adj = gtk_adjustment_new (2, 1, 100.0, 0.1, 1.0, 1.0);
@@ -165,6 +169,7 @@ main (int argc, char **argv)
 
   pdat->barxx.lbl = gtk_label_new (pdat->barxx.str);
   gtk_container_add (GTK_CONTAINER (noteb4xx), pdat->barxx.lbl);
+  gtk_label_set_justify(GTK_LABEL(pdat->barxx.lbl), GTK_JUSTIFY_LEFT);
 
   pdat->lnsc.pos = &(GTK_ADJUSTMENT (pdat->barl.adj)->value);
   pdat->lnsc.focus = &(GTK_ADJUSTMENT (pdat->barfc.adj)->value);
@@ -244,6 +249,20 @@ main (int argc, char **argv)
   pdat->lensdata.xwid = 3;
   pdat->flg.virt = 1;
   pdat->mouse.trap = 0;
+
+  pdat->physdata.axis = 3.*pdat->drawbox->allocation.height/5.;
+
+  pdat->physdata.poslc = GTK_ADJUSTMENT (pdat->barl.adj)->value
+    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
+  pdat->physdata.fc = *pdat->lnsc.focus
+    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
+  pdat->physdata.posld = GTK_ADJUSTMENT (pdat->barr.adj)->value
+    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
+  pdat->physdata.fd = *pdat->lnsd.focus
+    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
+  pdat->physdata.ldist = 
+    pdat->physdata.poslc - pdat->physdata.posld;
+
 ////////////////////////////////////////////////////////////////////////////////
   //sinais e callbacks
 
@@ -318,7 +337,12 @@ main (int argc, char **argv)
 ////////////////////////////////////////////////////////////////////////////////  
 
   gtk_widget_show_all (pdat->window);
+
+  g_signal_emit_by_name(G_OBJECT (button),"clicked");
+
   gtk_main ();
+
+  free(pdat);
 
   return 0;
 }

@@ -97,7 +97,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 	240/(fabs(gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj))) 
 	     + 48.33) 
 	+ 4.9; //fórmula mágica concedida pelo Grande Xamã Fit-Eha-Ya
-      //               será que quis dizer: ^mago^ ?
+               //               será que quis dizer: ^mago^ ?
 
       hwid2 = pdat->lensdata.headwid2 =  
 	240/(fabs(gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfd.adj)))
@@ -159,7 +159,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       cairo_arc (cr,  pos1 + cc, pos2, 
 		 rd, M_PI - opn,
 		 M_PI + opn);
-     cairo_arc (cr,  pos1 - cc, pos2, 
+      cairo_arc (cr,  pos1 - cc, pos2, 
 		 rd, - opn,
 		 + opn);
       cairo_fill (cr);
