@@ -56,7 +56,8 @@ typedef struct flag
 {
   uint8_t virt :1;
   uint8_t dist :1;
-  uint8_t rem  :6;
+  uint8_t lock :1;
+  uint8_t rem  :5;
 } flag;
 
 typedef struct physdata
@@ -77,7 +78,8 @@ typedef struct progdata
   bardat barang;
   bardat barxx;
   tbtn btnlock;
-  GtkWidget *window, *drawbox, *lenstype;
+  GtkWidget *window, *drawbox, *lenstype, 
+            *virtbtn, *distbtn ;
   drawdata lensdata;
   lens lnsc,lnsd;
   flag flg;

@@ -46,7 +46,7 @@ cfg_event (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
-
+gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->lenstype), TRUE);
   gtk_widget_queue_draw (pdat->window);
   return FALSE;
 }
@@ -80,8 +80,7 @@ upd_adj (GtkWidget * widget, gpointer dat)
     barra = &pdat->barl;
   else
     barra = &pdat->barr;
-
-  if (!pdat->btnlock.name->state)
+  if (!pdat->flg.lock)
     {
       if(pdat->flg.dist)
 	{
@@ -129,14 +128,14 @@ upd_adj_free (GtkWidget * widget, gpointer dat)
       l = 2;
     }
 
-  if (l == L_VAL && pdat->btnlock.name->state 
+  if (l == L_VAL && pdat->flg.lock 
       && *pdat->lnsc.focus > *pdat->lnsd.focus+20)
     {
       *pdat->lnsd.pos = *pdat->lnsc.pos +
 	*pdat->lnsc.focus - *pdat->lnsd.focus - 5;
       upd_mod(&(pdat->barr));
     }
-  else if(pdat->btnlock.name->state)
+  else if(pdat->flg.lock)
     (GTK_ADJUSTMENT (barra->adj))->value = barra->save; 
 
   sprintf (barra->str + l, "%4.1f", (GTK_ADJUSTMENT (barra->adj))->value);
@@ -156,8 +155,11 @@ set_val (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
-  if (!pdat->btnlock.name->state)
-    {
+  if (!pdat->flg.lock)
+    {      
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->virtbtn), TRUE);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->distbtn), FALSE);
+
       (GTK_ADJUSTMENT (pdat->barl.adj))->value = 320.;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
 			     "value-changed");
@@ -170,10 +172,9 @@ set_val (GtkWidget * widget, gpointer dat)
       *(pdat->lnsd.pos) = 477.8;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
 			     "value-changed");
-      pdat->flg.virt=1;
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->lenstype), TRUE);
-      pdat->flg.dist=0;
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->lenstype), TRUE);
+      printf("%d\t%d\n",pdat->flg.virt,pdat->flg.dist);
+      gtk_widget_queue_draw (pdat->window);
+
     }
   return TRUE;
 }
@@ -217,9 +218,10 @@ lchange (GtkWidget * widget, gpointer dat)
   pdat = (progdata *) dat;
   btnlock = &pdat->btnlock;
 
-  if (!btnlock->name->state)
+  if (!pdat->flg.lock)
     {
       sprintf (btnlock->label, "  Locked  ");
+      pdat->flg.lock=!pdat->flg.lock;
       gtk_button_set_label (GTK_BUTTON (btnlock->name), btnlock->label);
       pdat->barl.save = (GTK_ADJUSTMENT (pdat->barl.adj))->value;
       pdat->barr.save = (GTK_ADJUSTMENT (pdat->barr.adj))->value;
@@ -228,6 +230,7 @@ lchange (GtkWidget * widget, gpointer dat)
   else
     {
       sprintf (btnlock->label, " Unlocked ");
+      pdat->flg.lock=!pdat->flg.lock;
       gtk_button_set_label (GTK_BUTTON (btnlock->name), btnlock->label);
     }
 
