@@ -132,16 +132,21 @@ upd_adj (GtkWidget * widget, gpointer dat)
     barra = &pdat->barl;
   else
     barra = &pdat->barr;
-  if (!pdat->flg.lock)
+ if (!pdat->flg.lock)
     {
       if(pdat->flg.dist)
-	{
-	  if (GTK_OBJECT (widget) == pdat->barl.adj)
-	      *pdat->lnsd.pos = *pdat->lnsc.pos + d;
-          else
-	      *pdat->lnsc.pos = *pdat->lnsd.pos - d;
-	  upd_mod(barra->alt);
-	}
+        {
+         if (GTK_OBJECT (widget) == pdat->barl.adj)
+           if (*pdat->lnsd.pos + d > pdat->drawbox->allocation.width);
+           else
+             *pdat->lnsd.pos = *pdat->lnsc.pos + d;
+         else
+           if (*pdat->lnsc.pos - d < 0)
+             return TRUE;
+           else
+             *pdat->lnsc.pos = *pdat->lnsd.pos - d;
+         upd_mod(barra->alt);
+        }
 
       upd_mod (barra);
       gtk_widget_queue_draw (pdat->window);
