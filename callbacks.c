@@ -345,8 +345,7 @@ scalechange (GtkWidget * widget, gpointer dat)
 }
 
 //callback quando rato é usado para mexer coisas
-
-gboolean
+gboolean 
 titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
 {
   progdata *pdat;
@@ -359,228 +358,77 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
   */
   
 
-  if (event->type == GDK_MOTION_NOTIFY)
+  pdat->mouse.nestx = ((GdkEventMotion *) event)->x;
+  pdat->mouse.nesty = ((GdkEventMotion *) event)->y;
+
+  if(pdat->mouse.nestx > pdat->drawbox->allocation.width
+         || pdat->mouse.nestx < 0)
     {
-      pdat->mouse.nestx = ((GdkEventMotion *) event)->x;
-      pdat->mouse.nesty = ((GdkEventMotion *) event)->y;
-      
-      if(pdat->mouse.nestx > pdat->drawbox->allocation.width
-	 || pdat->mouse.nestx < 0)
-	return FALSE;
-      
-      if (pdat->mouse.trap == 1 )
-	{
-	  if(pdat->mouse.nestx + pdat->mouse.path1 
-	     > pdat->drawbox->allocation.width - TOL)
-	    (GTK_ADJUSTMENT (pdat->barl.adj))->value 
-	      = (pdat->drawbox->allocation.width - TOL)
-	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
+      pdat->mouse.trap=0;
+      return FALSE;
+    }
+  else if (pdat->mouse.trap != 0 && event->type == GDK_MOTION_NOTIFY)
+    {
+      switch (pdat->mouse.trap)
+        {
+	case 1:
+	  jerrylens(pdat,&pdat->barl);
+	  break;
+	case 2:
+	  jerrylens(pdat,&pdat->barr);
+	  break;
+	case 3:
+	  mickeyfocus(pdat,&pdat->barfc);
+	  break;
+	case 4:
+	  mickeyfocus(pdat,&pdat->barfd);
+	  break;
 
-	  else if(pdat->mouse.nestx + pdat->mouse.path1 - pdat->physdata.ldist 
-		  > pdat->drawbox->allocation.width - TOL 
-		  && pdat->flg.dist)
-	    (GTK_ADJUSTMENT (pdat->barl.adj))->value 
-	      = (pdat->drawbox->allocation.width - TOL 
-		 + pdat->physdata.ldist)
-	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-	  
-	  else if(pdat->mouse.nestx + pdat->mouse.path1 < TOL)
-	    (GTK_ADJUSTMENT (pdat->barl.adj))->value 
-	      = (TOL);
-
-	  else if (pdat->mouse.nestx + pdat->mouse.path1 - pdat->physdata.ldist 
-		   < (TOL) && pdat->flg.dist)
-	    (GTK_ADJUSTMENT (pdat->barl.adj))->value 
-	      = ((TOL) + pdat->physdata.ldist)
-	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-
-	  else
-	    (GTK_ADJUSTMENT (pdat->barl.adj))->value =
-	      (pdat->mouse.nestx + pdat->mouse.path1)
-	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-	 
-	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
-				 "value-changed");
-	  if(pdat->flg.dist)
-	    {
-	      (GTK_ADJUSTMENT (pdat->barr.adj))->value =
-		(GTK_ADJUSTMENT (pdat->barl.adj))->value - pdat->physdata.ldist
-		*GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-	 
-	      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
-				     "value-changed");
-	    }
-	}
-      else if(pdat->mouse.trap == 2 )
-	{
-	  if(pdat->mouse.nestx + pdat->mouse.path1 
-	     > pdat->drawbox->allocation.width - (TOL))
-
-	    (GTK_ADJUSTMENT (pdat->barr.adj))->value = 
-	      (pdat->drawbox->allocation.width - (TOL))
-	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-
-	  else if(pdat->mouse.nestx + pdat->mouse.path1 < (TOL))
-	    (GTK_ADJUSTMENT (pdat->barr.adj))->value 
-	      = (TOL);
-
-	  else if (pdat->mouse.nestx + pdat->mouse.path1 + pdat->physdata.ldist 
-		   < (TOL) && pdat->flg.dist)
-	    (GTK_ADJUSTMENT (pdat->barr.adj))->value 
-	      = ((TOL) - pdat->physdata.ldist)
-	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-
-	  else if(pdat->mouse.nestx + pdat->mouse.path1 
-		  + pdat->physdata.ldist 
-		  > pdat->drawbox->allocation.width - (TOL))
-
-	    (GTK_ADJUSTMENT (pdat->barr.adj))->value 
-	      = (pdat->drawbox->allocation.width - (TOL) 
-		 - pdat->physdata.ldist)
-	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-
-	  else
-
-	    (GTK_ADJUSTMENT (pdat->barr.adj))->value =
-	      (pdat->mouse.nestx + pdat->mouse.path2)
-	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-
-	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
-				 "value-changed");
-
-	  if(pdat->flg.dist)
-	    {
-	      (GTK_ADJUSTMENT (pdat->barl.adj))->value =
-		(GTK_ADJUSTMENT (pdat->barr.adj))->value 
-		+ pdat->physdata.ldist*GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-	 
-	      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
-				     "value-changed");
-				     }
-	}
-      else if(pdat->mouse.trap == 3 )
-	{
-	  if(pdat->mouse.nestx + pdat->mouse.path1 >
-	     pdat->drawbox->allocation.width - (TOL))
-
-	    (GTK_ADJUSTMENT (pdat->barfc.adj))->value 
-	      = (pdat->drawbox->allocation.width - (TOL))
-	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-	  
-	  else if(pdat->mouse.nestx + pdat->mouse.path1
-		  < 10)
-	  
-	    (GTK_ADJUSTMENT (pdat->barfc.adj))->value 
-	      = 10*GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-	  
-	  else
-
-	    (GTK_ADJUSTMENT (pdat->barfc.adj))->value =
-	      (pdat->mouse.nestx + pdat->mouse.path1)*
-	      GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-	 
-	  if((GTK_ADJUSTMENT (pdat->barfc.adj))->value >
-	     (GTK_ADJUSTMENT (pdat->barfc.adj))->upper)
-	    (GTK_ADJUSTMENT (pdat->barfc.adj))->value =
-	      (GTK_ADJUSTMENT (pdat->barfc.adj))->upper;
-
-	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barfc.adj),
-				 "value-changed");
-	}
-      else if(pdat->mouse.trap == 4 )
-	{
-	  if(pdat->mouse.nestx + pdat->mouse.path1 
-	     > pdat->drawbox->allocation.width - (TOL))
-
-	    (GTK_ADJUSTMENT (pdat->barfd.adj))->value 
-	      = (pdat->drawbox->allocation.width - (TOL))
-	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-	  
-	  else if(pdat->mouse.nestx + pdat->mouse.path1
-		  < 10)
-
-	    (GTK_ADJUSTMENT (pdat->barfd.adj))->value 
-	    = 10*GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-
-	  else
-
-	    (GTK_ADJUSTMENT (pdat->barfd.adj))->value =
-	      (pdat->mouse.nestx + pdat->mouse.path1)
-	      *GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-
-
-	  if((GTK_ADJUSTMENT (pdat->barfd.adj))->value >
-	     (GTK_ADJUSTMENT (pdat->barfd.adj))->upper)
-	    (GTK_ADJUSTMENT (pdat->barfd.adj))->value =
-	      (GTK_ADJUSTMENT (pdat->barfd.adj))->upper;
-	 
-	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barfd.adj),
-				 "value-changed");
-	}
-
+        }
+  
     }
   else if (event->type == GDK_BUTTON_PRESS)
     {
-      
-      pdat->mouse.nestx = ((GdkEventButton *) event)->x;
-      pdat->mouse.nesty = ((GdkEventMotion *) event)->y;
-   
-      if(pdat->mouse.nestx > pdat->drawbox->allocation.width
-	 || pdat->mouse.nestx < 0)
-	return FALSE;
-
-      if(((pdat->mouse.nestx - pdat->physdata.poslc) 
-	  < pdat->physdata.fc + pdat->lensdata.xwid*1.5)
-	 && ((pdat->mouse.nestx - pdat->physdata.poslc) 
-	     > pdat->physdata.fc - pdat->lensdata.xwid*1.5)
-	 && (fabs(pdat->mouse.nesty - pdat->physdata.axis) 
-	     < pdat->lensdata.xwid*1.5))
-	{
-	  pdat->mouse.trap = 3; 
-	  pdat->mouse.path1 =
-	    (GTK_ADJUSTMENT (pdat->barfc.adj))->value
-	    /GTK_ADJUSTMENT (pdat->barxx.adj)->value - pdat->mouse.nestx;
-	}
-
+      if (((pdat->mouse.nestx - pdat->physdata.poslc) 
+          < pdat->physdata.fc + pdat->lensdata.xwid*1.5)
+         && ((pdat->mouse.nestx - pdat->physdata.poslc) 
+             > pdat->physdata.fc - pdat->lensdata.xwid*1.5)
+         && (fabs(pdat->mouse.nesty - pdat->physdata.axis) 
+             < pdat->lensdata.xwid*1.5))
+        {
+          pdat->mouse.trap = 3; 
+          pdat->mouse.path1 =pdat->physdata.fc - pdat->mouse.nestx;
+        }
       else if(((pdat->mouse.nestx - pdat->physdata.posld) 
-	       < pdat->physdata.fd + pdat->lensdata.xwid*1.5)
-	      && ((pdat->mouse.nestx - pdat->physdata.posld) 
-		  > pdat->physdata.fd - pdat->lensdata.xwid*1.5)
-	      && (fabs(pdat->mouse.nesty - pdat->physdata.axis) 
-		  < pdat->lensdata.xwid*1.5))
-	{
-	  pdat->mouse.trap = 4;
-	  pdat->mouse.path1 =
-	    (GTK_ADJUSTMENT (pdat->barfd.adj))->value
-	    /GTK_ADJUSTMENT (pdat->barxx.adj)->value - pdat->mouse.nestx;
-
-	}
+               < pdat->physdata.fd + pdat->lensdata.xwid*1.5)
+              && ((pdat->mouse.nestx - pdat->physdata.posld) 
+                  > pdat->physdata.fd - pdat->lensdata.xwid*1.5)
+              && (fabs(pdat->mouse.nesty - pdat->physdata.axis) 
+                  < pdat->lensdata.xwid*1.5))
+        {
+          pdat->mouse.trap = 4;
+          pdat->mouse.path1 =pdat->physdata.fd - pdat->mouse.nestx;
+        }
       else if(fabs(pdat->mouse.nestx - pdat->physdata.poslc) 
-	      < pdat->lensdata.headwid1 
-	      && fabs(pdat->mouse.nesty - pdat->physdata.axis) 
-	      < pdat->lensdata.ylen)
-	{
-	  pdat->mouse.trap = 1;  
-	  pdat->mouse.path1 =
-	    ((GTK_ADJUSTMENT (pdat->barl.adj))->value)
-	    /GTK_ADJUSTMENT (pdat->barxx.adj)->value - pdat->mouse.nestx;
-
-	}
-      else if(fabs(pdat->mouse.nestx - pdat->physdata.posld)
-	      < pdat->lensdata.headwid2 
-	      && fabs(pdat->mouse.nesty - pdat->physdata.axis) 
-	      < pdat->lensdata.ylen)
-	{
-	  pdat->mouse.trap = 2;
-	  pdat->mouse.path2 =
-	    ((GTK_ADJUSTMENT (pdat->barr.adj))->value)
-	    /GTK_ADJUSTMENT (pdat->barxx.adj)->value - pdat->mouse.nestx;
-	}
-      
+              < pdat->lensdata.headwid1 
+              && fabs(pdat->mouse.nesty - pdat->physdata.axis) 
+              < pdat->lensdata.ylen)
+        {
+          pdat->mouse.trap = 1;  
+          pdat->mouse.path1 = pdat->physdata.poslc - pdat->mouse.nestx;
+        }
+     else if(fabs(pdat->mouse.nestx - pdat->physdata.posld)
+              < pdat->lensdata.headwid2 
+              && fabs(pdat->mouse.nesty - pdat->physdata.axis) 
+              < pdat->lensdata.ylen)
+        {
+          pdat->mouse.trap = 2;
+          pdat->mouse.path1 = pdat->physdata.posld - pdat->mouse.nestx;
+        }
     }
   else if (event->type == GDK_BUTTON_RELEASE)
     pdat->mouse.trap = 0;
 
-  gtk_widget_queue_draw (pdat->window);
+
   return TRUE;
 }
