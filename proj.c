@@ -22,7 +22,7 @@ main (int argc, char **argv)
   //barras e butões
   GtkWidget *button, *barlensl, *barlensr,
     *barfocc, *barfocd, *barangl, *lunbtn,
-    *virtbtn, *distbtn, *barsclx,
+    *barsclx,
     *ampxx, *redxx,*lenstype2;
 
   // boxes
@@ -186,13 +186,13 @@ main (int argc, char **argv)
   lunbtn = gtk_button_new_with_label("Criar Luneta");
   gtk_box_pack_end(GTK_BOX(optnbox), lunbtn, FALSE, FALSE, 5);
 
-  virtbtn = gtk_check_button_new_with_label("Raios Virtuais");
-  gtk_box_pack_start(GTK_BOX(optnbox), virtbtn, FALSE, FALSE, 5);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (virtbtn), TRUE);
+  pdat->virtbtn = gtk_check_button_new_with_label("Raios Virtuais");
+  gtk_box_pack_start(GTK_BOX(optnbox), pdat->virtbtn, FALSE, FALSE, 5);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->virtbtn), TRUE);
 
-  distbtn = gtk_check_button_new_with_label("Fixar Distância\nentre Lentes");
-  gtk_box_pack_start(GTK_BOX(optnbox), distbtn, FALSE, FALSE, 5);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (distbtn), FALSE);
+  pdat->distbtn = gtk_check_button_new_with_label("Fixar Distância\nentre Lentes");
+  gtk_box_pack_start(GTK_BOX(optnbox), pdat->distbtn, FALSE, FALSE, 5);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->distbtn), FALSE);
 
   //radio x
 
@@ -209,13 +209,13 @@ main (int argc, char **argv)
   //radio type
 
   pdat->lenstype = gtk_radio_button_new_with_label(NULL,
-						   "Lentes Esquemáticas");
+						   "Esquemáticas");
   gtk_container_add (GTK_CONTAINER (rlbox), pdat->lenstype);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->lenstype), TRUE);
 
   lenstype2 = gtk_radio_button_new_with_label(gtk_radio_button_group 
 					  (GTK_RADIO_BUTTON (pdat->lenstype)),
-					  "Lentes Desenhadas");
+					  "Desenhadas");
   gtk_container_add (GTK_CONTAINER (rlbox), lenstype2);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (lenstype2), FALSE);
 
@@ -249,20 +249,6 @@ main (int argc, char **argv)
   pdat->lensdata.xwid = 3;
   pdat->flg.virt = 1;
   pdat->mouse.trap = 0;
-
-  pdat->physdata.axis = 3.*pdat->drawbox->allocation.height/5.;
-
-  pdat->physdata.poslc = GTK_ADJUSTMENT (pdat->barl.adj)->value
-    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-  pdat->physdata.fc = *pdat->lnsc.focus
-    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-  pdat->physdata.posld = GTK_ADJUSTMENT (pdat->barr.adj)->value
-    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-  pdat->physdata.fd = *pdat->lnsd.focus
-    /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-  pdat->physdata.ldist = 
-    pdat->physdata.poslc - pdat->physdata.posld;
-
 ////////////////////////////////////////////////////////////////////////////////
   //sinais e callbacks
 
@@ -284,10 +270,10 @@ main (int argc, char **argv)
   g_signal_connect (G_OBJECT (pdat->btnlock.name), "toggled",
 		    G_CALLBACK (lchange), pdat);
 
-  g_signal_connect (G_OBJECT (virtbtn), "toggled",
+  g_signal_connect (G_OBJECT (pdat->virtbtn), "toggled",
 		    G_CALLBACK (virtchange), pdat);
 
-  g_signal_connect (G_OBJECT (distbtn), "toggled",
+  g_signal_connect (G_OBJECT (pdat->distbtn), "toggled",
 		    G_CALLBACK (distchange), pdat);
 
   g_signal_connect (G_OBJECT (ampxx), "toggled",
@@ -337,12 +323,8 @@ main (int argc, char **argv)
 ////////////////////////////////////////////////////////////////////////////////  
 
   gtk_widget_show_all (pdat->window);
-
-  g_signal_emit_by_name(G_OBJECT (button),"clicked");
-
   gtk_main ();
 
   free(pdat);
-
   return 0;
 }
