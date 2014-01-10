@@ -50,7 +50,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       set_val (NULL,dat);
     }
 
-  pos1 = pdat->physdata.poslc;
+  pos1 = pdat->phys.poslc;
 
   if (pos1 > pdat->drawbox->allocation.width)
     {
@@ -58,8 +58,9 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->barl.adj), pos1);
     }
 
+  
 
-  pos3 = pdat->physdata.posld;
+  pos3 = pdat->phys.posld;
 
   if (pos3 > pdat->drawbox->allocation.width)
     {
@@ -68,8 +69,9 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
     }
 
  
-  fd = pdat->physdata.fd;
-  fc = pdat->physdata.fc;
+
+  fd = pdat->phys.fd;
+  fc = pdat->phys.fc;
   ang = ((GTK_ADJUSTMENT (pdat->barang.adj))->value)*(M_PI/180);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -88,15 +90,15 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
   cairo_set_source_rgb (cr, 0.5, 0.5, 0.5);
   cairo_set_line_width (cr, 2);
-  cairo_move_to (cr, 0, pdat->physdata.axis);
+  cairo_move_to (cr, 0, pdat->phys.axis);
   cairo_line_to (cr, pdat->drawbox->allocation.width,
-		 pdat->physdata.axis);
+		 pdat->phys.axis);
   cairo_stroke (cr);
 
   cairo_set_source_rgb (cr, 1, 0.55, 0);
 
   cairo_set_line_width (cr, pdat->lensdata.xwid);
-  pos2 = pdat->physdata.axis;
+  pos2 = pdat->phys.axis;
 
   //desenha lentes
   if(pdat->lenstype->state)
