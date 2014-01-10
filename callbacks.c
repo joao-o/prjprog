@@ -89,7 +89,6 @@ upd_phys (progdata *dat)
   pdat->phys.fd = *pdat->lnsd.focus
     /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
 
-  pdat->phys.axis = 3.* pdat->drawbox->allocation.height/5.;
   return TRUE; 
 }
 
@@ -129,7 +128,7 @@ upd_adj (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat = (progdata *) dat;
   bardat *barra;
-  static double d;
+  double temp;
 
   if (GTK_OBJECT (widget) == pdat->barl.adj)
     barra = &pdat->barl;

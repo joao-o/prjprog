@@ -36,6 +36,9 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
 ///////////////////////////////////////////////////////////////////////////////
   //obtem valores
+
+  pdat->phys.axis = pdat->drawbox->allocation.height/2. + 20;
+
   gtk_window_get_size (GTK_WINDOW (pdat->window), &width, &height);
 
   gtk_adjustment_set_upper (GTK_ADJUSTMENT (pdat->barl.adj),

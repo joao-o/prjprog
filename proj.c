@@ -26,7 +26,7 @@ main (int argc, char **argv)
     *ampxx, *redxx,*lenstype2;
 
   // boxes
-  GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox,
+  GtkWidget *hbox1, *vbox1, *topbox, *midbox, *setbox, *datbox,
     *noteb, *notebp1, *notebp2, *notebp3, *notebp4, 
     *optnbox, *statusbox, *noteb4xx, *rlbox, *lblbox[8];
 
@@ -52,13 +52,17 @@ main (int argc, char **argv)
   gtk_init (&argc, &argv);
 
   pdat->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_default_size (GTK_WINDOW (pdat->window), 920, 576);
+  gtk_window_set_default_size (GTK_WINDOW (pdat->window), 920, 650);
   gtk_window_set_position (GTK_WINDOW (pdat->window), GTK_WIN_POS_CENTER);
 
 ////////////////////////////////////////////////////////////////////////////////
   // layout geral das boxes
+
+  hbox1 = gtk_hbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (pdat->window), hbox1);
+
   vbox1 = gtk_vbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (pdat->window), vbox1);
+  gtk_box_pack_start (GTK_BOX (hbox1), vbox1, TRUE, TRUE, 0);
 
   topbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox1), topbox, FALSE, TRUE, 0);
@@ -70,7 +74,7 @@ main (int argc, char **argv)
   gtk_box_pack_end (GTK_BOX (vbox1), setbox, FALSE, FALSE, 0);
 
   datbox = gtk_vbox_new (FALSE, 0);
-  gtk_box_pack_end (GTK_BOX (midbox), datbox, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (hbox1), datbox, FALSE, FALSE, 0);
 
   dtbfrm = gtk_frame_new ("Opções");
   gtk_box_pack_start (GTK_BOX (datbox), dtbfrm, TRUE, TRUE, 0);
@@ -90,7 +94,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (dtbfrm), optnbox);
 
   statusbox = gtk_vbox_new (FALSE, 0);
-  gtk_box_pack_end (GTK_BOX (setbox), statusbox, FALSE, FALSE, 20);
+  gtk_box_pack_end (GTK_BOX (optnbox), statusbox, FALSE, FALSE, 20);
 
   for(i=0; i<8; i++)
     {
