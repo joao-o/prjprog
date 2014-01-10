@@ -143,7 +143,7 @@ main (int argc, char **argv)
   gtk_label_set_justify(GTK_LABEL(pdat->barfd.lbl), GTK_JUSTIFY_LEFT);
 
   //angulo
-  pdat->barang.adj = gtk_adjustment_new (20, -89.0, 90.0, 0.1, 1.0, 1.0);
+  pdat->barang.adj = gtk_adjustment_new (20, -50.0, 50.0, 0.1, 1.0, 1.0);
 
   bangfrm = gtk_frame_new ("Ângulo de Incidência");
   gtk_container_add (GTK_CONTAINER (notebp3), bangfrm);
@@ -155,7 +155,7 @@ main (int argc, char **argv)
   gtk_label_set_justify(GTK_LABEL(pdat->barang.lbl), GTK_JUSTIFY_LEFT);
   
   //escala
-  pdat->barxx.adj = gtk_adjustment_new (2, 1, 100.0, 0.1, 1.0, 1.0);
+  pdat->barxx.adj = gtk_adjustment_new (2, 1, 10.0, 0.1, 1.0, 1.0);
 
   xxfrm = gtk_frame_new ("Escala");
   gtk_container_add (GTK_CONTAINER (notebp4), xxfrm);

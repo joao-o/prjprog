@@ -149,8 +149,10 @@ upd_adj (GtkWidget * widget, gpointer dat)
   else
     (GTK_ADJUSTMENT (barra->adj))->value = barra->save;
 
-  d = *pdat->lnsd.pos-*pdat->lnsc.pos;
+  d = *pdat->lnsd.pos - *pdat->lnsc.pos;
+
   upd_phys(pdat);
+
   return TRUE;
 }
 
@@ -224,7 +226,13 @@ set_val (GtkWidget * widget, gpointer dat)
       *(pdat->lnsd.pos) = 477.8;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
 			     "value-changed");
-      printf("%d\t%d\n",pdat->flg.virt,pdat->flg.dist);
+      (GTK_ADJUSTMENT (pdat->barang.adj))->value = 20.;
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
+			     "value-changed");
+      (GTK_ADJUSTMENT (pdat->barxx.adj))->value = 1.;
+      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
+			     "value-changed");
+ 
       gtk_widget_queue_draw (pdat->window);
 
     }
@@ -327,7 +335,7 @@ scalechange (GtkWidget * widget, gpointer dat)
   if( gtk_adjustment_get_upper(GTK_ADJUSTMENT (pdat->barxx.adj)) < 2)
     {
       gtk_adjustment_configure(GTK_ADJUSTMENT (pdat->barxx.adj),
-			       1.1, 1.0, 100, 0.1, 0, 0);
+			       1.1, 1.0, 10.0, 0.1, 0, 0);
 
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barxx.adj),
 			     "value-changed");
@@ -369,6 +377,7 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
     }
   else if (pdat->mouse.trap != 0 && event->type == GDK_MOTION_NOTIFY)
     {
+
       switch (pdat->mouse.trap)
         {
 	case 1:
@@ -383,12 +392,12 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
 	case 4:
 	  mickeyfocus(pdat,&pdat->barfd);
 	  break;
-
         }
   
     }
   else if (event->type == GDK_BUTTON_PRESS)
     {
+
       if (((pdat->mouse.nestx - pdat->physdata.poslc) 
           < pdat->physdata.fc + pdat->lensdata.xwid*1.5)
          && ((pdat->mouse.nestx - pdat->physdata.poslc) 
@@ -397,8 +406,9 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
              < pdat->lensdata.xwid*1.5))
         {
           pdat->mouse.trap = 3; 
-          pdat->mouse.path1 =pdat->physdata.fc - pdat->mouse.nestx;
+          pdat->mouse.path1 = pdat->physdata.fc - pdat->mouse.nestx;
         }
+
       else if(((pdat->mouse.nestx - pdat->physdata.posld) 
                < pdat->physdata.fd + pdat->lensdata.xwid*1.5)
               && ((pdat->mouse.nestx - pdat->physdata.posld) 
@@ -407,8 +417,9 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
                   < pdat->lensdata.xwid*1.5))
         {
           pdat->mouse.trap = 4;
-          pdat->mouse.path1 =pdat->physdata.fd - pdat->mouse.nestx;
+          pdat->mouse.path1 = pdat->physdata.fd - pdat->mouse.nestx;
         }
+
       else if(fabs(pdat->mouse.nestx - pdat->physdata.poslc) 
               < pdat->lensdata.headwid1 
               && fabs(pdat->mouse.nesty - pdat->physdata.axis) 
@@ -417,6 +428,7 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
           pdat->mouse.trap = 1;  
           pdat->mouse.path1 = pdat->physdata.poslc - pdat->mouse.nestx;
         }
+
      else if(fabs(pdat->mouse.nestx - pdat->physdata.posld)
               < pdat->lensdata.headwid2 
               && fabs(pdat->mouse.nesty - pdat->physdata.axis) 
@@ -425,6 +437,7 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
           pdat->mouse.trap = 2;
           pdat->mouse.path1 = pdat->physdata.posld - pdat->mouse.nestx;
         }
+
     }
   else if (event->type == GDK_BUTTON_RELEASE)
     pdat->mouse.trap = 0;
