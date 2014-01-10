@@ -9,6 +9,7 @@
 #include <callbacks.h>
 #include <prjcairo.h>
 #include <cairofunc.h>
+#include <miscui.h>
 
 #ifndef RENDER
 #define RENDER expose_ev
@@ -22,7 +23,7 @@ main (int argc, char **argv)
   //barras e butões
   GtkWidget *button, *barlensl, *barlensr,
     *barfocc, *barfocd, *barangl, *lunbtn,
-    *barsclx, *lblpos, *lblfoc,
+    *barsclx, *lblpos, *lblfoc, *colorbtn,
     *ampxx, *redxx, *lenstype2, *stuffings;
 
   // boxes
@@ -111,7 +112,7 @@ main (int argc, char **argv)
   rlbox = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (lensfrm), rlbox);
 
-  btntbl = gtk_table_new (3 , 5, TRUE);
+  btntbl = gtk_table_new (4 , 5, TRUE);
   gtk_table_set_row_spacings(GTK_TABLE(btntbl), 5);
   gtk_table_set_col_spacings(GTK_TABLE(btntbl), 5);
   gtk_box_pack_end( GTK_BOX (optnbox), btntbl, FALSE, FALSE, 5);
@@ -213,6 +214,10 @@ main (int argc, char **argv)
   gtk_table_attach_defaults (GTK_TABLE (btntbl), lunbtn, 
 			    1, 4, 1, 2);
 
+  colorbtn = gtk_button_new_with_label ("Cores");
+  gtk_table_attach_defaults (GTK_TABLE (btntbl), colorbtn, 
+			    1, 4, 2, 3);
+
   pdat->virtbtn = gtk_check_button_new_with_label("Raios Virtuais");
   gtk_box_pack_start(GTK_BOX(optnbox), pdat->virtbtn, FALSE, FALSE, 5);
 
@@ -255,9 +260,9 @@ main (int argc, char **argv)
   gdk_color_parse ("orange", &pdat->btnlock.colorhigh);
   pdat->btnlock.name = gtk_toggle_button_new_with_label (pdat->btnlock.label);
 
-  //gtk_box_pack_start (GTK_BOX (optnbox), pdat->btnlock.name, FALSE, FALSE, 2);
   gtk_table_attach_defaults (GTK_TABLE (btntbl), pdat->btnlock.name, 
-			    1, 4, 2, 3);
+			    1, 4, 3, 4);
+
   gtk_widget_modify_bg (pdat->btnlock.name,
 			GTK_STATE_NORMAL, &pdat->btnlock.coloroff);
   gtk_widget_modify_bg (pdat->btnlock.name,
@@ -309,6 +314,8 @@ main (int argc, char **argv)
   g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (set_val), pdat);
 
   g_signal_connect (G_OBJECT (lunbtn), "clicked", G_CALLBACK (luneta), pdat);
+
+  g_signal_connect (G_OBJECT (colorbtn), "clicked", G_CALLBACK (colormenu), pdat);
 
   g_signal_connect (G_OBJECT (pdat->btnlock.name), "toggled",
 		    G_CALLBACK (lchange), pdat);
