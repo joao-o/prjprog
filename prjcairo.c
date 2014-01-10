@@ -10,7 +10,7 @@ const double nodsh[]={1};
 
 // é na realidade uma CSR para espose events está aqui porque desenha principalmente
 gboolean
-expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
+expose_ev (GtkWidget * widget, GdkEventExpose *event, gpointer dat)
 {
   progdata *pdat;
   cairo_t *cr;
@@ -62,7 +62,6 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
     }
 
   
-
   pos3 = pdat->phys.posld;
 
   if (pos3 > pdat->drawbox->allocation.width)
@@ -71,7 +70,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->barr.adj), pos3);
     }
 
- 
+  pos2 = pdat->phys.axis;
 
   fd = pdat->phys.fd;
   fc = pdat->phys.fc;
@@ -79,6 +78,54 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
 
 ////////////////////////////////////////////////////////////////////////////////
 
+  if(pos3 < pos1)
+    {
+      mx[2] = - fd + pos3;
+      mx[5] = pos1 + fconj(fc, - (pos1 - mx[2]));
+      mx[1] = pos3; //primeira lente
+      mx[3] = pos1; //segunda lente
+    }
+  else
+    {
+      mx[2] = fc + pos1;
+      mx[5] = pos3 + fconj(-fd, - (pos3 - mx[2]));
+      mx[1] = pos1;
+      mx[3] = pos3;
+    }
+
+  //raios
+  
+  // determina os pontos onde tem de passar os raios
+
+  //infinito
+  mx[0]=0;
+  ly[0]= pos2 - mx[1]*tan(ang);
+
+  //lente convergente
+  ly[1]= pos2;
+
+  //imagem 1
+  ly[2]= lin(mx[0],ly[0],mx[1],ly[1],mx[2]);
+  uy[2]= ly[2];
+
+  uy[1]= uy[2];
+  uy[0]= ly[0] + (uy[1] - ly[1]);
+
+  //lente divergente
+  uy[3]= pos2;
+  ly[3]= ly[2];
+
+  //imagem2
+  uy[5]= lin(mx[2],ly[2],mx[3],uy[3],mx[5]);
+  ly[5]= uy[5];
+
+  //infinito2
+  mx[4]= pdat->drawbox->allocation.width;
+  uy[4]= lin(mx[3], uy[3], mx[5], ly[5], mx[4]);
+  ly[4]= lin(mx[3], ly[3], mx[5], ly[5], mx[4]);
+ 
+
+////////////////////////////////////////////////////////////////////////////////
 //desenha eixo
   cr = gdk_cairo_create (pdat->window->window);
 
@@ -101,7 +148,16 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_set_source_rgb (cr, 1, 0.55, 0);
 
   cairo_set_line_width (cr, pdat->lensdata.xwid);
-  pos2 = pdat->phys.axis;
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  if(fabs(ly[2] - pos2) > 87.5)
+    (pdat->lensdata.ylen) = 2*fabs(ly[2] - pos2);
+  else
+    (pdat->lensdata.ylen) = 175;
+
+
+  //////////////////////////////////////////////////////////////////////////////
 
   //desenha lentes
   if(pdat->lenstype->state)
@@ -219,55 +275,8 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_arc (cr, pos3 + fd, pos2, pdat->lensdata.xwid*1.5, 15, 7. * M_PI);
   cairo_fill(cr);
   cairo_stroke(cr);
+
   ///////////////////////////////////////////////////////////////
-
-  if(pos3 < pos1)
-    {
-      mx[2] = - fd + pos3;
-      mx[5] = pos1 + fconj(fc, - (pos1 - mx[2]));
-      mx[1] = pos3; //primeira lente
-      mx[3] = pos1; //segunda lente
-    }
-  else
-    {
-      mx[2] = fc + pos1;
-      mx[5] = pos3 + fconj(-fd, - (pos3 - mx[2]));
-      mx[1] = pos1;
-      mx[3] = pos3;
-    }
-
-  //buggado
-  /*if (mx[2] > pdat->drawbox->allocation.width)
-    mx[2] = pdat->drawbox->allocation.width;
-
-  if (pos5 > pdat->drawbox->allocation.width)
-  pos5 = pdat->drawbox->allocation.width;*/
-
-  //raios
-  
-  // determina os pontos onde tem de passar os raios
-
-  //infinito
-  mx[0]=0;
-  ly[0]= pos2 - mx[1]*tan(ang);
-
-  //lente convergente
-  ly[1]= pos2;
-
-  //imagem 1
-  ly[2]= lin(mx[0],ly[0],mx[1],ly[1],mx[2]);
-  uy[2]= ly[2];
-
-  uy[1]= uy[2];
-  uy[0]= ly[0] + (uy[1] - ly[1]);
-
-  //lente divergente
-  uy[3]= pos2;
-  ly[3]= ly[2];
-
-  //imagem2
-  uy[5]= lin(mx[2],ly[2],mx[3],uy[3],mx[5]);
-  ly[5]= uy[5];
     
   cairo_set_source_rgb (cr, 0.44, 1.00, 0.22);
 
@@ -283,10 +292,6 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   cairo_line_to (cr, mx[5], ly[5]);
   cairo_stroke (cr);
 
-  mx[4]= pdat->drawbox->allocation.width;
-  uy[4]= lin(mx[3], uy[3], mx[5], ly[5], mx[4]);
-  ly[4]= lin(mx[3], ly[3], mx[5], ly[5], mx[4]);
- 
   cairo_set_line_width (cr, pdat->lensdata.xwid/3);
 
   //desenha

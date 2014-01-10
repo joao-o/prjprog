@@ -186,12 +186,12 @@ upd_adj_free (GtkWidget * widget, gpointer dat)
   else if (GTK_OBJECT (widget) == pdat->barang.adj)
     {
       barra = &pdat->barang;
-      l = 21;
+      l = 22;
     }
   else if (GTK_OBJECT (widget) == pdat->barxx.adj)
     {
       barra = &pdat->barxx;
-      l = 10;
+      l = 11;
     }
 
   if (l == L_VAL && pdat->flg.lock 
@@ -229,7 +229,6 @@ set_val (GtkWidget * widget, gpointer dat)
       (GTK_ADJUSTMENT (pdat->barl.adj))->value = 320.;
            g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
       			     "value-changed");
-      //gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->barl.adj),320.);
       *(pdat->lnsc.focus) = 180;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barfc.adj),
 			     "value-changed");
