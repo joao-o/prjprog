@@ -189,6 +189,7 @@ main (int argc, char **argv)
   pdat->barr.alt = &pdat->barl;
   pdat->lnsd.pos = &(GTK_ADJUSTMENT (pdat->barr.adj)->value);
   pdat->lnsd.focus = &(GTK_ADJUSTMENT (pdat->barfd.adj)->value);
+  pdat->phys.scl =&(GTK_ADJUSTMENT(pdat->barxx.adj))->value;
 
 ////////////////////////////////////////////////////////////////////////////////
   //botões

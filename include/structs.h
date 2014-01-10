@@ -68,6 +68,7 @@ typedef struct physdata
   double fd;
   double axis;
   double ldist;
+  double *scl; 
 } physdata;
 
 // struct principal com os dados do programa
