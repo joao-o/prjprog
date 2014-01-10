@@ -21,7 +21,7 @@ struct bardat
 {
   GtkObject *adj;
   GtkWidget *nome, *lbl;
-  char str[20];
+  char str[40];
   double save;
   bardat *alt;
 };

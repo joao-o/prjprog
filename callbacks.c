@@ -11,7 +11,7 @@
 #include <string.h>
 #include <math.h>
 
-#define L_VAL 14
+#define L_VAL 21
 
 // ficheiro com as CSR (callback service routines)
 
@@ -110,12 +110,15 @@ upd_mod (bardat * barra)
 {
   if( (GTK_ADJUSTMENT(barra->adj))->value 
       > (GTK_ADJUSTMENT(barra->adj))->upper)
+
     (GTK_ADJUSTMENT(barra->adj))->value = (GTK_ADJUSTMENT(barra->adj))->upper;
+
   if( (GTK_ADJUSTMENT(barra->adj))->value 
       < (GTK_ADJUSTMENT(barra->adj))->lower)
+
     (GTK_ADJUSTMENT(barra->adj))->value = (GTK_ADJUSTMENT(barra->adj))->lower;
 
-  sprintf (barra->str + 7, "%5.1f", (GTK_ADJUSTMENT (barra->adj))->value);
+  sprintf (barra->str + 21, "%5.1f", (GTK_ADJUSTMENT (barra->adj))->value);
   gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
   barra->save = (GTK_ADJUSTMENT (barra->adj))->value;
   return;
@@ -133,26 +136,47 @@ upd_adj (GtkWidget * widget, gpointer dat)
   else
     barra = &pdat->barr;
  if (!pdat->flg.lock)
-    {
-      if(pdat->flg.dist)
-        {
+   {
+     if(pdat->flg.dist)
+       {
          if (GTK_OBJECT (widget) == pdat->barl.adj)
-           if (*pdat->lnsd.pos + d > pdat->drawbox->allocation.width);
-           else
-             *pdat->lnsd.pos = *pdat->lnsc.pos + d;
+	   {
+	     if (*pdat->lnsc.pos + d > pdat->drawbox->allocation.width)
+	       {
+		 *pdat->lnsd.pos = pdat->drawbox->allocation.width;
+		 *pdat->lnsc.pos = pdat->drawbox->allocation.width - d;
+	       }
+	     else if (*pdat->lnsc.pos + d < 0)
+	       {
+		 *pdat->lnsd.pos = 0;
+		 *pdat->lnsc.pos = - d;
+	       }
+	     else
+	       *pdat->lnsd.pos = *pdat->lnsc.pos + d;
+	   }
          else
-           if (*pdat->lnsc.pos - d < 0)
-             return TRUE;
-           else
-             *pdat->lnsc.pos = *pdat->lnsd.pos - d;
+	   {
+	     if (*pdat->lnsd.pos - d > pdat->drawbox->allocation.width)
+	       {
+		 *pdat->lnsc.pos = pdat->drawbox->allocation.width;
+		 *pdat->lnsd.pos = pdat->drawbox->allocation.width + d;
+	       }
+	     else if (*pdat->lnsd.pos - d < 0)
+	       {
+		 *pdat->lnsc.pos = 0;
+		 *pdat->lnsd.pos = d;
+	       }
+	     else
+	       *pdat->lnsc.pos = *pdat->lnsd.pos - d;
+	   }
          upd_mod(barra->alt);
-        }
+       }
 
-      upd_mod (barra);
-      gtk_widget_queue_draw (pdat->window);
-    }
-  else
-    (GTK_ADJUSTMENT (barra->adj))->value = barra->save;
+     upd_mod (barra);
+     gtk_widget_queue_draw (pdat->window);
+   }
+ else
+   (GTK_ADJUSTMENT (barra->adj))->value = barra->save;
 
   d = *pdat->lnsd.pos - *pdat->lnsc.pos;
 
@@ -179,12 +203,12 @@ upd_adj_free (GtkWidget * widget, gpointer dat)
   else if (GTK_OBJECT (widget) == pdat->barang.adj)
     {
       barra = &pdat->barang;
-      l = 8;
+      l = 21;
     }
   else if (GTK_OBJECT (widget) == pdat->barxx.adj)
     {
       barra = &pdat->barxx;
-      l = 2;
+      l = 10;
     }
 
   if (l == L_VAL && pdat->flg.lock 
@@ -220,8 +244,9 @@ set_val (GtkWidget * widget, gpointer dat)
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->distbtn), FALSE);
 
       (GTK_ADJUSTMENT (pdat->barl.adj))->value = 320.;
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
-			     "value-changed");
+           g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
+      			     "value-changed");
+      //gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->barl.adj),320.);
       *(pdat->lnsc.focus) = 180;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barfc.adj),
 			     "value-changed");
@@ -237,7 +262,11 @@ set_val (GtkWidget * widget, gpointer dat)
       (GTK_ADJUSTMENT (pdat->barxx.adj))->value = 1.;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
 			     "value-changed");
- 
+
+      gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->barang.adj), 20.);
+
+      gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->barxx.adj), 2.);
+
       gtk_widget_queue_draw (pdat->window);
 
     }

@@ -22,28 +22,30 @@ main (int argc, char **argv)
   //barras e butões
   GtkWidget *button, *barlensl, *barlensr,
     *barfocc, *barfocd, *barangl, *lunbtn,
-    *barsclx,
+    *barsclx, *lblpos, *lblfoc,
     *ampxx, *redxx,*lenstype2;
 
   // boxes
   GtkWidget *vbox1, *topbox, *midbox, *setbox, *datbox,
     *noteb, *notebp1, *notebp2, *notebp3, *notebp4, 
-    *optnbox, *statusbox, *noteb4xx, *rlbox;
+    *optnbox, *statusbox, *noteb4xx, *rlbox, *lblbox[8];
 
   //frames
   GtkWidget *dtbfrm, *drwfrm, 
     *blcfrm, *bldfrm, *bfcfrm, *bfdfrm, *bangfrm,
     *xxfrm, *lensfrm;
 
+  int i;
+
   //setup inicial e criação da janela principal
   pdat = calloc (1, sizeof (progdata));
 
-  strcpy (pdat->barl.str, "value= 0000.0");
-  strcpy (pdat->barr.str, "value= 0000.0");
-  strcpy (pdat->barfc.str, "focal length= 000.0");
-  strcpy (pdat->barfd.str, "focal length= 000.0");
-  strcpy (pdat->barang.str, "angulo= 00.0");
-  strcpy (pdat->barxx.str, "1:0000");
+  strcpy (pdat->barl.str, "\tLente Convergente = 0000.0");
+  strcpy (pdat->barr.str, "\tLente Divergente  = 0000.0");
+  strcpy (pdat->barfc.str, "\tLente Convergente = 000.0");
+  strcpy (pdat->barfd.str, "\tLente Divergente  = 000.0");
+  strcpy (pdat->barang.str, "\nAngulo (em graus) = 00.0");
+  strcpy (pdat->barxx.str, "\nEscala 1:0000");
 
   sprintf (pdat->btnlock.label, " Unlocked ");
 
@@ -88,7 +90,13 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (dtbfrm), optnbox);
 
   statusbox = gtk_vbox_new (FALSE, 0);
-  gtk_box_pack_end (GTK_BOX (optnbox), statusbox, FALSE, FALSE, 100);
+  gtk_box_pack_end (GTK_BOX (setbox), statusbox, FALSE, FALSE, 20);
+
+  for(i=0; i<8; i++)
+    {
+      lblbox[i] = gtk_hbox_new(FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (statusbox), lblbox[i], FALSE, FALSE, 2);
+    }
 
   lensfrm = gtk_frame_new ("Tipo de Lentes");
   gtk_box_pack_end (GTK_BOX (optnbox), lensfrm, TRUE, TRUE, 0);
@@ -112,13 +120,14 @@ main (int argc, char **argv)
   barlensr = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barr.adj));
   gtk_container_add (GTK_CONTAINER (bldfrm), barlensr);
 
+  lblpos = gtk_label_new ("  Posicao");
+  gtk_box_pack_start (GTK_BOX (lblbox[0]), lblpos, FALSE, FALSE, 0);
+
   pdat->barl.lbl = gtk_label_new (pdat->barl.str);
-  gtk_box_pack_start (GTK_BOX (statusbox), pdat->barl.lbl, TRUE, TRUE, 0);
-  gtk_label_set_justify(GTK_LABEL(pdat->barl.lbl), GTK_JUSTIFY_LEFT);
+  gtk_box_pack_start (GTK_BOX (lblbox[1]), pdat->barl.lbl, FALSE, FALSE, 0);
 
   pdat->barr.lbl = gtk_label_new (pdat->barr.str);
-  gtk_box_pack_start (GTK_BOX (statusbox), pdat->barr.lbl, TRUE, TRUE, 0);
-  gtk_label_set_justify(GTK_LABEL(pdat->barr.lbl), GTK_JUSTIFY_LEFT);
+  gtk_box_pack_start (GTK_BOX (lblbox[2]), pdat->barr.lbl, FALSE, FALSE, 0);
 
   //distancia focal
   pdat->barfc.adj = gtk_adjustment_new (300.0, 1.0, 301.0, 0.1, 1.0, 1.0);
@@ -134,13 +143,14 @@ main (int argc, char **argv)
   barfocd = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barfd.adj));
   gtk_container_add (GTK_CONTAINER (bfdfrm), barfocd);
 
+  lblfoc = gtk_label_new ("\n  Distancia Focal");
+  gtk_box_pack_start (GTK_BOX (lblbox[3]), lblfoc, FALSE, FALSE, 0);
+
   pdat->barfc.lbl = gtk_label_new (pdat->barfc.str);
-  gtk_box_pack_start (GTK_BOX (statusbox), pdat->barfc.lbl, TRUE, TRUE, 0);
-  gtk_label_set_justify(GTK_LABEL(pdat->barfc.lbl), GTK_JUSTIFY_LEFT);
+  gtk_box_pack_start (GTK_BOX (lblbox[4]), pdat->barfc.lbl, FALSE, FALSE, 0);
 
   pdat->barfd.lbl = gtk_label_new (pdat->barfd.str);
-  gtk_box_pack_start (GTK_BOX (statusbox), pdat->barfd.lbl, TRUE, TRUE, 0);
-  gtk_label_set_justify(GTK_LABEL(pdat->barfd.lbl), GTK_JUSTIFY_LEFT);
+  gtk_box_pack_start (GTK_BOX (lblbox[5]), pdat->barfd.lbl, FALSE, FALSE, 0);
 
   //angulo
   pdat->barang.adj = gtk_adjustment_new (20, -50.0, 50.0, 0.1, 1.0, 1.0);
@@ -151,8 +161,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (bangfrm), barangl);
 
   pdat->barang.lbl = gtk_label_new (pdat->barang.str);
-  gtk_box_pack_start (GTK_BOX (statusbox), pdat->barang.lbl, TRUE, TRUE, 0);
-  gtk_label_set_justify(GTK_LABEL(pdat->barang.lbl), GTK_JUSTIFY_LEFT);
+  gtk_box_pack_start (GTK_BOX (lblbox[6]), pdat->barang.lbl, FALSE, FALSE, 0);
   
   //escala
   pdat->barxx.adj = gtk_adjustment_new (2, 1, 10.0, 0.1, 1.0, 1.0);
@@ -168,9 +177,8 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (notebp4), noteb4xx);
 
   pdat->barxx.lbl = gtk_label_new (pdat->barxx.str);
-  gtk_container_add (GTK_CONTAINER (noteb4xx), pdat->barxx.lbl);
-  gtk_label_set_justify(GTK_LABEL(pdat->barxx.lbl), GTK_JUSTIFY_LEFT);
-
+  gtk_box_pack_start (GTK_BOX (lblbox[7]), pdat->barxx.lbl, FALSE, FALSE, 0);
+  
   pdat->lnsc.pos = &(GTK_ADJUSTMENT (pdat->barl.adj)->value);
   pdat->lnsc.focus = &(GTK_ADJUSTMENT (pdat->barfc.adj)->value);
   pdat->barl.alt = &pdat->barr;

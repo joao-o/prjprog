@@ -19,6 +19,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   double uy[7], ly[7], mx[7], rgbr[3], rgbv[3];
   double ang, fc, fd, hwid1, hwid2;
   int dshl=sizeof(dsh)/sizeof(dsh[0]);
+  static int faz_init=0;
 
   pdat = (progdata*) dat;
   scl = gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barxx.adj));
@@ -37,6 +38,18 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
   //obtem valores
   gtk_window_get_size (GTK_WINDOW (pdat->window), &width, &height);
 
+  gtk_adjustment_set_upper (GTK_ADJUSTMENT (pdat->barl.adj),
+			    (pdat->drawbox->allocation.width)*scl);
+
+  gtk_adjustment_set_upper (GTK_ADJUSTMENT (pdat->barr.adj),
+			    (pdat->drawbox->allocation.width)*scl);
+
+  if (faz_init == 0)
+    {
+      faz_init = 1;
+      set_val (NULL,dat);
+    }
+
   pos1 = pdat->physdata.poslc;
 
   if (pos1 > pdat->drawbox->allocation.width)
@@ -45,8 +58,6 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->barl.adj), pos1);
     }
 
-  gtk_adjustment_set_upper (GTK_ADJUSTMENT (pdat->barl.adj),
-			    (pdat->drawbox->allocation.width)*scl);
 
   pos3 = pdat->physdata.posld;
 
@@ -56,9 +67,7 @@ expose_ev (GtkWidget * widget,GdkEventExpose *event, gpointer dat)
       gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->barr.adj), pos3);
     }
 
-  gtk_adjustment_set_upper (GTK_ADJUSTMENT (pdat->barr.adj),
-			    (pdat->drawbox->allocation.width)*scl);
-
+ 
   fd = pdat->physdata.fd;
   fc = pdat->physdata.fc;
   ang = ((GTK_ADJUSTMENT (pdat->barang.adj))->value)*(M_PI/180);
