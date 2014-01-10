@@ -84,7 +84,7 @@ typedef struct progdata
   lens lnsc,lnsd;
   flag flg;
   rodent mouse;
-  physdata physdata;
+  physdata phys;
 } progdata;
 
 //tentar manter as coisas modulares e nao acrescentar coisas do tipo adj1,adj1 .

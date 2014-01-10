@@ -3,6 +3,7 @@
 
 #include <structs.h>
 #include <prjcairo.h>
+#include <cairofunc.h>
 #include <phys.h>
 #include <miscui.h>
 
@@ -76,20 +77,19 @@ upd_phys (progdata *dat)
 {
   progdata *pdat = (progdata *) dat; 
 
-  pdat->physdata.poslc = GTK_ADJUSTMENT (pdat->barl.adj)->value
+  pdat->phys.poslc = GTK_ADJUSTMENT (pdat->barl.adj)->value
     /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
 
-  pdat->physdata.fc = *pdat->lnsc.focus
+  pdat->phys.fc = *pdat->lnsc.focus
     /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
 
-  pdat->physdata.posld = GTK_ADJUSTMENT (pdat->barr.adj)->value
+  pdat->phys.posld = GTK_ADJUSTMENT (pdat->barr.adj)->value
     /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
 
-  pdat->physdata.fd = *pdat->lnsd.focus
+  pdat->phys.fd = *pdat->lnsd.focus
     /GTK_ADJUSTMENT (pdat->barxx.adj)->value;
 
-  pdat->physdata.ldist = pdat->physdata.poslc - pdat->physdata.posld;
-  pdat->physdata.axis = 3.* pdat->drawbox->allocation.height/5.;
+  pdat->phys.axis = 3.* pdat->drawbox->allocation.height/5.;
   return TRUE; 
 }
 
@@ -126,7 +126,7 @@ upd_adj (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat = (progdata *) dat;
   bardat *barra;
-  static double d;
+  double temp; 
 
   if (GTK_OBJECT (widget) == pdat->barl.adj)
     barra = &pdat->barl;
@@ -136,25 +136,28 @@ upd_adj (GtkWidget * widget, gpointer dat)
     {
       if(pdat->flg.dist)
         {
-         if (GTK_OBJECT (widget) == pdat->barl.adj)
-           if (*pdat->lnsd.pos + d > pdat->drawbox->allocation.width);
-           else
-             *pdat->lnsd.pos = *pdat->lnsc.pos + d;
-         else
-           if (*pdat->lnsc.pos - d < 0)
-             return TRUE;
-           else
-             *pdat->lnsc.pos = *pdat->lnsd.pos - d;
-         upd_mod(barra->alt);
+          temp = (GTK_ADJUSTMENT(barra->adj))->value+pdat->phys.ldist*
+              dsign(-(GTK_ADJUSTMENT(barra->adj))->value+
+                      (GTK_ADJUSTMENT(barra->alt->adj))->value); //trivial 
+          /*
+          calcula onde por a outra lente quando "dist" está set 
+          o dsign serve para ver a posições relativas
+          ie se soma ou subtrai uso temp pois só quero fazer aquilo^ uma vez
+          */
+          if (temp>TOL && temp<pdat->drawbox->allocation.width-TOL)
+            {
+              GTK_ADJUSTMENT(barra->alt->adj)->value = temp;
+              upd_mod(barra->alt);
+            }
+          else
+            GTK_ADJUSTMENT(barra->adj)->value = barra->save;
         }
-
       upd_mod (barra);
       gtk_widget_queue_draw (pdat->window);
     }
   else
     (GTK_ADJUSTMENT (barra->adj))->value = barra->save;
 
-  d = *pdat->lnsd.pos-*pdat->lnsc.pos;
   upd_phys(pdat);
   return TRUE;
 }
@@ -168,7 +171,6 @@ upd_adj_free (GtkWidget * widget, gpointer dat)
   bardat *barra;
   pdat = (progdata *) dat;
   int l=L_VAL;
-
 
   if (GTK_OBJECT (widget) == pdat->barfc.adj)
       barra = &pdat->barfc;
@@ -229,7 +231,6 @@ set_val (GtkWidget * widget, gpointer dat)
       *(pdat->lnsd.pos) = 477.8;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
 			     "value-changed");
-      printf("%d\t%d\n",pdat->flg.virt,pdat->flg.dist);
       gtk_widget_queue_draw (pdat->window);
 
     }
@@ -310,6 +311,7 @@ distchange (GtkWidget * widget, gpointer dat)
 {
   progdata *pdat;
   pdat = (progdata *) dat;
+  pdat->phys.ldist = fabs(*pdat->lnsc.pos-*pdat->lnsd.pos);
   pdat->flg.dist = !pdat->flg.dist;
   return TRUE;
 }
@@ -394,41 +396,41 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
     }
   else if (event->type == GDK_BUTTON_PRESS)
     {
-      if (((pdat->mouse.nestx - pdat->physdata.poslc) 
-          < pdat->physdata.fc + pdat->lensdata.xwid*1.5)
-         && ((pdat->mouse.nestx - pdat->physdata.poslc) 
-             > pdat->physdata.fc - pdat->lensdata.xwid*1.5)
-         && (fabs(pdat->mouse.nesty - pdat->physdata.axis) 
+      if (((pdat->mouse.nestx - pdat->phys.poslc) 
+          < pdat->phys.fc + pdat->lensdata.xwid*1.5)
+         && ((pdat->mouse.nestx - pdat->phys.poslc) 
+             > pdat->phys.fc - pdat->lensdata.xwid*1.5)
+         && (fabs(pdat->mouse.nesty - pdat->phys.axis) 
              < pdat->lensdata.xwid*1.5))
         {
           pdat->mouse.trap = 3; 
-          pdat->mouse.path1 =pdat->physdata.fc - pdat->mouse.nestx;
+          pdat->mouse.path1 =pdat->phys.fc - pdat->mouse.nestx;
         }
-      else if(((pdat->mouse.nestx - pdat->physdata.posld) 
-               < pdat->physdata.fd + pdat->lensdata.xwid*1.5)
-              && ((pdat->mouse.nestx - pdat->physdata.posld) 
-                  > pdat->physdata.fd - pdat->lensdata.xwid*1.5)
-              && (fabs(pdat->mouse.nesty - pdat->physdata.axis) 
+      else if(((pdat->mouse.nestx - pdat->phys.posld) 
+               < pdat->phys.fd + pdat->lensdata.xwid*1.5)
+              && ((pdat->mouse.nestx - pdat->phys.posld) 
+                  > pdat->phys.fd - pdat->lensdata.xwid*1.5)
+              && (fabs(pdat->mouse.nesty - pdat->phys.axis) 
                   < pdat->lensdata.xwid*1.5))
         {
           pdat->mouse.trap = 4;
-          pdat->mouse.path1 =pdat->physdata.fd - pdat->mouse.nestx;
+          pdat->mouse.path1 =pdat->phys.fd - pdat->mouse.nestx;
         }
-      else if(fabs(pdat->mouse.nestx - pdat->physdata.poslc) 
+      else if(fabs(pdat->mouse.nestx - pdat->phys.poslc) 
               < pdat->lensdata.headwid1 
-              && fabs(pdat->mouse.nesty - pdat->physdata.axis) 
+              && fabs(pdat->mouse.nesty - pdat->phys.axis) 
               < pdat->lensdata.ylen)
         {
           pdat->mouse.trap = 1;  
-          pdat->mouse.path1 = pdat->physdata.poslc - pdat->mouse.nestx;
+          pdat->mouse.path1 = pdat->phys.poslc - pdat->mouse.nestx;
         }
-     else if(fabs(pdat->mouse.nestx - pdat->physdata.posld)
+     else if(fabs(pdat->mouse.nestx - pdat->phys.posld)
               < pdat->lensdata.headwid2 
-              && fabs(pdat->mouse.nesty - pdat->physdata.axis) 
+              && fabs(pdat->mouse.nesty - pdat->phys.axis) 
               < pdat->lensdata.ylen)
         {
           pdat->mouse.trap = 2;
-          pdat->mouse.path1 = pdat->physdata.posld - pdat->mouse.nestx;
+          pdat->mouse.path1 = pdat->phys.posld - pdat->mouse.nestx;
         }
     }
   else if (event->type == GDK_BUTTON_RELEASE)
