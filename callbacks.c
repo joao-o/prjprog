@@ -139,14 +139,15 @@ upd_adj (GtkWidget * widget, gpointer dat)
       if(pdat->flg.dist)
         {
           temp = (GTK_ADJUSTMENT(barra->adj))->value+pdat->phys.ldist*
-              dsign( - (GTK_ADJUSTMENT(barra->adj))->value +
-                      (GTK_ADJUSTMENT(barra->alt->adj))->value); //trivial 
+              dsign(-barra->save+barra->alt->save);
           /*
           calcula onde por a outra lente quando "dist" está set 
           o dsign serve para ver a posições relativas
           ie se soma ou subtrai uso temp pois só quero fazer aquilo^ uma vez
           */
-          if (temp>TOL && temp<pdat->drawbox->allocation.width - TOL)
+
+          if (temp>TOL && 
+              temp < pdat->drawbox->allocation.width * *pdat->phys.scl-TOL )
             {
               GTK_ADJUSTMENT(barra->alt->adj)->value = temp;
               upd_mod(barra->alt);
@@ -228,7 +229,6 @@ set_val (GtkWidget * widget, gpointer dat)
       (GTK_ADJUSTMENT (pdat->barl.adj))->value = 320.;
            g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
       			     "value-changed");
-      //gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->barl.adj),320.);
       *(pdat->lnsc.focus) = 180;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barfc.adj),
 			     "value-changed");

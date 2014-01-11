@@ -90,7 +90,6 @@ main (int argc, char **argv)
   notebp[0] = gtk_vbox_new (FALSE, 0);
   notebp[1] = gtk_vbox_new (FALSE, 0);
   notebp[2] = gtk_vbox_new (FALSE, 0);
-  notebp[3] = gtk_vbox_new (FALSE, 0);
 
   optnbox = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (dtbfrm), optnbox);
@@ -157,7 +156,7 @@ main (int argc, char **argv)
   barfocd = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barfd.adj));
   gtk_container_add (GTK_CONTAINER (bfdfrm), barfocd);
 
-  lblfoc = gtk_label_new ("\n  Distancia Focal\t\t\t\t\t\t");
+  lblfoc = gtk_label_new ("\n  Distancia Focal\t\t\t   ");
   gtk_box_pack_start (GTK_BOX (lblbox[3]), lblfoc, FALSE, FALSE, 0);
 
   pdat->barfc.lbl = gtk_label_new (pdat->barfc.str);
@@ -181,14 +180,14 @@ main (int argc, char **argv)
   pdat->barxx.adj = gtk_adjustment_new (2, 1, 10.0, 0.1, 1.0, 1.0);
 
   xxfrm = gtk_frame_new ("Escala");
-  gtk_container_add (GTK_CONTAINER (notebp[3]), xxfrm);
+  gtk_container_add (GTK_CONTAINER (notebp[2]), xxfrm);
   barsclx = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barxx.adj));
   gtk_container_add (GTK_CONTAINER (xxfrm), barsclx);
 
   pdat->barxx.lbl = gtk_label_new (pdat->barxx.str);
  
   noteb4xx = gtk_hbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (notebp[3]), noteb4xx);
+  gtk_container_add (GTK_CONTAINER (notebp[2]), noteb4xx);
 
   pdat->barxx.lbl = gtk_label_new (pdat->barxx.str);
   gtk_box_pack_start (GTK_BOX (lblbox[7]), pdat->barxx.lbl, FALSE, FALSE, 0);
@@ -202,6 +201,7 @@ main (int argc, char **argv)
   pdat->barr.alt = &pdat->barl;
   pdat->lnsd.pos = &(GTK_ADJUSTMENT (pdat->barr.adj)->value);
   pdat->lnsd.focus = &(GTK_ADJUSTMENT (pdat->barfd.adj)->value);
+  pdat->phys.scl =&(GTK_ADJUSTMENT(pdat->barxx.adj))->value;
 
 ////////////////////////////////////////////////////////////////////////////////
   //botões
@@ -275,12 +275,11 @@ main (int argc, char **argv)
 
   notelbl[0] = gtk_label_new ("Posicao das Lentes");
   notelbl[1] = gtk_label_new ("Distancias Focais");
-  notelbl[2] = gtk_label_new ("Angulo");
-  notelbl[3] = gtk_label_new ("Escala");
+  notelbl[2] = gtk_label_new ("Angulo/Escala");
 
   noteb = gtk_notebook_new ();
 
-  for(i=0; i<4; i++)
+  for(i=0; i<3; i++)
     {
       gtk_notebook_append_page (GTK_NOTEBOOK (noteb), notebp[i], NULL);
       gtk_notebook_set_tab_label(GTK_NOTEBOOK (noteb), notebp[i], 
