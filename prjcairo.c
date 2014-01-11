@@ -147,7 +147,7 @@ expose_ev (GtkWidget * widget, GdkEventExpose *event, gpointer dat)
 
   cairo_set_source_rgb (cr, 1, 0.55, 0);
 
-  cairo_set_line_width (cr, pdat->ldat.xwid);
+  cairo_set_line_width (cr, XWID);
 
   //////////////////////////////////////////////////////////////////////////////
 
@@ -194,7 +194,7 @@ expose_ev (GtkWidget * widget, GdkEventExpose *event, gpointer dat)
 
       cairo_set_source_rgb (cr, 0.21, 0.21, 1);
 
-      cairo_set_line_width (cr, pdat->ldat.xwid);
+      cairo_set_line_width (cr, XWID);
 
       cairo_move_to (cr, pos3, pos2 + (pdat->ldat.ylen)/2);
       cairo_line_to (cr, pos3, pos2 - (pdat->ldat.ylen)/2);
@@ -263,16 +263,16 @@ expose_ev (GtkWidget * widget, GdkEventExpose *event, gpointer dat)
   /////////////////////////////////////////////////////////
   //Circulos para alterar distancias focais com rato
 
-  cairo_set_line_width (cr, pdat->ldat.xwid);
+  cairo_set_line_width (cr, XWID);
 
   cairo_set_source_rgba (cr, 1, 0.55, 0, 1);
   cairo_move_to (cr, pos1 + fc, pos2);
-  cairo_arc (cr, pos1 + fc, pos2, pdat->ldat.xwid*1.5, 15, 7. * M_PI);
+  cairo_arc (cr, pos1 + fc, pos2, XWID*1.5, 15, 7. * M_PI);
   cairo_fill(cr);
   
   cairo_set_source_rgb (cr, 0.21, 0.21, 1);
   cairo_move_to (cr, pos3 + fd, pos2);
-  cairo_arc (cr, pos3 + fd, pos2, pdat->ldat.xwid*1.5, 15, 7. * M_PI);
+  cairo_arc (cr, pos3 + fd, pos2, XWID*1.5, 15, 7. * M_PI);
   cairo_fill(cr);
   cairo_stroke(cr);
 
@@ -280,19 +280,19 @@ expose_ev (GtkWidget * widget, GdkEventExpose *event, gpointer dat)
     
   cairo_set_source_rgb (cr, 0.44, 1.00, 0.22);
 
-  cairo_set_line_width (cr, pdat->ldat.xwid/2);
+  cairo_set_line_width (cr, XWID/2);
   cairo_move_to (cr, mx[2], pos2);
   cairo_line_to (cr, mx[2], ly[2]);
   cairo_stroke (cr);
 
   cairo_set_source_rgb (cr, 0.55, 0.00, 0.55);
 
-  cairo_set_line_width (cr, pdat->ldat.xwid/2);
+  cairo_set_line_width (cr, XWID/2);
   cairo_move_to (cr, mx[5], pos2);
   cairo_line_to (cr, mx[5], ly[5]);
   cairo_stroke (cr);
 
-  cairo_set_line_width (cr, pdat->ldat.xwid/3);
+  cairo_set_line_width (cr, XWID/3);
 
   //desenha
   for(i=0;i<4;i++)

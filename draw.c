@@ -100,7 +100,7 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
   buffer[4] = tan ((M_PI / 180) * (GTK_ADJUSTMENT (pdat->barang.adj))->value);
   pdat->phys.d.focus = -pdat->phys.d.focus;
 
-  //verifica se init é 1 e seguidamete incrementa-a
+  //verifica se init é 0 e seguidamete incrementa-a
   if (!init)
     {
       set_val (NULL, (gpointer) pdat);
@@ -145,19 +145,16 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 
   //reminder : buffer[4] = declive recta que passa no eixo
 
-  buffer[0] = lens2->pos - lens1->pos ;	//x foco lente 1
+  buffer[0] = lens1->pos + lens1->focus;	//x foco lente 1
   buffer[3] = pdat->phys.axis - buffer[4] * (lens1->pos);	//ordenada na origem, e
-  buffer[1] = buffer[4] * lens2->pos;	//y foco lente 1
-  buffer[2] = buffer[4] * (lens2->pos) + buffer[3];	//y raio eixo lente 2
-
-  //printf("%f\n",lens1->focus);
+  buffer[1] = buffer[4] * buffer[0] + buffer[3];	//y foco lente 1
+  buffer[2] = buffer[4] * lens2->pos + buffer[3];	//y raio eixo lente 2
 
   // desenha reais
-  draw_line_rel(cr,0,buffer[3],lens2->pos,buffer[1]);
-
-  //draw_line (cr, 0, buffer[3], lens2->pos, buffer[2]);	//e
-  //draw_line (cr, 0, buffer[1] - pdat->phys.axis + buffer[3], lens1->pos, buffer[1]);	//p
-  //draw_line (cr, (lens1->pos), buffer[1], lens2->pos, buffer[1]);	//p
+  draw_line (cr, 0, buffer[3], lens1->pos,pdat->phys.axis ); //e
+  draw_line (cr, lens1->pos, pdat->phys.axis, lens2->pos, buffer[2]);//e
+  draw_line (cr, 0, buffer[1] - pdat->phys.axis + buffer[3], lens1->pos, buffer[1]);//p
+  draw_line (cr, (lens1->pos), buffer[1], lens2->pos, buffer[1]);	//p
 
   cairo_stroke (cr);
 
@@ -182,29 +179,34 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 	}
       cairo_stroke (cr);
     }
-  pdat->ldat.ylen= (buffer[1]-pdat->phys.axis > 150) ? 
-      buffer[1]-150 : 150;
+
+  pdat->ldat.ylen= (fabs(buffer[1]-pdat->phys.axis) > 87.5) ? 
+      buffer[1]-pdat->phys.axis : 87.5;
  
-  //circulos de d focal
 
   //lentes esquemáticas
   if (!pdat->flg.ltype)
     {
+      cairo_set_line_width(cr,XWID);
       cairo_set_dash (cr, nodash, 0, 0);
+      
       cairo_set_source_rgb (cr, 1, 0.55, 0);
-      draw_vspear (lens1->pos, pdat->phys.axis, pdat->ldat.ylen,
-		   lens1->focus, cr);
-      draw_vspear (lens1->pos, pdat->phys.axis, -pdat->ldat.ylen,
-		   lens1->focus, cr);
-      cairo_move_to (cr, buffer[0], pdat->phys.axis);
-      cairo_arc (cr, buffer[0], pdat->phys.axis, pdat->ldat.xwid*1.5, 0, 2. * M_PI);
+      draw_vspear (pdat->phys.c.pos, pdat->phys.axis, pdat->ldat.ylen,
+		   pdat->phys.c.focus, cr);
+      draw_vspear (pdat->phys.c.pos, pdat->phys.axis, -pdat->ldat.ylen,
+		   pdat->phys.c.focus, cr);
+      cairo_arc (cr, pdat->phys.c.pos+pdat->phys.c.focus,
+                  pdat->phys.axis, XWID*1.5, 0, 2. * M_PI);
       cairo_fill(cr);
 
       cairo_set_source_rgb (cr, 0.21, 0.21, 1);
-      draw_vspear (lens2->pos, pdat->phys.axis, buffer[1] - pdat->phys.axis,
-		   lens2->focus, cr);
-      draw_vspear (lens2->pos, pdat->phys.axis, -buffer[1] + pdat->phys.axis,
-		   lens2->focus, cr);
+      draw_vspear (pdat->phys.d.pos, pdat->phys.axis, pdat->ldat.ylen,
+		   pdat->phys.d.focus, cr);
+      draw_vspear (pdat->phys.d.pos, pdat->phys.axis, -pdat->ldat.ylen,
+		   pdat->phys.d.focus, cr);
+      cairo_arc (cr, pdat->phys.d.pos-pdat->phys.d.focus,
+                  pdat->phys.axis, XWID*1.5, 0, 2. * M_PI);
+      cairo_fill(cr);
     }
   //lentes desenhadas
   else

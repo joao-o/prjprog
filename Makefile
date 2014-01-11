@@ -21,8 +21,8 @@ TESTE = cairotest.c
 
 all: comp link
 
-optimus:CFLAGS += $(OPT_FLAGS)
-optimus:LFLAGS += $(OPT_FLAGS)
+optimus:CFLAGS += $(OPT_FLAGS) -DRENDER=expose_e
+optimus:LFLAGS += $(OPT_FLAGS) -DRENDER=expose_e
 optimus: all
 
 debug: CFLAGS += $(DB_FLAGS)
