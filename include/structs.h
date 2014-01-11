@@ -86,7 +86,8 @@ typedef struct progdata
   bardat rgbscl[3];
   tbtn btnlock;
   GtkWidget *window, *drawbox, *lenstype, 
-    *virtbtn, *distbtn, *combocolor, *btn[6];
+    *virtbtn, *distbtn, *combocolor, *btn[6],
+    *colwhl;
   drawdata ldat;
   lenspt lnsc,lnsd;
   flag flg;

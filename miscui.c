@@ -40,10 +40,21 @@ erroluneta (progdata * dat)
 }
 
 gboolean
-colorselec (progdata *pdat)
+colorselec (GtkWidget *widget, progdata *pdat)
 {
   int i;
-
+  for(i=0;i<6;i++)
+    {
+      if(gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pdat->btn[i])))
+	{
+	  pdat->ptclr=&pdat->btn[i];
+	  /*gtk_color_selection_set_current_color(GTK_COLOR_SELECTION
+						(pdat->colwhl),
+						&pdat->color[i]);*/
+	  printf("%d\n",i);
+	  break;
+	}
+    }
   return TRUE;
 }
 
@@ -101,8 +112,8 @@ colormenu (GtkWidget *widget, progdata * pdat)
   reset =  gtk_button_new_with_label ("Cores Predefinidas");
   gtk_box_pack_end (GTK_BOX (btnbox), reset, FALSE, FALSE, 0);
 
-  g_signal_connect_swapped (dialog, "response", 
-			    G_CALLBACK (gtk_widget_destroy), dialog);
+  pdat->colwhl = gtk_color_selection_new();
+  gtk_box_pack_end (GTK_BOX (colorbox), pdat->colwhl, TRUE, TRUE, 0);
 
   for(i=0;i<6;i++)
     {
@@ -116,12 +127,14 @@ colormenu (GtkWidget *widget, progdata * pdat)
 			    GTK_STATE_ACTIVE, &pdat->color[i]);
       
       g_signal_connect (G_OBJECT (pdat->btn[i]), "clicked",
-		   G_CALLBACK (colorselec), pdat);
+			G_CALLBACK (colorselec), pdat);
     }
 
+  g_signal_connect_swapped (dialog, "response", 
+			    G_CALLBACK (gtk_widget_destroy), dialog);
 
- gtk_widget_show_all (dialog);
- return TRUE;
+  gtk_widget_show_all (dialog);
+  return TRUE;
 }
 
 /*
