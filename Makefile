@@ -71,5 +71,8 @@ $(TARGET): $(OBJECT) $(INCLUDE)
 edit:
 	vim Makefile
 
+count:
+	wc -l *.c
+
 clean: 
 	$(RM) -f *~ *.o $(TARGET) test

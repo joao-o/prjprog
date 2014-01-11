@@ -28,6 +28,7 @@ dsign (double x)
 {
   return (x > 0) - (x < 0);
 }
+
 // ^ ...
 
 void
@@ -58,72 +59,76 @@ draw_varrow (double x, double y, double hgt, double focus, cairo_t * cr)
     {
       cairo_move_to (cr, x, y - hgt);
       cairo_rel_line_to (cr,
-		         i * (-0.02 * focus + 10),
-		         (0.02 * focus + 10) * dsign (focus) * dsign (hgt));
+			 i * (-0.02 * focus + 10),
+			 (0.02 * focus + 10) * dsign (focus) * dsign (hgt));
       // numeros mágicos acima controlam o ajuste de curvatura
       // é do tipo y=mx+b
     }
 }
-void
-draw_vspear (double x,double y,double hgt,double focus,cairo_t *cr)
-{
-  double i = 240/(fabs(focus) + 48.33) + 4.9;
 
-  cairo_set_line_width (cr, 3);
+void
+draw_vspear (double x, double y, double hgt, double focus, cairo_t * cr)
+{
+  double i = 240 / (fabs (focus) + 48.33) + 4.9;
+
+  cairo_set_line_width (cr, 2);
   cairo_move_to (cr, x, y);
   cairo_rel_line_to (cr, 0, -hgt);
-  cairo_move_to (cr, x-i, y-hgt);
-  
-  cairo_rel_line_to(cr, i ,-15*dsign(focus)*dsign(hgt));
-  cairo_rel_line_to(cr, i ,15*dsign(focus)*dsign(hgt));
-  cairo_close_path(cr);
-  //cairo_rel_line_to(cr, -2*i,0);
+  cairo_stroke (cr);
 
-               //fórmula mágica concedida pelo Grande Xamã Fit-Eha-Ya
-               //               será que quis dizer: ^mago^ ?
+  cairo_move_to (cr, x - i, y - hgt);
+  cairo_rel_line_to (cr, i, -15 * dsign (focus) * dsign (hgt));
+  cairo_rel_line_to (cr, i, 15 * dsign (focus) * dsign (hgt));
+  cairo_close_path (cr);
+  cairo_fill (cr);
+  //fórmula mágica concedida pelo Grande Xamã Fit-Eha-Ya
+  //               será que quis dizer: ^mago^ ?
 }
 
 
 gboolean
-expose_e (GtkWidget * widget, GdkEventExpose *event, progdata *pdat)
+expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 {
   cairo_t *cr;
   lens *lens1, *lens2;
   int *wwidth = &pdat->drawbox->allocation.width;
-  static int init=1;
-  static double buffer[5];
+  static int init = 0;
+  static double buffer[5]; //espaço para fazer contas
 
-  pdat->phys.axis = pdat->drawbox->allocation.height/2;
+  pdat->phys.axis = pdat->drawbox->allocation.height / 2;
 
   buffer[4] = tan ((M_PI / 180) * (GTK_ADJUSTMENT (pdat->barang.adj))->value);
   pdat->phys.d.focus = -pdat->phys.d.focus;
 
   //verifica se init é 1 e seguidamete incrementa-a
-  if (!init) 
+  if (!init)
     {
-      set_val (NULL,(gpointer)pdat);
+      set_val (NULL, (gpointer) pdat);
       ++init;
     }
 
-  (GTK_ADJUSTMENT (pdat->barl.adj))->upper = (*wwidth - TOL)* *pdat->phys.scl;
-  (GTK_ADJUSTMENT (pdat->barr.adj))->upper = (*wwidth - TOL)* *pdat->phys.scl;
+  (GTK_ADJUSTMENT (pdat->barl.adj))->upper =
+    (*wwidth - TOL) * *pdat->phys.scl;
+  (GTK_ADJUSTMENT (pdat->barr.adj))->upper =
+    (*wwidth - TOL) * *pdat->phys.scl;
 
   cr = gdk_cairo_create (pdat->drawbox->window);
 
   // é aqui que a magia acontece 
-  cairo_rectangle(cr, 0, 10,
-          (double)*wwidth,(double) pdat->drawbox->allocation.height);
-  cairo_clip(cr);
+  cairo_rectangle (cr, 0, 10,
+		   (double) *wwidth,
+		   (double) pdat->drawbox->allocation.height);
+  cairo_clip (cr);
 
   cairo_set_source_rgba (cr, 0., 0., 0., 1.);
-  cairo_paint(cr);
-  
+  cairo_paint (cr);
+
   cairo_set_source_rgba (cr, 1., 1., 1., 1.);
-  draw_line_rel (cr, 0,pdat->phys.axis,*wwidth,0);
+  draw_line_rel (cr, 0, pdat->phys.axis, *wwidth, 0);
   cairo_stroke (cr);
 
   //verifica primeira lente
-  
+
   if (*(pdat->lnsc.pos) < *(pdat->lnsd.pos))
     {
       lens1 = &(pdat->phys.c);
@@ -140,21 +145,19 @@ expose_e (GtkWidget * widget, GdkEventExpose *event, progdata *pdat)
 
   //reminder : buffer[4] = declive recta que passa no eixo
 
-  buffer[0] = lens1->pos + lens1->focus;	//x foco lente 1
-  buffer[3] = pdat->phys.axis - buffer[4] * (lens1->pos);
-  buffer[1] = buffer[4] * buffer[0] + buffer[3];	//y foco lente 1
+  buffer[0] = lens2->pos - lens1->pos ;	//x foco lente 1
+  buffer[3] = pdat->phys.axis - buffer[4] * (lens1->pos);	//ordenada na origem, e
+  buffer[1] = buffer[4] * lens2->pos;	//y foco lente 1
   buffer[2] = buffer[4] * (lens2->pos) + buffer[3];	//y raio eixo lente 2
 
-  printf("%f\n",lens1->focus);
-
-  draw_vspear(lens1->pos,pdat->phys.axis,buffer[1]-pdat->phys.axis,lens1->focus,cr);
+  //printf("%f\n",lens1->focus);
 
   // desenha reais
+  draw_line_rel(cr,0,buffer[3],lens2->pos,buffer[1]);
 
-  draw_line (cr, 0, buffer[3], (lens1->pos), pdat->phys.axis); //e
-  draw_line (cr, 0, buffer[1] - pdat->phys.axis + buffer[3], lens1->pos, buffer[1]);//p
-  draw_line (cr, (lens1->pos), pdat->phys.axis, lens2->pos, buffer[2]);//e
-  draw_line (cr, (lens1->pos), buffer[1], lens2->pos, buffer[1]);//p
+  //draw_line (cr, 0, buffer[3], lens2->pos, buffer[2]);	//e
+  //draw_line (cr, 0, buffer[1] - pdat->phys.axis + buffer[3], lens1->pos, buffer[1]);	//p
+  //draw_line (cr, (lens1->pos), buffer[1], lens2->pos, buffer[1]);	//p
 
   cairo_stroke (cr);
 
@@ -165,9 +168,8 @@ expose_e (GtkWidget * widget, GdkEventExpose *event, progdata *pdat)
       cairo_set_source_rgba (cr, 0., 1., 0., 1.);
       if (lens1->focus < 0)
 	{
-	  draw_line (cr, buffer[0], buffer[1], lens1->pos, buffer[1]);//e
-	  draw_line (cr, buffer[0], buffer[1], lens1->pos, pdat->phys.axis);//p
-	  //draw_line (cr,*lens1->pos,,buffer[0],buffer[1]);
+	  draw_line (cr, buffer[0], buffer[1], lens1->pos, buffer[1]);	//e
+	  draw_line (cr, buffer[0], buffer[1], lens1->pos, pdat->phys.axis);	//p
 	}
       else
 	{
@@ -180,10 +182,39 @@ expose_e (GtkWidget * widget, GdkEventExpose *event, progdata *pdat)
 	}
       cairo_stroke (cr);
     }
+  pdat->ldat.ylen= (buffer[1]-pdat->phys.axis > 150) ? 
+      buffer[1]-150 : 150;
+ 
+  //circulos de d focal
+
+  //lentes esquemáticas
+  if (!pdat->flg.ltype)
+    {
+      cairo_set_dash (cr, nodash, 0, 0);
+      cairo_set_source_rgb (cr, 1, 0.55, 0);
+      draw_vspear (lens1->pos, pdat->phys.axis, pdat->ldat.ylen,
+		   lens1->focus, cr);
+      draw_vspear (lens1->pos, pdat->phys.axis, -pdat->ldat.ylen,
+		   lens1->focus, cr);
+      cairo_move_to (cr, buffer[0], pdat->phys.axis);
+      cairo_arc (cr, buffer[0], pdat->phys.axis, pdat->ldat.xwid*1.5, 0, 2. * M_PI);
+      cairo_fill(cr);
+
+      cairo_set_source_rgb (cr, 0.21, 0.21, 1);
+      draw_vspear (lens2->pos, pdat->phys.axis, buffer[1] - pdat->phys.axis,
+		   lens2->focus, cr);
+      draw_vspear (lens2->pos, pdat->phys.axis, -buffer[1] + pdat->phys.axis,
+		   lens2->focus, cr);
+    }
+  //lentes desenhadas
+  else
+    {
+    }
 
   buffer[3] = (buffer[0] - lens2->pos);	//difrença entre fc(l1) e pos(l2)
   buffer[0] = (buffer[1] - pdat->phys.axis) / buffer[3];	//declive do raio eixo lente2
-  buffer[2] = lens2->pos + (buffer[3] * lens2->focus) / (lens2->focus + buffer[3]);
+  buffer[2] =
+    lens2->pos + (buffer[3] * lens2->focus) / (lens2->focus + buffer[3]);
   //x img2
 
   buffer[3] = buffer[0] * (buffer[2] - lens2->pos) + pdat->phys.axis;	//y img2
@@ -205,7 +236,8 @@ expose_e (GtkWidget * widget, GdkEventExpose *event, progdata *pdat)
   draw_line (cr, lens2->pos, pdat->phys.axis, *wwidth,
 	     buffer[0] * buffer[4] + pdat->phys.axis);
   draw_line (cr, lens2->pos, buffer[1], *wwidth,
-	     (pdat->phys.axis - buffer[1]) / lens2->focus * buffer[4] + buffer[1]);
+	     (pdat->phys.axis - buffer[1]) / lens2->focus * buffer[4] +
+	     buffer[1]);
 
   cairo_stroke (cr);
   cairo_destroy (cr);

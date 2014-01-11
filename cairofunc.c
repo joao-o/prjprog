@@ -96,18 +96,18 @@ expose_evv (GtkWidget * widget, GdkEventExpose * event, gpointer dat)
   //desenha lente convergente
   cairo_set_source_rgba (cr, 1., 0.55, 0., 1.);
 
-  draw_varrow (*(pdat->lnsc.pos), midref, pdat->lensdata.ylen,
+  draw_varrow (*(pdat->lnsc.pos), midref, pdat->ldat.ylen,
 	       *(pdat->lnsc.focus), cr);
   draw_varrow (*(pdat->lnsc.pos),
-	       midref, -pdat->lensdata.ylen, *(pdat->lnsc.focus), cr);
+	       midref, -pdat->ldat.ylen, *(pdat->lnsc.focus), cr);
 
   // desenha lente divergente
   cairo_set_source_rgba (cr, 1., 0.55, 0., 1.);
 
   draw_varrow (*(pdat->lnsd.pos),
-	       midref, pdat->lensdata.ylen, *(pdat->lnsd.focus), cr);
+	       midref, pdat->ldat.ylen, *(pdat->lnsd.focus), cr);
   draw_varrow (*(pdat->lnsd.pos),
-	       midref, -pdat->lensdata.ylen, *(pdat->lnsd.focus), cr);
+	       midref, -pdat->ldat.ylen, *(pdat->lnsd.focus), cr);
   cairo_stroke (cr);
 
   //verifica primeira lente
