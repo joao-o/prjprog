@@ -285,7 +285,7 @@ lchange (GtkWidget * widget, gpointer dat)
 
   if (!pdat->flg.lock)
     {
-      sprintf (btnlock->label, "  Locked  ");
+      sprintf (btnlock->label, " Bloqueado  ");
       pdat->flg.lock=!pdat->flg.lock;
       gtk_button_set_label (GTK_BUTTON (btnlock->name), btnlock->label);
       pdat->barl.save = (GTK_ADJUSTMENT (pdat->barl.adj))->value;
@@ -294,7 +294,7 @@ lchange (GtkWidget * widget, gpointer dat)
     }
   else
     {
-      sprintf (btnlock->label, " Unlocked ");
+      sprintf (btnlock->label, "Desbloqueado");
       pdat->flg.lock=!pdat->flg.lock;
       gtk_button_set_label (GTK_BUTTON (btnlock->name), btnlock->label);
     }

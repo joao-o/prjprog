@@ -21,43 +21,114 @@ erroluneta (progdata * dat)
     "é maior que a distância focal da lente divergente.";
 
   dialog = gtk_dialog_new_with_buttons ("ERRO a criar luneta",
-                                         GTK_WINDOW(pdat->window),
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_OK,
-                                         GTK_RESPONSE_NONE,
-                                         NULL);
+					GTK_WINDOW(pdat->window),
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_STOCK_OK,
+					GTK_RESPONSE_NONE,
+					NULL);
 
-   gtk_window_set_default_size (GTK_WINDOW(dialog), 400, 150);
-   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-   label = gtk_label_new (message);
-  
-   g_signal_connect_swapped (dialog, "response", 
-			     G_CALLBACK (gtk_widget_destroy), dialog);
+  gtk_window_set_default_size (GTK_WINDOW(dialog), 400, 150);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
-   gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), label);
-   gtk_widget_show_all (dialog);
+  label = gtk_label_new (message);
+
+  g_signal_connect_swapped (dialog, "response", 
+			    G_CALLBACK (gtk_widget_destroy), dialog);
+
+  gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), label);
+  gtk_widget_show_all (dialog);
 }
 
 gboolean
 colorselec (progdata *pdat)
 {
   int i;
-  i = gtk_combo_box_get_active(GTK_COMBO_BOX(pdat->combocolor));
-  pdat->ptclr = &pdat->color[i];
-  gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->rgbscl[0].adj), 
-			    pdat->ptclr->red/255);
-  gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->rgbscl[1].adj), 
-			    pdat->ptclr->green/255);
-  gtk_adjustment_set_value (GTK_ADJUSTMENT (pdat->rgbscl[2].adj), 
-			    pdat->ptclr->blue/255);
-  
+
   return TRUE;
 }
 
 gboolean
+colormenu (GtkWidget *widget, progdata * pdat)
+{
+  GtkWidget *dialog, *mainbox, *btnbox,
+    *colorbox, *reset;
+  int i;
+ 
+  dialog = gtk_dialog_new_with_buttons ("Menu de Cores",
+					GTK_WINDOW(pdat->window),
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_STOCK_OK,
+					GTK_RESPONSE_NONE,
+					NULL);
+  
+  gtk_window_set_default_size (GTK_WINDOW(dialog), 400, 150);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+
+  mainbox = gtk_hbox_new(FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), mainbox);
+  btnbox = gtk_vbox_new(FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (mainbox), btnbox, TRUE, TRUE, 0);
+  colorbox = gtk_vbox_new(FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (mainbox), colorbox, TRUE, TRUE, 0);
+
+ 
+  pdat->btn[0] =  gtk_radio_button_new_with_label (NULL, "Lente Convergente");
+  pdat->btn[1] =  gtk_radio_button_new_with_label (gtk_radio_button_group 
+						   (GTK_RADIO_BUTTON 
+						    (pdat->btn[0])),
+						   "Lente Divergente");
+
+  pdat->btn[2] =  gtk_radio_button_new_with_label (gtk_radio_button_group 
+						   (GTK_RADIO_BUTTON 
+						    (pdat->btn[1])),
+						   "Primeira Imagem");
+
+  pdat->btn[3] =  gtk_radio_button_new_with_label (gtk_radio_button_group 
+						   (GTK_RADIO_BUTTON 
+						    (pdat->btn[2])),
+						   "Segunda Imagem");
+
+  pdat->btn[4] =  gtk_radio_button_new_with_label (gtk_radio_button_group 
+						   (GTK_RADIO_BUTTON 
+						    (pdat->btn[3])),
+						   "Raios Reais");
+
+  pdat->btn[5] =  gtk_radio_button_new_with_label (gtk_radio_button_group 
+						   (GTK_RADIO_BUTTON 
+						    (pdat->btn[4])),
+						   "Raios Virtuais");
+
+  reset =  gtk_button_new_with_label ("Cores Predefinidas");
+  gtk_box_pack_end (GTK_BOX (btnbox), reset, FALSE, FALSE, 0);
+
+  g_signal_connect_swapped (dialog, "response", 
+			    G_CALLBACK (gtk_widget_destroy), dialog);
+
+  for(i=0;i<6;i++)
+    {
+      gtk_box_pack_start (GTK_BOX (btnbox), pdat->btn[i], FALSE, FALSE, 0);
+         
+      gtk_widget_modify_bg (pdat->btn[i],
+			    GTK_STATE_NORMAL, &pdat->color[i]);
+      gtk_widget_modify_bg (pdat->btn[i],
+			    GTK_STATE_PRELIGHT, &pdat->color[i]);
+      gtk_widget_modify_bg (pdat->btn[i],
+			    GTK_STATE_ACTIVE, &pdat->color[i]);
+      
+      g_signal_connect (G_OBJECT (pdat->btn[i]), "clicked",
+		   G_CALLBACK (colorselec), pdat);
+    }
+
+
+ gtk_widget_show_all (dialog);
+ return TRUE;
+}
+
+/*
+gboolean
 colorchange (GtkWidget * widget, progdata *pdat)
 {
- /*
+
  if (GTK_OBJECT (widget) == pdat->rgbscl[0].adj)
     pdat->ptclr->red = (GTK_ADJUSTMENT(pdat->rgbscl[0].adj))->value*255;
  if (GTK_OBJECT (widget) == pdat->rgbscl[0].adj)
@@ -65,16 +136,16 @@ colorchange (GtkWidget * widget, progdata *pdat)
  if (GTK_OBJECT (widget) == pdat->rgbscl[0].adj)
     pdat->ptclr->blue = (GTK_ADJUSTMENT(pdat->rgbscl[2].adj))->value*255;
  printf("%d",pdat->ptclr->blue);
- */
+
 
  return TRUE;
-
+/*
 }
 gboolean
 colormenu (GtkWidget *widget, gpointer dat)
 {
   progdata *pdat = (progdata *) dat;
-  GtkWidget *dialog, *btn, *mainbox, *box2, *rgbbox, *rgbfrm, *rgbbar[3];
+  GtkWidget *dialog, *btn, *mainbox, *box2, *rgbbox, *rgbfrm, *rgbbar[3], *tbl;
   GdkColor base[3];
   int i;
 
@@ -110,7 +181,7 @@ colormenu (GtkWidget *widget, gpointer dat)
 				 "Raios Virtuais");
 
   /*gtk_table_attach_defaults (GTK_TABLE (tbl), pdat->combocolor, 
-			     0, 1, 0, 1);*/
+			     0, 1, 0, 1);
   
   box2 = gtk_vbox_new (FALSE,0);
   gtk_box_pack_start(GTK_BOX(box2),pdat->combocolor,TRUE,TRUE,0);
@@ -125,7 +196,7 @@ colormenu (GtkWidget *widget, gpointer dat)
   gdk_color_parse ("red", &base[0]);
   gdk_color_parse ("green", &base[1]);
   gdk_color_parse ("blue", &base[2]);
-*/
+
   for(i=0;i<3;i++)
     {
       pdat->rgbscl[i].adj = gtk_adjustment_new (100, 0, 255, 0.01, 1.0, 1.0);
@@ -139,7 +210,7 @@ colormenu (GtkWidget *widget, gpointer dat)
 			    GTK_STATE_PRELIGHT, &base[i]);
       gtk_widget_modify_bg (rgbbar[i],
 			    GTK_STATE_ACTIVE, &base[i]);
-      */
+      
     }
 
   g_signal_connect (G_OBJECT (pdat->rgbscl[0].adj), "value-changed",
@@ -159,4 +230,4 @@ colormenu (GtkWidget *widget, gpointer dat)
 
   gtk_widget_show_all (dialog);
 
-}
+}*/

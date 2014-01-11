@@ -50,7 +50,7 @@ main (int argc, char **argv)
   strcpy (pdat->barang.str, "\n Angulo (em graus) = 00.0");
   strcpy (pdat->barxx.str, "\n Escala 1:0000");
 
-  sprintf (pdat->btnlock.label, " Unlocked ");
+  sprintf (pdat->btnlock.label, "Desbloqueado");
 
   gtk_init (&argc, &argv);
 
