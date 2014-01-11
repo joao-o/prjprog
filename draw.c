@@ -9,9 +9,9 @@
 #include <time.h>
 #include <callbacks.h>
 
-static const double dash[] = { 8., 6. };
-static const double imgdsh[] = { 4., 3. };
-static const double nodash[] = { 1 };
+static const double dash[] = { 8.};
+static const double imgdsh[] = { 4., 1. };
+static const double nodash[] = {  };
 
 //função sinal
 double
@@ -153,8 +153,8 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 	  draw_line (cr, buffer[0], buffer[1], lens1->pos, buffer[1]);	//e
 	  draw_line (cr, buffer[0], buffer[1], lens1->pos, pdat->phys.axis);	//p
           cairo_stroke(cr);
-          cairo_set_dash(cr, imgdsh, 1, 0);
-          cairo_set_source_rgba (cr, 0, 0.2 , 0.5, 0.1);
+          cairo_set_dash(cr, imgdsh, 2, 0);
+          cairo_set_source_rgba (cr, 0, 0.8 , 0.2, 1);
 	  draw_varrow (buffer[0], pdat->phys.axis,
 		       pdat->phys.axis - buffer[1], 20, cr);
 	}
@@ -166,8 +166,8 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 	      draw_line (cr, lens2->pos, buffer[2], buffer[0], buffer[1]);
 	      draw_line (cr, lens2->pos, buffer[1], buffer[0], buffer[1]);
               cairo_stroke(cr);
-              cairo_set_dash(cr, imgdsh, 1, 0);
-              cairo_set_source_rgba (cr, 0, 0.2 , 0.5, 0.1);
+              cairo_set_dash(cr, imgdsh, 2, 0);
+              cairo_set_source_rgba (cr, 0, 0.8 , 0.2, 1);
 	      draw_varrow (buffer[0], pdat->phys.axis,
 			   pdat->phys.axis - buffer[1], 150, cr);
 	    }
@@ -175,8 +175,8 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
       cairo_stroke (cr);
     }
 
-  pdat->ldat.ylen = (fabs (buffer[1] - pdat->phys.axis) > 87.5) ?
-    buffer[1] - pdat->phys.axis : 87.5;
+  pdat->ldat.ylen = (fabs (buffer[2] - pdat->phys.axis) > 87.5) ?
+    buffer[2] - pdat->phys.axis : 87.5;
 
 
   //lentes esquemáticas
@@ -254,8 +254,8 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
   cairo_set_line_width (cr, RAY);
   buffer[3] = (buffer[0] - lens2->pos);	//difrença entre fc(l1) e pos(l2)
   buffer[0] = (buffer[1] - pdat->phys.axis) / buffer[3];	//declive do raio eixo lente2
-  buffer[2] =
-    lens2->pos + (buffer[3] * lens2->focus) / (lens2->focus + buffer[3]);
+  buffer[2] = lens2->pos + (buffer[3] * lens2->focus) / 
+      (lens2->focus + buffer[3]);
   //x img2
 
   buffer[3] = buffer[0] * (buffer[2] - lens2->pos) + pdat->phys.axis;	//y img2
@@ -269,8 +269,9 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 	{
 	  draw_line (cr, lens2->pos, pdat->phys.axis, buffer[2], buffer[3]);
 	  draw_line (cr, lens2->pos, buffer[1], buffer[2], buffer[3]);
-          cairo_set_dash(cr, imgdsh, 1, 0);
-          cairo_set_source_rgba (cr, 0, 0.2 , 0.5, 0.1);
+          cairo_stroke(cr);
+          cairo_set_dash(cr, imgdsh, 2, 0);
+          cairo_set_source_rgba (cr, 0.4, 0.8 , 0.2, 1.);
 	  draw_varrow (buffer[2], pdat->phys.axis,
 		       pdat->phys.axis - buffer[3], 150, cr);
 	}
