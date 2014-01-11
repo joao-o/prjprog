@@ -9,18 +9,8 @@
 #include <time.h>
 #include <callbacks.h>
 
-#define TOL 20			//Distância ente eixo optico e borda da drawbox
-
-#define NPTS 7
-
-
-static const double dash[] = { 8., 8. };
+static const double dash[] = { 8., 6. };
 static const double nodash[] = { 1 };
-
-//tr: Recomendo o tracejado com x2 mais off que on
-//   È mais agradável à vista e impede que a sobreposição de duas
-//   linhas pareça não ter tracejado
-
 
 //função sinal
 double
@@ -93,7 +83,7 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
   lens *lens1, *lens2;
   int *wwidth = &pdat->drawbox->allocation.width;
   static int init = 0;
-  static double buffer[5]; //espaço para fazer contas
+  static double buffer[5];	//espaço para fazer contas
 
   pdat->phys.axis = pdat->drawbox->allocation.height / 2;
 
@@ -146,14 +136,14 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
   //reminder : buffer[4] = declive recta que passa no eixo
 
   buffer[0] = lens1->pos + lens1->focus;	//x foco lente 1
-  buffer[3] = pdat->phys.axis - buffer[4] * (lens1->pos);	//ordenada na origem, e
+  buffer[3] = pdat->phys.axis - buffer[4] * (lens1->pos);	//obuffer[3]enada na origem, e
   buffer[1] = buffer[4] * buffer[0] + buffer[3];	//y foco lente 1
   buffer[2] = buffer[4] * lens2->pos + buffer[3];	//y raio eixo lente 2
 
   // desenha reais
-  draw_line (cr, 0, buffer[3], lens1->pos,pdat->phys.axis ); //e
-  draw_line (cr, lens1->pos, pdat->phys.axis, lens2->pos, buffer[2]);//e
-  draw_line (cr, 0, buffer[1] - pdat->phys.axis + buffer[3], lens1->pos, buffer[1]);//p
+  draw_line (cr, 0, buffer[3], lens1->pos, pdat->phys.axis);	//e
+  draw_line (cr, lens1->pos, pdat->phys.axis, lens2->pos, buffer[2]);	//e
+  draw_line (cr, 0, buffer[1] - pdat->phys.axis + buffer[3], lens1->pos, buffer[1]);	//p
   draw_line (cr, (lens1->pos), buffer[1], lens2->pos, buffer[1]);	//p
 
   cairo_stroke (cr);
@@ -180,37 +170,77 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
       cairo_stroke (cr);
     }
 
-  pdat->ldat.ylen= (fabs(buffer[1]-pdat->phys.axis) > 87.5) ? 
-      buffer[1]-pdat->phys.axis : 87.5;
- 
+  pdat->ldat.ylen = (fabs (buffer[1] - pdat->phys.axis) > 87.5) ?
+    buffer[1] - pdat->phys.axis : 87.5;
+
 
   //lentes esquemáticas
   if (!pdat->flg.ltype)
     {
-      cairo_set_line_width(cr,XWID);
+      cairo_set_line_width (cr, XWID);
       cairo_set_dash (cr, nodash, 0, 0);
-      
+
       cairo_set_source_rgb (cr, 1, 0.55, 0);
       draw_vspear (pdat->phys.c.pos, pdat->phys.axis, pdat->ldat.ylen,
 		   pdat->phys.c.focus, cr);
       draw_vspear (pdat->phys.c.pos, pdat->phys.axis, -pdat->ldat.ylen,
 		   pdat->phys.c.focus, cr);
-      cairo_arc (cr, pdat->phys.c.pos+pdat->phys.c.focus,
-                  pdat->phys.axis, XWID*1.5, 0, 2. * M_PI);
-      cairo_fill(cr);
+      cairo_arc (cr, pdat->phys.c.pos + pdat->phys.c.focus,
+		 pdat->phys.axis, XWID * 1.5, 0, 2. * M_PI);
+      cairo_fill (cr);
 
       cairo_set_source_rgb (cr, 0.21, 0.21, 1);
       draw_vspear (pdat->phys.d.pos, pdat->phys.axis, pdat->ldat.ylen,
 		   pdat->phys.d.focus, cr);
       draw_vspear (pdat->phys.d.pos, pdat->phys.axis, -pdat->ldat.ylen,
 		   pdat->phys.d.focus, cr);
-      cairo_arc (cr, pdat->phys.d.pos-pdat->phys.d.focus,
-                  pdat->phys.axis, XWID*1.5, 0, 2. * M_PI);
-      cairo_fill(cr);
+      cairo_arc (cr, pdat->phys.d.pos - pdat->phys.d.focus,
+		 pdat->phys.axis, XWID * 1.5, 0, 2. * M_PI);
+      cairo_fill (cr);
     }
   //lentes desenhadas
   else
     {
+      //Modo "desenhadas"
+      cairo_set_source_rgba (cr, 0.75, 0.70, 0.55, 0.6);
+
+      buffer[3] = 2 * pdat->phys.c.focus + pdat->ldat.ylen * 2 + 200;
+      buffer[2] = sqrt (buffer[3] * buffer[3] -
+			(pdat->ldat.ylen) * (pdat->ldat.ylen));
+
+      buffer[4] = asin ((pdat->ldat.ylen) / (buffer[3]));
+
+      cairo_arc (cr, pdat->phys.c.pos + buffer[2], pdat->phys.axis,
+		 buffer[3], M_PI - buffer[4], M_PI + buffer[4]);
+      cairo_arc (cr, pdat->phys.c.pos - buffer[2], pdat->phys.axis,
+		 buffer[3], -buffer[4], +buffer[4]);
+      cairo_fill (cr);
+
+      cairo_arc (cr, pdat->phys.c.pos + pdat->phys.c.focus,
+		 pdat->phys.axis, XWID * 1.5, 0, 2. * M_PI);
+      cairo_fill (cr);
+
+      cairo_set_source_rgba (cr, 0.50, 0.50, 0.65, 0.6);
+
+      buffer[3] = -2 * pdat->phys.d.focus + pdat->ldat.ylen * 2 + 200;
+      buffer[2] = sqrt (buffer[3] * buffer[3] -
+			(pdat->ldat.ylen) * (pdat->ldat.ylen));
+
+      buffer[4] = asin ((pdat->ldat.ylen) / (buffer[3]));
+      pdat->ldat.headwid2 = 1.5 * (buffer[3] - buffer[2]);
+
+      cairo_arc (cr, pdat->phys.d.pos + buffer[2] + pdat->ldat.headwid2,
+		 pdat->phys.axis, buffer[3], M_PI - buffer[4],
+		 M_PI + buffer[4]);
+
+      cairo_arc (cr, pdat->phys.d.pos - buffer[2] - pdat->ldat.headwid2,
+		 pdat->phys.axis, buffer[3], -buffer[4], +buffer[4]);
+
+      cairo_fill (cr);
+
+      cairo_arc (cr, pdat->phys.d.pos - pdat->phys.d.focus,
+		 pdat->phys.axis, XWID * 1.5, 0, 2. * M_PI);
+      cairo_fill (cr);
     }
 
   buffer[3] = (buffer[0] - lens2->pos);	//difrença entre fc(l1) e pos(l2)
