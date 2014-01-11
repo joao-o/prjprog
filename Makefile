@@ -15,8 +15,8 @@ CC = gcc
 RM = /bin/rm
 
 TARGET = proj
-PROGS  = proj.c callbacks.c prjcairo.c phys.c cairofunc.c miscui.c 
-OBJECT = proj.o callbacks.o prjcairo.o phys.o cairofunc.o miscui.o
+PROGS  = proj.c callbacks.c prjcairo.c phys.c miscui.c draw.c #cairofunc.c 
+OBJECT = proj.o callbacks.o prjcairo.o phys.o miscui.o draw.o #cairofunc.o 
 TESTE = cairotest.c
 
 all: comp link
@@ -33,6 +33,10 @@ joao: CFLAGS += -DRENDER=expose_evv $(DB_FLAGS)
 joao: LFLAGS += -DRENDER=expose_evv $(DB_FLAGS)
 joao: all
 
+final: CFLAGS += -DRENDER=expose_e $(DB_FLAGS)
+final: LFLAGS += -DRENDER=expose_e $(DB_FLAGS)
+final: all
+
 link: $(TARGET)
 
 comp: $(OBJECT)
@@ -47,6 +51,9 @@ prjcairo.o: prjcairo.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
 phys.o: phys.c $(INCLUDE)
+	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
+
+draw.o: draw.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
 miscui.o: miscui.c $(INCLUDE)

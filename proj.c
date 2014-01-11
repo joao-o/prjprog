@@ -10,6 +10,7 @@
 #include <prjcairo.h>
 #include <cairofunc.h>
 #include <miscui.h>
+#include <draw.h>
 
 #ifndef RENDER
 #define RENDER expose_ev
