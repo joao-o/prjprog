@@ -53,7 +53,7 @@ expose_ev (GtkWidget * widget, GdkEventExpose *event, gpointer dat)
       set_val (NULL,dat);
     }
 
-  pos1 = pdat->phys.poslc;
+  pos1 = pdat->phys.c.pos;
 
   if (pos1 > pdat->drawbox->allocation.width)
     {
@@ -62,7 +62,7 @@ expose_ev (GtkWidget * widget, GdkEventExpose *event, gpointer dat)
     }
 
   
-  pos3 = pdat->phys.posld;
+  pos3 = pdat->phys.d.pos;
 
   if (pos3 > pdat->drawbox->allocation.width)
     {
@@ -72,8 +72,8 @@ expose_ev (GtkWidget * widget, GdkEventExpose *event, gpointer dat)
 
   pos2 = pdat->phys.axis;
 
-  fd = pdat->phys.fd;
-  fc = pdat->phys.fc;
+  fd = pdat->phys.d.focus;
+  fc = pdat->phys.c.focus;
   ang = ((GTK_ADJUSTMENT (pdat->barang.adj))->value)*(M_PI/180);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -165,8 +165,8 @@ expose_ev (GtkWidget * widget, GdkEventExpose *event, gpointer dat)
       //Modo esquemático
       hwid1 = pdat->lensdata.headwid1 = 
 	240/(fabs(gtk_adjustment_get_value (GTK_ADJUSTMENT (pdat->barfc.adj))) 
-	     + 48.33) 
-	+ 4.9; //fórmula mágica concedida pelo Grande Xamã Fit-Eha-Ya
+	     + 48.33) + 4.9; 
+               //fórmula mágica concedida pelo Grande Xamã Fit-Eha-Ya
                //               será que quis dizer: ^mago^ ?
 
       hwid2 = pdat->lensdata.headwid2 =  

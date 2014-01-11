@@ -37,10 +37,10 @@ typedef struct drawdata
 } drawdata;
 
 //stuct com dados das lentes
-typedef struct lens
+typedef struct lenspt
 {
   double *pos, *focus;
-} lens;
+} lenspt;
 
 //struct com coisas do rato
 typedef struct rodent
@@ -60,12 +60,15 @@ typedef struct flag
   uint8_t rem  :5;
 } flag;
 
+typedef struct lens
+{
+    double pos;
+    double focus;
+} lens;
+
 typedef struct physdata
 {
-  double poslc;
-  double posld;
-  double fc;
-  double fd;
+  lens c,d;
   double axis;
   double ldist;
   double *scl; 
@@ -83,7 +86,7 @@ typedef struct progdata
   GtkWidget *window, *drawbox, *lenstype, 
     *virtbtn, *distbtn, *combocolor;
   drawdata lensdata;
-  lens lnsc,lnsd;
+  lenspt lnsc,lnsd;
   flag flg;
   rodent mouse;
   physdata phys;
