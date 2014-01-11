@@ -57,7 +57,8 @@ typedef struct flag
   uint8_t virt :1;
   uint8_t dist :1;
   uint8_t lock :1;
-  uint8_t rem  :5;
+  uint8_t ltype:1;
+  uint8_t rem  :4;
 } flag;
 
 typedef struct lens
@@ -85,7 +86,7 @@ typedef struct progdata
   tbtn btnlock;
   GtkWidget *window, *drawbox, *lenstype, 
     *virtbtn, *distbtn, *combocolor;
-  drawdata lensdata;
+  drawdata ldat;
   lenspt lnsc,lnsd;
   flag flg;
   rodent mouse;

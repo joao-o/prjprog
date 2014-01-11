@@ -229,17 +229,6 @@ main (int argc, char **argv)
   gtk_box_pack_start(GTK_BOX(optnbox), pdat->distbtn, FALSE, FALSE, 5);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->distbtn), FALSE);
 
-  //radio x
-
-  ampxx = gtk_radio_button_new_with_label(NULL,"Ampliar");
-  gtk_container_add (GTK_CONTAINER (noteb4xx), ampxx);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ampxx), TRUE);
-
-  redxx = gtk_radio_button_new_with_label(gtk_radio_button_group 
-					  (GTK_RADIO_BUTTON (ampxx)),
-					  "Reduzir");
-  gtk_container_add (GTK_CONTAINER (noteb4xx), redxx);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (redxx), FALSE);
 
   //radio type
 
@@ -292,8 +281,8 @@ main (int argc, char **argv)
 /////////////////////////////////////////////////////////////////////////
   // temporário até ser ajustável
 
-  pdat->lensdata.ylen = 175;
-  pdat->lensdata.xwid = 3;
+  pdat->ldat.ylen = 175;
+  pdat->ldat.xwid = 3;
   pdat->flg.virt = 1;
   pdat->mouse.trap = 0;
 
@@ -325,9 +314,6 @@ main (int argc, char **argv)
 
   g_signal_connect (G_OBJECT (pdat->distbtn), "toggled",
 		    G_CALLBACK (distchange), pdat);
-
-  g_signal_connect (G_OBJECT (ampxx), "toggled",
-		    G_CALLBACK (scalechange), pdat);
 
   g_signal_connect (G_OBJECT (lenstype2), "toggled",
 		    G_CALLBACK (typechange), pdat);
