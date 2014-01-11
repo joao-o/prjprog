@@ -311,11 +311,14 @@ main (int argc, char **argv)
 			    G_CALLBACK (gtk_main_quit), NULL);
 
   //callbacks butões
-  g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (set_val), pdat);
+  g_signal_connect (G_OBJECT (button), "clicked", 
+		    G_CALLBACK (set_val), pdat);
 
-  g_signal_connect (G_OBJECT (lunbtn), "clicked", G_CALLBACK (luneta), pdat);
+  g_signal_connect (G_OBJECT (lunbtn), "clicked", 
+		    G_CALLBACK (luneta), pdat);
 
-  g_signal_connect (G_OBJECT (colorbtn), "clicked", G_CALLBACK (colormenu), pdat);
+  g_signal_connect (G_OBJECT (colorbtn), "clicked", 
+		    G_CALLBACK (colormenu), pdat);
 
   g_signal_connect (G_OBJECT (pdat->btnlock.name), "toggled",
 		    G_CALLBACK (lchange), pdat);
