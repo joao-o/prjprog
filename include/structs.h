@@ -3,6 +3,8 @@
 
 #include <stdint.h> 
 #define TOL 20			//Distância ente eixo optico e borda da drawbox
+#define XWID 3                  //espessura das lentes finas
+#define RAY 1.5
 
 // struct com dados para butao toggle com cores que mudam 
 typedef struct tbtn
@@ -32,7 +34,6 @@ struct bardat
 typedef struct drawdata
 {
   double ylen; //altura das lentes
-  double xwid; //espessura das lentes
   double headwid1, headwid2; //espessura dos triangulos
 } drawdata;
 

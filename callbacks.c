@@ -406,21 +406,21 @@ titanmouse (GtkWidget * widget, GdkEvent * event, gpointer dat)
   else if (event->type == GDK_BUTTON_PRESS)
     {
       if (((pdat->mouse.nestx - pdat->phys.c.pos) 
-          < pdat->phys.c.focus + pdat->ldat.xwid*1.5)
+          < pdat->phys.c.focus + XWID*1.5)
          && ((pdat->mouse.nestx - pdat->phys.c.pos) 
-             > pdat->phys.c.focus - pdat->ldat.xwid*1.5)
+             > pdat->phys.c.focus - XWID*1.5)
          && (fabs(pdat->mouse.nesty - pdat->phys.axis) 
-             < pdat->ldat.xwid*1.5))
+             < XWID*1.5))
         {
           pdat->mouse.trap = 3; 
           pdat->mouse.path1 =pdat->phys.c.focus - pdat->mouse.nestx;
         }
       else if(((pdat->mouse.nestx - pdat->phys.d.pos) 
-               < pdat->phys.d.focus + pdat->ldat.xwid*1.5)
+               < pdat->phys.d.focus + XWID*1.5)
               && ((pdat->mouse.nestx - pdat->phys.d.pos) 
-                  > pdat->phys.d.focus - pdat->ldat.xwid*1.5)
+                  > pdat->phys.d.focus - XWID*1.5)
               && (fabs(pdat->mouse.nesty - pdat->phys.axis) 
-                  < pdat->ldat.xwid*1.5))
+                  < XWID*1.5))
         {
           pdat->mouse.trap = 4;
           pdat->mouse.path1 =pdat->phys.d.focus - pdat->mouse.nestx;

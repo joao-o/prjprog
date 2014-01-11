@@ -281,8 +281,6 @@ main (int argc, char **argv)
 /////////////////////////////////////////////////////////////////////////
   // temporário até ser ajustável
 
-  pdat->ldat.ylen = 175;
-  pdat->ldat.xwid = 3;
   pdat->flg.virt = 1;
   pdat->mouse.trap = 0;
 
