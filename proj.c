@@ -23,13 +23,14 @@ main (int argc, char **argv)
     *lenstype2, *stuffings;
 
   // boxes
-  GtkWidget *hbox1, *vbox1, *topbox, *midbox, *setbox, *datbox,
-    *noteb, *notebp[4],
+  GtkWidget *hbox1, *vbox1, *topbox, 
+    *midbox, *setbox, *datbox,
+    *noteb, *notebp[4], *padding,
     *optnbox, *statusbox, *noteb4xx, *rlbox, *lblbox[9],
     *btntbl, *notelbl[4];
 
   //frames
-  GtkWidget *dtbfrm, *drwfrm,
+  GtkWidget *dtbfrm, *drwfrm, 
     *blcfrm, *bldfrm, *bfcfrm, *bfdfrm, *bangfrm,
     *xxfrm, *lensfrm, *statusfrm;
 
@@ -64,6 +65,9 @@ main (int argc, char **argv)
 
   topbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox1), topbox, FALSE, TRUE, 0);
+
+  padding = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (topbox), padding, FALSE, TRUE, 400);
 
   midbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox1), midbox, TRUE, TRUE, 0);
@@ -225,7 +229,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (rlbox), pdat->lenstype);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->lenstype), TRUE);
 
-  lenstype2 = gtk_radio_button_new_with_label(gtk_radio_button_group
+  lenstype2 = gtk_radio_button_new_with_label(gtk_radio_button_group 
 					  (GTK_RADIO_BUTTON (pdat->lenstype)),
 					  "Desenhadas");
 
@@ -239,7 +243,7 @@ main (int argc, char **argv)
   gdk_color_parse ("orange", &pdat->btnlock.colorhigh);
   pdat->btnlock.name = gtk_toggle_button_new_with_label (pdat->btnlock.label);
 
-  gtk_table_attach_defaults (GTK_TABLE (btntbl), pdat->btnlock.name,
+  gtk_table_attach_defaults (GTK_TABLE (btntbl), pdat->btnlock.name, 
 			    1, 4, 3, 4);
 
   gtk_widget_modify_bg (pdat->btnlock.name,
