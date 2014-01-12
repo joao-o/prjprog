@@ -59,33 +59,6 @@ colorchange(GtkWidget * widget, progdata *pdat)
   gtk_widget_queue_draw (pdat->window);
   return TRUE;
 }
- 
-gboolean
-colorreset (GtkWidget * widget, progdata *pdat)
-{
-  int i;
-
-  gdk_color_parse ("#FF8C00", &pdat->color[0]);
-  gdk_color_parse ("#3636FF", &pdat->color[1]);
-  gdk_color_parse ("#00CC33", &pdat->color[2]);
-  gdk_color_parse ("#66CC33", &pdat->color[3]);
-  gdk_color_parse ("#FFFF00", &pdat->color[4]);
-  gdk_color_parse ("#00B3FF", &pdat->color[5]);
-
-  for(i=0;i<6;i++)
-    {      
-      gtk_widget_modify_bg (pdat->btn[i],
-			    GTK_STATE_NORMAL, &pdat->color[i]);
-      gtk_widget_modify_bg (pdat->btn[i],
-			    GTK_STATE_PRELIGHT, &pdat->color[i]);
-      gtk_widget_modify_bg (pdat->btn[i],
-			    GTK_STATE_ACTIVE, &pdat->color[i]);
-    }
-
-  gtk_widget_queue_draw (pdat->window);
-
-  return TRUE;
-}
 
 gboolean
 colorselec (GtkWidget *widget, progdata *pdat)
@@ -108,10 +81,111 @@ colorselec (GtkWidget *widget, progdata *pdat)
 }
 
 gboolean
+colorreset (GtkWidget * widget, progdata *pdat)
+{
+  int i;
+
+  gdk_color_parse ("#FF8C00", &pdat->color[0]);
+  gdk_color_parse ("#3636FF", &pdat->color[1]);
+  gdk_color_parse ("#00CC33", &pdat->color[2]);
+  gdk_color_parse ("#66CC33", &pdat->color[3]);
+  gdk_color_parse ("#FFFF00", &pdat->color[4]);
+  gdk_color_parse ("#00B3FF", &pdat->color[5]);
+
+  for(i=0;i<6;i++)
+    {      
+      gtk_widget_modify_bg (pdat->btn[i],
+			    GTK_STATE_NORMAL, &pdat->color[i]);
+      gtk_widget_modify_bg (pdat->btn[i],
+			    GTK_STATE_PRELIGHT, &pdat->color[i]);
+      gtk_widget_modify_bg (pdat->btn[i],
+			    GTK_STATE_ACTIVE, &pdat->color[i]);
+    }
+
+  colorselec(NULL, pdat);
+  gtk_widget_queue_draw (pdat->window);
+
+  return TRUE;
+}
+
+
+gboolean
+colorresetsing (GtkWidget * widget, progdata *pdat)
+{
+  int i;
+
+  if((GTK_TOGGLE_BUTTON(pdat->btn[0]))->active)
+    {
+      gdk_color_parse ("#FF8C00", &pdat->color[0]);
+      gtk_widget_modify_bg (pdat->btn[0],
+			    GTK_STATE_NORMAL, &pdat->color[0]);
+      gtk_widget_modify_bg (pdat->btn[0],
+			    GTK_STATE_PRELIGHT, &pdat->color[0]);
+      gtk_widget_modify_bg (pdat->btn[0],
+			    GTK_STATE_ACTIVE, &pdat->color[0]);
+    }
+  else if((GTK_TOGGLE_BUTTON(pdat->btn[1]))->active)
+    {
+      gdk_color_parse ("#3636FF", &pdat->color[1]);
+      gtk_widget_modify_bg (pdat->btn[1],
+			    GTK_STATE_NORMAL, &pdat->color[1]);
+      gtk_widget_modify_bg (pdat->btn[1],
+			    GTK_STATE_PRELIGHT, &pdat->color[1]);
+      gtk_widget_modify_bg (pdat->btn[1],
+			    GTK_STATE_ACTIVE, &pdat->color[1]);
+    }
+  else if((GTK_TOGGLE_BUTTON(pdat->btn[2]))->active)
+    {
+      gdk_color_parse ("#00CC33", &pdat->color[2]);
+      gtk_widget_modify_bg (pdat->btn[2],
+			    GTK_STATE_NORMAL, &pdat->color[2]);
+      gtk_widget_modify_bg (pdat->btn[2],
+			    GTK_STATE_PRELIGHT, &pdat->color[2]);
+      gtk_widget_modify_bg (pdat->btn[2],
+			    GTK_STATE_ACTIVE, &pdat->color[2]);
+    }
+  else if((GTK_TOGGLE_BUTTON(pdat->btn[3]))->active)
+    {
+      gdk_color_parse ("#66CC33", &pdat->color[3]);
+      gtk_widget_modify_bg (pdat->btn[3],
+			    GTK_STATE_NORMAL, &pdat->color[3]);
+      gtk_widget_modify_bg (pdat->btn[3],
+			    GTK_STATE_PRELIGHT, &pdat->color[3]);
+      gtk_widget_modify_bg (pdat->btn[3],
+			    GTK_STATE_ACTIVE, &pdat->color[3]);
+    }
+  else if((GTK_TOGGLE_BUTTON(pdat->btn[4]))->active)
+    {
+      gdk_color_parse ("#FFFF00", &pdat->color[4]);
+      gtk_widget_modify_bg (pdat->btn[4],
+			    GTK_STATE_NORMAL, &pdat->color[4]);
+      gtk_widget_modify_bg (pdat->btn[4],
+			    GTK_STATE_PRELIGHT, &pdat->color[4]);
+      gtk_widget_modify_bg (pdat->btn[4],
+			    GTK_STATE_ACTIVE, &pdat->color[4]);
+    }
+  else if((GTK_TOGGLE_BUTTON(pdat->btn[5]))->active)
+    {
+      gdk_color_parse ("#00B3FF", &pdat->color[5]);
+      gtk_widget_modify_bg (pdat->btn[5],
+			    GTK_STATE_NORMAL, &pdat->color[5]);
+      gtk_widget_modify_bg (pdat->btn[5],
+			    GTK_STATE_PRELIGHT, &pdat->color[5]);
+      gtk_widget_modify_bg (pdat->btn[5],
+			    GTK_STATE_ACTIVE, &pdat->color[5]);
+    }
+
+  colorselec(NULL, pdat);
+  gtk_widget_queue_draw (pdat->window);
+
+  return TRUE;
+}
+
+gboolean
 colormenu (GtkWidget *widget, progdata * pdat)
 {
   GtkWidget *dialog, *mainbox, *btnbox,
-    *colorbox, *reset;
+    *colorbox, *reset, *resetsing;
   int i;
  
   dialog = gtk_dialog_new_with_buttons ("Menu de Cores",
@@ -159,15 +233,18 @@ colormenu (GtkWidget *widget, progdata * pdat)
 						   (GTK_RADIO_BUTTON 
 						    (pdat->btn[4])),
 						   "Raios Virtuais");
-
+  
+  resetsing =  gtk_button_new_with_label ("Restaurar Cor");
   reset =  gtk_button_new_with_label ("Cores Predefinidas");
-  gtk_box_pack_end (GTK_BOX (btnbox), reset, FALSE, FALSE, 0);
 
+  gtk_box_pack_end (GTK_BOX (btnbox), reset, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (btnbox), resetsing, FALSE, FALSE, 5);
+ 
   pdat->colwhl = gtk_color_selection_new();
   gtk_box_pack_end (GTK_BOX (colorbox), pdat->colwhl, TRUE, TRUE, 0);
   gtk_color_selection_set_current_color(GTK_COLOR_SELECTION
-						(pdat->colwhl),
-						&pdat->color[0]);
+					(pdat->colwhl),
+					&pdat->color[0]);
   for(i=0;i<6;i++)
     {
 
@@ -188,6 +265,9 @@ colormenu (GtkWidget *widget, progdata * pdat)
 
   g_signal_connect (G_OBJECT (reset), "clicked",
 		    G_CALLBACK (colorreset), pdat);
+  
+  g_signal_connect (G_OBJECT (resetsing), "clicked",
+		    G_CALLBACK (colorresetsing), pdat);
 
   g_signal_connect (G_OBJECT (pdat->colwhl), "color-changed",
 		    G_CALLBACK (colorchange), pdat);
