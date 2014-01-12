@@ -92,7 +92,6 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
   //verifica se init é 0 e seguidamete incrementa-a
   if (!init)
     {
-      colorreset(NULL , pdat);
       set_val (NULL , (gpointer) pdat);
       ++init;
     }

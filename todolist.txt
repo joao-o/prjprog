@@ -9,14 +9,14 @@ Coisas a fazer
 [x] Possível resolução: Desenhar numa surface na memória
     sem restrições e passar com clip para a window
 
-[ ] Também limitar acção do rato no arraste 
+[x] Também limitar acção do rato no arraste 
 	tr(fácil)
 	[x]jo(fazer com que posas
     	 	    arrastar as lentes independentemente )
 		    tr(right click-> conjunto left click-> lente?)
        jo(por mim ok)
 
-[ ] pequnas caixas para por valores directamete
+[nope] pequnas caixas para por valores directamete
 
 [x] coisas para impedir divisões por 0
 	tr(em que casos? É suposto certas coisas tenderem para infinito)
@@ -36,7 +36,7 @@ Coisas a fazer
         jo(imagens também a tracejado?)
 	tr(done o importante)
 
-[ ] Janela para mudar cor das coisas 
+[x] Janela para mudar cor das coisas 
 	tr(lentes, primeira imagem, segunda imagem,...) 
 	jo(implica criar montes de estruturas para guardar as
     	    cores(vector de 24 bits?) 
@@ -51,7 +51,7 @@ Coisas a fazer
 [x] coisas já implementadas.    
 
 Ideias soltas:
-[ ] permitir mudar a natureza das lentes 
+[nope] permitir mudar a natureza das lentes 
 	tr(em termos de contas é fácil, 
 	    o prjcairo só precisa de uma ligeira adaptação e o cairofunc também me
 	    parece que sim)
@@ -79,4 +79,3 @@ Ideias soltas:
 btw: 
 projecto do carlos/leonel
 https://github.com/garridinho/Programacao-lentes 
-

@@ -279,10 +279,17 @@ main (int argc, char **argv)
   gtk_box_pack_start (GTK_BOX (setbox), noteb, TRUE, TRUE, 0);
 
 /////////////////////////////////////////////////////////////////////////
-  // temporário até ser ajustável
+  // inits
 
   pdat->flg.virt = 1;
   pdat->mouse.trap = 0;
+  gdk_color_parse ("#FF8C00", &pdat->color[0]);
+  gdk_color_parse ("#3636FF", &pdat->color[1]);
+  gdk_color_parse ("#00CC33", &pdat->color[2]);
+  gdk_color_parse ("#66CC33", &pdat->color[3]);
+  gdk_color_parse ("#FFFF00", &pdat->color[4]);
+  gdk_color_parse ("#00B3FF", &pdat->color[5]);
+
 
 ////////////////////////////////////////////////////////////////////////////////
   //sinais e callbacks
