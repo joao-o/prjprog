@@ -9,7 +9,33 @@
 #include <callbacks.h>
 #include <miscui.h>
 #include <draw.h>
+/*
 
+Mapa do Código:
+
+proj.c
+- Função "main"
+-- Cria janela com widgets
+
+callbacks.c
+- Funções chamadas pelos widgets criados em proj.c
+-- Funções auxiliares aos callbacks 
+	(i.e.: funções chamadas internamente pelos callbacks)
+
+draw.c
+- Função de desenho "expose_ev"
+-- Funções auxiliares à função de desenho
+
+miscui.c
+- Funções que criam janelas de diálogo
+-- Callbacks dos widgets presentas nas janelas de dialogo
+
+Compilar o programa:
+make
+Executar o programa:
+./galileo
+
+*/
 
 int
 main (int argc, char **argv)

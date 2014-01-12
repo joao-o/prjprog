@@ -7,7 +7,7 @@
 #include <time.h>
 #include <callbacks.h>
 
-static const double dash[] = { 8. };
+static const double dash[] = { 8., 12 };
 static const double imgdsh[] = { 4., 1. };
 static const double nodash[] = { };
 
@@ -163,11 +163,12 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 
   cairo_stroke (cr);
 
-  buffer[4] = buffer[1]*(lens2->pos - lens1->pos)/(lens2->pos - buffer[0]);
+  buffer[4] = (buffer[1]-pdat->phys.axis)*
+    (lens2->pos - lens1->pos)/(lens2->pos - buffer[0]) + pdat->phys.axis;
 
   if (pdat->flg.virt)		//desenha virtuais
     {
-      cairo_set_dash (cr, dash, 1, 0);
+      cairo_set_dash (cr, dash, 2, 0);
       gdk_cairo_set_source_color (cr, &pdat->color[5]);
       if (lens1->focus < 0)
 	{
@@ -198,17 +199,24 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 	}
       cairo_stroke (cr);
     }
+  
+  cairo_set_dash (cr, nodash, 0, 0);
+  gdk_cairo_set_source_color (cr, &pdat->color[4]);
 
   if (buffer[0] < lens2->pos && buffer[0] > lens1->pos)
     {
-      cairo_set_dash (cr, nodash, 0, 0);
-      gdk_cairo_set_source_color (cr, &pdat->color[4]);
       draw_line (cr, lens2->pos, pdat->phys.axis, buffer[0], buffer[1]);
       cairo_stroke (cr);
 
       gdk_cairo_set_source_color (cr, &pdat->color[2]);
       draw_varrow (buffer[0], pdat->phys.axis,
 		   pdat->phys.axis - buffer[1], 20, cr);
+      cairo_stroke (cr);
+    }
+
+  if(lens1->focus < 0)
+    {
+      draw_line (cr, lens2->pos, pdat->phys.axis, lens1->pos, buffer[4]);
       cairo_stroke (cr);
     }
 
@@ -307,7 +315,7 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 
   if (pdat->flg.virt)
     {
-      cairo_set_dash (cr, dash, 1, 0);
+      cairo_set_dash (cr, dash, 2, 0);
       gdk_cairo_set_source_color (cr, &pdat->color[5]);
       if (buffer[2] < lens2->pos)
 	{
