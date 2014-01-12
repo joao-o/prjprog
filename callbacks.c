@@ -15,55 +15,7 @@
 
 // CSR de "configure events" (as dimensões da janela mudaram)
 
-void
-jerrylens (progdata * pdat, bardat * barra)
-{
-  if (pdat->mouse.nestx + pdat->mouse.path1
-      > pdat->drawbox->allocation.width - TOL)
 
-    (GTK_ADJUSTMENT (barra->adj))->value
-      = (pdat->drawbox->allocation.width - TOL)
-      * GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-
-  else if (pdat->mouse.nestx + pdat->mouse.path1 < TOL)
-
-    (GTK_ADJUSTMENT (barra->adj))->value = (TOL);
-
-  else
-    (GTK_ADJUSTMENT (barra->adj))->value =
-      (pdat->mouse.nestx + pdat->mouse.path1)
-      * GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-
-  g_signal_emit_by_name (GTK_ADJUSTMENT (barra->adj), "value-changed");
-}
-
-void
-mickeyfocus (progdata * pdat, bardat * barra)
-{
-  if (pdat->mouse.nestx + pdat->mouse.path1 >
-      pdat->drawbox->allocation.width - (TOL))
-
-    (GTK_ADJUSTMENT (barra->adj))->value
-      = (pdat->drawbox->allocation.width - (TOL))
-      * GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-
-  else if (pdat->mouse.nestx + pdat->mouse.path1 < 10)
-
-    (GTK_ADJUSTMENT (barra->adj))->value
-      = 10 * GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-
-  else
-    (GTK_ADJUSTMENT (barra->adj))->value =
-      (pdat->mouse.nestx + pdat->mouse.path1) *
-      GTK_ADJUSTMENT (pdat->barxx.adj)->value;
-
-  if ((GTK_ADJUSTMENT (barra->adj))->value >
-      (GTK_ADJUSTMENT (barra->adj))->upper)
-    (GTK_ADJUSTMENT (barra->adj))->value =
-      (GTK_ADJUSTMENT (barra->adj))->upper;
-
-  g_signal_emit_by_name (GTK_ADJUSTMENT (barra->adj), "value-changed");
-}
 
 gboolean
 upd_phys (progdata * pdat)
@@ -302,13 +254,68 @@ typechange (GtkWidget * widget, progdata *pdat)
 gboolean
 scalechange (GtkWidget * widget, progdata *pdat)
 {
+  int *wwidth = &pdat->drawbox->allocation.width;
   upd_phys(pdat);
+  (GTK_ADJUSTMENT (pdat->barl.adj))->upper =
+    (*wwidth - TOL) * *pdat->phys.scl;
+  (GTK_ADJUSTMENT (pdat->barr.adj))->upper =
+    (*wwidth - TOL) * *pdat->phys.scl;
+  upd_mod(&pdat->barr,OFFPOS);
+  upd_mod(&pdat->barl,OFFPOS);
   upd_mod(&pdat->barxx,OFFSCL);
-  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj), "value-changed");
-  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj), "value-changed");
   gtk_widget_queue_draw (pdat->window);
 
   return TRUE;
+}
+    
+void
+jerrylens (progdata * pdat, bardat * barra)
+{
+  if (pdat->mouse.nestx + pdat->mouse.path1
+      > pdat->drawbox->allocation.width - TOL)
+
+    (GTK_ADJUSTMENT (barra->adj))->value
+      = (pdat->drawbox->allocation.width - TOL)
+      * GTK_ADJUSTMENT (pdat->barxx.adj)->value;
+
+  else if (pdat->mouse.nestx + pdat->mouse.path1 < TOL)
+
+    (GTK_ADJUSTMENT (barra->adj))->value = (TOL);
+
+  else
+    (GTK_ADJUSTMENT (barra->adj))->value =
+      (pdat->mouse.nestx + pdat->mouse.path1)
+      * GTK_ADJUSTMENT (pdat->barxx.adj)->value;
+
+  g_signal_emit_by_name (GTK_ADJUSTMENT (barra->adj), "value-changed");
+}
+
+void
+mickeyfocus (progdata * pdat, bardat * barra)
+{
+  if (pdat->mouse.nestx + pdat->mouse.path1 >
+      pdat->drawbox->allocation.width - (TOL))
+
+    (GTK_ADJUSTMENT (barra->adj))->value
+      = (pdat->drawbox->allocation.width - (TOL))
+      * GTK_ADJUSTMENT (pdat->barxx.adj)->value;
+
+  else if (pdat->mouse.nestx + pdat->mouse.path1 < 10)
+
+    (GTK_ADJUSTMENT (barra->adj))->value
+      = 10 * GTK_ADJUSTMENT (pdat->barxx.adj)->value;
+
+  else
+    (GTK_ADJUSTMENT (barra->adj))->value =
+      (pdat->mouse.nestx + pdat->mouse.path1) *
+      GTK_ADJUSTMENT (pdat->barxx.adj)->value;
+
+  if ((GTK_ADJUSTMENT (barra->adj))->value >
+      (GTK_ADJUSTMENT (barra->adj))->upper)
+    (GTK_ADJUSTMENT (barra->adj))->value =
+      (GTK_ADJUSTMENT (barra->adj))->upper;
+
+  g_signal_emit_by_name (GTK_ADJUSTMENT (barra->adj), "value-changed");
 }
 
 //callback quando rato é usado para mexer coisas

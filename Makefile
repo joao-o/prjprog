@@ -14,7 +14,7 @@ LFLAGS     = $(W_FLAGS) $(LINK_FLAGS) $(LINK_LIBS)
 CC = gcc
 RM = /bin/rm
 
-TARGET = proj
+TARGET = galileo
 PROGS  = proj.c callbacks.c miscui.c draw.c
 OBJECT = proj.o callbacks.o miscui.o draw.o
 TESTE = cairotest.c
