@@ -222,13 +222,13 @@ set_val (GtkWidget * widget, gpointer dat)
       *pdat->lnsc.pos = 320.;
        g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
       			     "value-changed");
-      *(pdat->lnsc.focus) = 180;
+      *(pdat->lnsc.focus) = 157;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barfc.adj),
 			     "value-changed");
       *(pdat->lnsd.focus) = 20;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barfd.adj),
 			     "value-changed");
-      *(pdat->lnsd.pos) = 477.8;
+      *(pdat->lnsd.pos) = 452.;
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
 			     "value-changed");
       (GTK_ADJUSTMENT (pdat->barang.adj))->value = 20.;

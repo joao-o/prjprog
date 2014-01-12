@@ -134,7 +134,7 @@ main (int argc, char **argv)
   barlensr = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barr.adj));
   gtk_container_add (GTK_CONTAINER (bldfrm), barlensr);
 
-  lblpos = gtk_label_new ("  Posicao");
+  lblpos = gtk_label_new ("Posicao");
   gtk_box_pack_start (GTK_BOX (lblbox[0]), lblpos, FALSE, FALSE, 10);
 
   pdat->barl.lbl = gtk_label_new (pdat->barl.str);
@@ -194,7 +194,7 @@ main (int argc, char **argv)
   gtk_box_pack_start (GTK_BOX (lblbox[7]), pdat->barxx.lbl, FALSE, FALSE, 0);
 
   stuffings = gtk_label_new ("");
-  gtk_box_pack_start (GTK_BOX (lblbox[8]), stuffings, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (lblbox[8]), stuffings, FALSE, FALSE, 110);
   
  
 
