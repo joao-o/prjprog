@@ -113,7 +113,7 @@ main (int argc, char **argv)
   btntbl = gtk_table_new (4 , 5, TRUE);
   gtk_table_set_row_spacings(GTK_TABLE(btntbl), 5);
   gtk_table_set_col_spacings(GTK_TABLE(btntbl), 5);
-  gtk_box_pack_end( GTK_BOX (optnbox), btntbl, FALSE, FALSE, 5);
+  gtk_box_pack_end( GTK_BOX (optnbox), btntbl, FALSE, FALSE, 15);
 
 ////////////////////////////////////////////////////////////////////////////////
   // adjusts e barras
@@ -132,7 +132,7 @@ main (int argc, char **argv)
   barlensr = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barr.adj));
   gtk_container_add (GTK_CONTAINER (bldfrm), barlensr);
 
-  lblpos = gtk_label_new ("Posicao");
+  lblpos = gtk_label_new ("\nPosicao");
   gtk_box_pack_start (GTK_BOX (lblbox[0]), lblpos, FALSE, FALSE, 10);
 
   pdat->barl.lbl = gtk_label_new (pdat->barl.str);
@@ -155,8 +155,8 @@ main (int argc, char **argv)
   barfocd = gtk_hscale_new (GTK_ADJUSTMENT (pdat->barfd.adj));
   gtk_container_add (GTK_CONTAINER (bfdfrm), barfocd);
 
-  lblfoc = gtk_label_new ("\n  Distancia Focal\t\t\t   ");
-  gtk_box_pack_start (GTK_BOX (lblbox[3]), lblfoc, FALSE, FALSE, 0);
+  lblfoc = gtk_label_new ("\nDistancia Focal");
+  gtk_box_pack_start (GTK_BOX (lblbox[3]), lblfoc, FALSE, FALSE, 10);
 
   pdat->barfc.lbl = gtk_label_new (pdat->barfc.str);
   gtk_box_pack_start (GTK_BOX (lblbox[4]), pdat->barfc.lbl, FALSE, FALSE, 0);
@@ -173,7 +173,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (bangfrm), barangl);
 
   pdat->barang.lbl = gtk_label_new (pdat->barang.str);
-  gtk_box_pack_start (GTK_BOX (lblbox[6]), pdat->barang.lbl, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (lblbox[6]), pdat->barang.lbl, FALSE, FALSE, 10);
   
   //escala
   pdat->barxx.adj = gtk_adjustment_new (2, 1, 10.0, 0.1, 1.0, 1.0);
@@ -189,7 +189,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (notebp[2]), noteb4xx);
 
   pdat->barxx.lbl = gtk_label_new (pdat->barxx.str);
-  gtk_box_pack_start (GTK_BOX (lblbox[7]), pdat->barxx.lbl, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (lblbox[7]), pdat->barxx.lbl, FALSE, FALSE, 10);
 
   stuffings = gtk_label_new ("");
   gtk_box_pack_start (GTK_BOX (lblbox[8]), stuffings, FALSE, FALSE, 110);
@@ -217,7 +217,7 @@ main (int argc, char **argv)
 
   pdat->distbtn = gtk_check_button_new_with_label
     ("Fixar Distância\nentre Lentes");
-  gtk_box_pack_start(GTK_BOX(optnbox), pdat->distbtn, FALSE, FALSE, 5);
+  gtk_box_pack_start(GTK_BOX(optnbox), pdat->distbtn, FALSE, FALSE, 0);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->distbtn), FALSE);
 
 
