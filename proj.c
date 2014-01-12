@@ -26,8 +26,9 @@ main (int argc, char **argv)
     *lenstype2, *stuffings;
 
   // boxes
-  GtkWidget *hbox1, *vbox1, *topbox, *midbox, *setbox, *datbox,
-    *noteb, *notebp[4], 
+  GtkWidget *hbox1, *vbox1, *topbox, 
+    *midbox, *setbox, *datbox,
+    *noteb, *notebp[4], *padding,
     *optnbox, *statusbox, *noteb4xx, *rlbox, *lblbox[9],
     *btntbl, *notelbl[4];
 
@@ -67,6 +68,9 @@ main (int argc, char **argv)
 
   topbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox1), topbox, FALSE, TRUE, 0);
+
+  padding = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (topbox), padding, FALSE, TRUE, 400);
 
   midbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox1), midbox, TRUE, TRUE, 0);
