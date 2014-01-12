@@ -20,7 +20,7 @@ main (int argc, char **argv)
   GtkWidget *button, *barlensl, *barlensr,
     *barfocc, *barfocd, *barangl, *lunbtn,
     *barsclx, *lblpos, *lblfoc, *colorbtn,
-    *lenstype2, *stuffings;
+    *lenstype2, *stuffings, *abtbtn;
 
   // boxes
   GtkWidget *hbox1, *vbox1, *topbox,
@@ -111,7 +111,7 @@ main (int argc, char **argv)
   rlbox = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (lensfrm), rlbox);
 
-  btntbl = gtk_table_new (4 , 5, TRUE);
+  btntbl = gtk_table_new (5 , 5, TRUE);
   gtk_table_set_row_spacings(GTK_TABLE(btntbl), 5);
   gtk_table_set_col_spacings(GTK_TABLE(btntbl), 5);
  
@@ -210,6 +210,10 @@ main (int argc, char **argv)
   gtk_table_attach_defaults (GTK_TABLE (btntbl), colorbtn,
 			    1, 4, 2, 3);
 
+  abtbtn = gtk_button_new_with_label ("Sobre");
+  gtk_table_attach_defaults (GTK_TABLE (btntbl), abtbtn,
+  			    4, 5, 4, 5);
+
   pdat->virtbtn = gtk_check_button_new_with_label("Raios Virtuais");
   gtk_box_pack_start(GTK_BOX(optnbox), pdat->virtbtn, FALSE, FALSE, 5);
 
@@ -281,7 +285,7 @@ main (int argc, char **argv)
   gdk_color_parse ("#FF8C00", &pdat->color[0]);
   gdk_color_parse ("#3636FF", &pdat->color[1]);
   gdk_color_parse ("#00CC33", &pdat->color[2]);
-  gdk_color_parse ("#66CC33", &pdat->color[3]);
+  gdk_color_parse ("#990931", &pdat->color[3]);
   gdk_color_parse ("#FFFF00", &pdat->color[4]);
   gdk_color_parse ("#00B3FF", &pdat->color[5]);
 
@@ -328,6 +332,10 @@ main (int argc, char **argv)
   g_signal_connect (G_OBJECT (lenstype2), "toggled",
 		    G_CALLBACK (typechange), pdat);
 
+  g_signal_connect (G_OBJECT (abtbtn), "clicked",
+		    G_CALLBACK (about), pdat);
+
+
   //callbacks barras
   g_signal_connect (G_OBJECT (pdat->barl.adj), "value-changed",
 		    G_CALLBACK (upd_adj), pdat);
@@ -373,3 +381,4 @@ main (int argc, char **argv)
   free(pdat);
   return 0;
 }
+
