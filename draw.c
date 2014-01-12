@@ -326,7 +326,8 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
   buffer[2] = lens2->pos + (buffer[3] * lens2->focus) / buffer[2];
   //x img2
 
-  buffer[3] = buffer[0] * (buffer[2] - lens2->pos) + pdat->phys.axis;	//y img2
+  buffer[3] = buffer[0] * (buffer[2] - lens2->pos) + pdat->phys.axis;
+  //y img2
   buffer[4] = *wwidth - lens2->pos;
 
   if (pdat->flg.virt)
