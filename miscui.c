@@ -2,7 +2,6 @@
 #include <cairo.h>
 
 #include <structs.h>
-#include <prjcairo.h>
 
 #include <stdio.h>
 #include <stdlib.h>

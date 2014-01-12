@@ -2,9 +2,6 @@
 #include <cairo.h>
 
 #include <structs.h>
-#include <prjcairo.h>
-#include <cairofunc.h>
-#include <phys.h>
 #include <miscui.h>
 
 #include <stdio.h>
