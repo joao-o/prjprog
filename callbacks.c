@@ -255,13 +255,16 @@ gboolean
 scalechange (GtkWidget * widget, progdata *pdat)
 {
   int *wwidth = &pdat->drawbox->allocation.width;
-  upd_phys(pdat);
+  /*
   (GTK_ADJUSTMENT (pdat->barl.adj))->upper =
     (*wwidth - TOL) * *pdat->phys.scl;
   (GTK_ADJUSTMENT (pdat->barr.adj))->upper =
     (*wwidth - TOL) * *pdat->phys.scl;
+  */
   upd_mod(&pdat->barr,OFFPOS);
   upd_mod(&pdat->barl,OFFPOS);
+  upd_phys(pdat);
+
   upd_mod(&pdat->barxx,OFFSCL);
   gtk_widget_queue_draw (pdat->window);
 

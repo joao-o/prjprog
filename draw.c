@@ -92,6 +92,19 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
   (GTK_ADJUSTMENT (pdat->barr.adj))->upper =
     (*wwidth - TOL) * *pdat->phys.scl;
 
+  if ((GTK_ADJUSTMENT (pdat->barl.adj))->value
+      > (GTK_ADJUSTMENT (pdat->barl.adj))->upper)
+
+    (GTK_ADJUSTMENT (pdat->barl.adj))->value =
+      (GTK_ADJUSTMENT (pdat->barl.adj))->upper-TOL;
+
+  if ((GTK_ADJUSTMENT (pdat->barr.adj))->value
+      > (GTK_ADJUSTMENT (pdat->barr.adj))->upper)
+
+    (GTK_ADJUSTMENT (pdat->barr.adj))->value =
+      (GTK_ADJUSTMENT (pdat->barr.adj))->upper-TOL;
+
+
   //verifica se init é 0 e seguidamete incrementa-a
   if (!init)
     {
