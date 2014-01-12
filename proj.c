@@ -314,6 +314,8 @@ main (int argc, char **argv)
   gdk_color_parse ("#990931", &pdat->color[3]);
   gdk_color_parse ("#FFFF00", &pdat->color[4]);
   gdk_color_parse ("#00B3FF", &pdat->color[5]);
+  gdk_color_parse ("#FFFFFF", &pdat->color[6]);
+  gdk_color_parse ("#000000", &pdat->color[7]);
 
   pdat->lnsc.pos = &(GTK_ADJUSTMENT (pdat->barl.adj)->value);
   pdat->lnsc.focus = &(GTK_ADJUSTMENT (pdat->barfc.adj)->value);

@@ -108,10 +108,12 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 		   (double) pdat->drawbox->allocation.height);
   cairo_clip (cr);
 
-  cairo_set_source_rgba (cr, 0., 0., 0., 1.);
+  //cairo_set_source_rgba (cr, 0., 0., 0., 1.);
+  gdk_cairo_set_source_color (cr, &pdat->color[7]);
   cairo_paint (cr);
 
-  cairo_set_source_rgba (cr, 1., 1., 1., 1.);
+  // cairo_set_source_rgba (cr, 1., 1., 1., 1.);
+  gdk_cairo_set_source_color (cr, &pdat->color[6]);
   cairo_move_to (cr, 0, pdat->phys.axis);
   cairo_rel_line_to (cr, *wwidth, 0);
   cairo_stroke (cr);
@@ -258,7 +260,7 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
     {
       //Modo "desenhadas"
       cairo_set_source_rgba (cr, 0.75, 0.70, 0.55, 0.6);
-
+     
       buffer[3] = 2 * pdat->phys.c.focus + pdat->ldat.ylen * 2 + 200;
       buffer[2] = sqrt (buffer[3] * buffer[3] -
 			(pdat->ldat.ylen) * (pdat->ldat.ylen));
@@ -299,6 +301,7 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 
       cairo_set_source_rgba (cr, 1, 1, 1, 1);	//reset do alpha
     }
+
   cairo_set_line_width (cr, RAY);
   buffer[3] = (buffer[0] - lens2->pos);	//difrença entre fc(l1) e pos(l2)
   buffer[0] = (buffer[1] - pdat->phys.axis) / buffer[3];	
