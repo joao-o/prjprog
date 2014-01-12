@@ -53,7 +53,7 @@ main (int argc, char **argv)
   pdat->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (pdat->window), 920, 650);
   gtk_window_set_position (GTK_WINDOW (pdat->window), GTK_WIN_POS_CENTER);
-
+  gtk_window_set_icon_from_file (GTK_WINDOW(pdat->window),"icon0.png",NULL);
 ////////////////////////////////////////////////////////////////////////////////
   // layout geral das boxes
 
@@ -345,7 +345,7 @@ main (int argc, char **argv)
 		    G_CALLBACK (upd_adj_free), pdat);
 
   g_signal_connect (G_OBJECT (pdat->barxx.adj), "value-changed",
-		    G_CALLBACK (upd_adj_free), pdat);
+		    G_CALLBACK (scalechange), pdat);
 
   //callbacks janela / Xwindows
   g_signal_connect (pdat->window, "expose-event",

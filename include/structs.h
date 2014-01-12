@@ -5,6 +5,10 @@
 #define TOL 20			//Distância ente eixo optico e borda da drawbox
 #define XWID 3                  //espessura das lentes finas
 #define RAY 1.5
+#define OFFANG 22
+#define OFFFOC 21
+#define OFFSCL 11
+#define OFFPOS 21
 
 // struct com dados para butao toggle com cores que mudam 
 typedef struct tbtn

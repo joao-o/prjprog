@@ -10,7 +10,6 @@
 #include <string.h>
 #include <math.h>
 
-#define L_VAL 21
 
 // ficheiro com as CSR (callback service routines)
 
@@ -87,7 +86,7 @@ cfg_event (GtkWidget * widget, GdkEventExpose * event, progdata *pdat)
 // callback que muda coisas quando os ajust mudam (lockable)
 
 void
-upd_mod (bardat * barra)
+upd_mod (bardat * barra, int offset)
 {
   if ((GTK_ADJUSTMENT (barra->adj))->value
       > (GTK_ADJUSTMENT (barra->adj))->upper)
@@ -101,7 +100,7 @@ upd_mod (bardat * barra)
     (GTK_ADJUSTMENT (barra->adj))->value =
       (GTK_ADJUSTMENT (barra->adj))->lower;
 
-  sprintf (barra->str + 21, "%5.1f", (GTK_ADJUSTMENT (barra->adj))->value);
+  sprintf (barra->str + offset, "%5.1f", (GTK_ADJUSTMENT (barra->adj))->value);
   gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
   barra->save = (GTK_ADJUSTMENT (barra->adj))->value;
   return;
@@ -133,13 +132,13 @@ upd_adj (GtkWidget * widget, progdata *pdat)
 	      temp < pdat->drawbox->allocation.width * *pdat->phys.scl - TOL)
 	    {
 	      GTK_ADJUSTMENT (barra->alt->adj)->value = temp;
-	      upd_mod (barra->alt);
+	      upd_mod (barra->alt,OFFPOS);
 	    }
 	  else
 	    GTK_ADJUSTMENT (barra->adj)->value = barra->save;
 	}
 
-      upd_mod (barra);
+      upd_mod (barra,OFFPOS);
       gtk_widget_queue_draw (pdat->window);
     }
   else
@@ -157,7 +156,7 @@ gboolean
 upd_adj_free (GtkWidget * widget, progdata *pdat)
 {
   bardat *barra;
-  int l = L_VAL;
+  int l = OFFFOC;
 
   if (GTK_OBJECT (widget) == pdat->barfc.adj)
     barra = &pdat->barfc;
@@ -166,29 +165,26 @@ upd_adj_free (GtkWidget * widget, progdata *pdat)
   else if (GTK_OBJECT (widget) == pdat->barang.adj)
     {
       barra = &pdat->barang;
-      l = 22;
+      l = OFFANG;
     }
   else if (GTK_OBJECT (widget) == pdat->barxx.adj)
     {
       barra = &pdat->barxx;
-      l = 11;
+      l = OFFSCL;
     }
 
-  if (l == L_VAL && pdat->flg.lock
+  if (l == OFFFOC && pdat->flg.lock
       && *pdat->lnsc.focus > *pdat->lnsd.focus + 20)
     {
       *pdat->lnsd.pos = *pdat->lnsc.pos +
 	*pdat->lnsc.focus - *pdat->lnsd.focus - 5;
-      upd_mod (&(pdat->barr));
+      upd_mod (&(pdat->barr),l);
     }
-  else if (pdat->flg.lock)
+  else if (pdat->flg.lock && !pdat->flg.dist)
     (GTK_ADJUSTMENT (barra->adj))->value = barra->save;
 
-  sprintf (barra->str + l, "%4.1f", (GTK_ADJUSTMENT (barra->adj))->value);
-  gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
-
+  upd_mod(barra,l);
   gtk_widget_queue_draw (pdat->window);
-  barra->save = (GTK_ADJUSTMENT (barra->adj))->value;
 
   upd_phys (pdat);
   return TRUE;
@@ -306,23 +302,11 @@ typechange (GtkWidget * widget, progdata *pdat)
 gboolean
 scalechange (GtkWidget * widget, progdata *pdat)
 {
-
-  if (gtk_adjustment_get_upper (GTK_ADJUSTMENT (pdat->barxx.adj)) < 2)
-    {
-      gtk_adjustment_configure (GTK_ADJUSTMENT (pdat->barxx.adj),
-				1.1, 1.0, 10.0, 0.1, 0, 0);
-
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barxx.adj),
-			     "value-changed");
-    }
-  else if (gtk_adjustment_get_upper (GTK_ADJUSTMENT (pdat->barxx.adj)) > 2)
-    {
-      gtk_adjustment_configure (GTK_ADJUSTMENT (pdat->barxx.adj),
-				0.9, 0.1, 1.00, 0.001, 0, 0);
-
-      g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barxx.adj),
-			     "value-changed");
-    }
+  upd_phys(pdat);
+  upd_mod(&pdat->barxx,OFFSCL);
+  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj), "value-changed");
+  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj), "value-changed");
+  gtk_widget_queue_draw (pdat->window);
 
   return TRUE;
 }
