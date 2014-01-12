@@ -1,8 +1,6 @@
-espessura das lentes desenhadas varia com escala
+
 
 quando está divergente-convergente e a convergente está antes da distância focal da divergente aparece um raio estranho do lado esquerdo da divergente
-
-As setas da convergente continuam mal
 
 As cores ainda dão o GTk Critical ao ínicio
 
