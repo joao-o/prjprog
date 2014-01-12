@@ -11,7 +11,7 @@
 
 static const double dash[] = { 8.};
 static const double imgdsh[] = { 4., 1. };
-static const double nodash[] = {  };
+static const double nodash[] = { };
 
 //função sinal
 double
@@ -84,17 +84,18 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
   buffer[4] = tan ((M_PI / 180) * (GTK_ADJUSTMENT (pdat->barang.adj))->value);
   pdat->phys.d.focus = -pdat->phys.d.focus;
 
-  //verifica se init é 0 e seguidamete incrementa-a
-  if (!init)
-    {
-      set_val (NULL, (gpointer) pdat);
-      ++init;
-    }
-
   (GTK_ADJUSTMENT (pdat->barl.adj))->upper =
     (*wwidth - TOL) * *pdat->phys.scl;
   (GTK_ADJUSTMENT (pdat->barr.adj))->upper =
     (*wwidth - TOL) * *pdat->phys.scl;
+
+  //verifica se init é 0 e seguidamete incrementa-a
+  if (!init)
+    {
+      colorreset(NULL , pdat);
+      set_val (NULL , (gpointer) pdat);
+      ++init;
+    }
 
   cr = gdk_cairo_create (pdat->drawbox->window);
 
@@ -213,7 +214,7 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
       //Modo "desenhadas"
       cairo_set_source_rgba (cr, 0.75, 0.70, 0.55, 0.6);
 
-      buffer[3] = 2 * pdat->phys.c.focus + pdat->ldat.ylen * 2 + 200;
+      buffer[3] = 2 * *pdat->lnsc.focus + pdat->ldat.ylen * 2 + 200;
       buffer[2] = sqrt (buffer[3] * buffer[3] -
 			(pdat->ldat.ylen) * (pdat->ldat.ylen));
 
@@ -231,7 +232,7 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 
       cairo_set_source_rgba (cr, 0.50, 0.50, 0.65, 0.6);
 
-      buffer[3] = -2 * pdat->phys.d.focus + pdat->ldat.ylen * 2 + 200;
+      buffer[3] = -2 * *pdat->lnsd.focus + pdat->ldat.ylen * 2 + 200;
       buffer[2] = sqrt (buffer[3] * buffer[3] -
 			(pdat->ldat.ylen) * (pdat->ldat.ylen));
 
@@ -254,8 +255,11 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
   cairo_set_line_width (cr, RAY);
   buffer[3] = (buffer[0] - lens2->pos);	//difrença entre fc(l1) e pos(l2)
   buffer[0] = (buffer[1] - pdat->phys.axis) / buffer[3];	//declive do raio eixo lente2
-  buffer[2] = lens2->pos + (buffer[3] * lens2->focus) / 
-      (lens2->focus + buffer[3]);
+
+  buffer[2] = (lens2->focus + buffer[3]);
+  if (buffer[2] == 0 )
+      buffer[2] = 0.1;
+  buffer[2] = lens2->pos + (buffer[3] * lens2->focus) / buffer[2];
   //x img2
 
   buffer[3] = buffer[0] * (buffer[2] - lens2->pos) + pdat->phys.axis;	//y img2
@@ -288,6 +292,7 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 	     buffer[1]);
 
   cairo_stroke (cr);
+
   cairo_destroy (cr);
   pdat->phys.d.focus = -pdat->phys.d.focus;
 
