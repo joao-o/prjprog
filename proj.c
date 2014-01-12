@@ -135,7 +135,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (bldfrm), barlensr);
 
   lblpos = gtk_label_new ("  Posicao");
-  gtk_box_pack_start (GTK_BOX (lblbox[0]), lblpos, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (lblbox[0]), lblpos, FALSE, FALSE, 10);
 
   pdat->barl.lbl = gtk_label_new (pdat->barl.str);
   gtk_box_pack_start (GTK_BOX (lblbox[1]), pdat->barl.lbl, FALSE, FALSE, 0);
