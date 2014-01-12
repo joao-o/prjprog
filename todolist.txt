@@ -9,7 +9,7 @@ Coisas a fazer
 [x] Possível resolução: Desenhar numa surface na memória
     sem restrições e passar com clip para a window
 
-[x] Também limitar acção do rato no arraste 
+[x] Também limitar acção do rato no arraste
 	tr(fácil)
 	[x]jo(fazer com que posas
     	 	    arrastar as lentes independentemente )
@@ -24,51 +24,51 @@ Coisas a fazer
           como muito longe, i.e. o cairo não sabe onde fica inf (resultado
           quando divides por 0))
 
-[x] Ajustar escalas 
-	tr(as distancias focais permitem distancias muito grandes. 
+[x] Ajustar escalas
+	tr(as distancias focais permitem distancias muito grandes.
  	   Se bem que ter a escala dos eixos ajustáveis resolve o problema)
 
 [x] Identificar raios virtuais. Ter opção de não mostrar
 	tr(prjcairo já apanha a maior parte deles, estou a trabalhar numa ligeira
-	   alteração ao ciclo para resolver os restantes) 
+	   alteração ao ciclo para resolver os restantes)
 	jo(menu para alterar estilo
 	   dos raios?? espessura do stroke/cor?)
         jo(imagens também a tracejado?)
 	tr(done o importante)
 
-[x] Janela para mudar cor das coisas 
-	tr(lentes, primeira imagem, segunda imagem,...) 
+[x] Janela para mudar cor das coisas
+	tr(lentes, primeira imagem, segunda imagem,...)
 	jo(implica criar montes de estruturas para guardar as
-    	    cores(vector de 24 bits?) 
+    	    cores(vector de 24 bits?)
 	tr(4x3 ints, não é assim tanto)
         jo(ints não, char chega).
 
-[x] fazer git rm callbacks.c.orig! 
+[x] fazer git rm callbacks.c.orig!
 	tr(o que é isto?)
-        jo(está um ficheiro fantasma no projecto 
+        jo(está um ficheiro fantasma no projecto
            escreve o comando acima antes de fazeres commit)
 
-[x] coisas já implementadas.    
+[x] coisas já implementadas.
 
 Ideias soltas:
-[nope] permitir mudar a natureza das lentes 
-	tr(em termos de contas é fácil, 
+[nope] permitir mudar a natureza das lentes
+	tr(em termos de contas é fácil,
 	    o prjcairo só precisa de uma ligeira adaptação e o cairofunc também me
 	    parece que sim)
 	jo(do estilo alterar de convergente para divergente? )
 	tr(sim)
 
-[ ] Guardar definições num ficheiro e o programa abre esse ficheiro 
+[ ] Guardar definições num ficheiro e o programa abre esse ficheiro
     sempre que inicia.
         jo(solução genial: guardar pdat em modo binário; problemas: ponteiros)
 
 [ ] Guardar configurações em ficheiro e o programa consegue abrir esses
-    ficheiros 
+    ficheiros
 	jo( fácil se quiseres apenas uma caixa em que escreves o nome do ficheiro ).
 
 [x] alterar distâcias focais com o rato
 	jo(hell yes!)
-	tr(Puxar as lentes para cima e para baixo? 
+	tr(Puxar as lentes para cima e para baixo?
           O eixo dos yy não serve de nada
 	  Ou então puxar um ponto como na simulação de Berkely.
           assim é mais intuitivo)
@@ -76,6 +76,6 @@ Ideias soltas:
           de berkley).
 	tr(done)
 
-btw: 
+btw:
 projecto do carlos/leonel
-https://github.com/garridinho/Programacao-lentes 
+https://github.com/garridinho/Programacao-lentes

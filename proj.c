@@ -10,9 +10,6 @@
 #include <miscui.h>
 #include <draw.h>
 
-#ifndef RENDER
-#define RENDER expose_ev
-#endif
 
 int
 main (int argc, char **argv)
@@ -110,7 +107,7 @@ main (int argc, char **argv)
 
   lensfrm = gtk_frame_new ("Tipo de Lentes");
   gtk_box_pack_end (GTK_BOX (datbox), lensfrm, TRUE, FALSE, 10);
-  
+
   rlbox = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (lensfrm), rlbox);
 
@@ -177,7 +174,7 @@ main (int argc, char **argv)
 
   pdat->barang.lbl = gtk_label_new (pdat->barang.str);
   gtk_box_pack_start (GTK_BOX (lblbox[6]), pdat->barang.lbl, FALSE, FALSE, 10);
-  
+
   //escala
   pdat->barxx.adj = gtk_adjustment_new (2, 1, 10.0, 0.1, 1.0, 1.0);
 
@@ -187,7 +184,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (xxfrm), barsclx);
 
   pdat->barxx.lbl = gtk_label_new (pdat->barxx.str);
- 
+
   noteb4xx = gtk_hbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (notebp[2]), noteb4xx);
 
@@ -196,21 +193,21 @@ main (int argc, char **argv)
 
   stuffings = gtk_label_new ("");
   gtk_box_pack_start (GTK_BOX (lblbox[8]), stuffings, FALSE, FALSE, 110);
-  
- 
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
   //botões
   button = gtk_button_new_with_label ("Recomeçar");
-  gtk_table_attach_defaults (GTK_TABLE (btntbl), button, 
+  gtk_table_attach_defaults (GTK_TABLE (btntbl), button,
 			    1, 4, 0, 1);
 
   lunbtn = gtk_button_new_with_label("Criar Luneta");
-  gtk_table_attach_defaults (GTK_TABLE (btntbl), lunbtn, 
+  gtk_table_attach_defaults (GTK_TABLE (btntbl), lunbtn,
 			    1, 4, 1, 2);
 
   colorbtn = gtk_button_new_with_label ("Cores");
-  gtk_table_attach_defaults (GTK_TABLE (btntbl), colorbtn, 
+  gtk_table_attach_defaults (GTK_TABLE (btntbl), colorbtn,
 			    1, 4, 2, 3);
 
   pdat->virtbtn = gtk_check_button_new_with_label("Raios Virtuais");
@@ -258,7 +255,7 @@ main (int argc, char **argv)
   gtk_box_pack_start( GTK_BOX (optnbox), btntbl, FALSE, FALSE, 15);
 
 ////////////////////////////////////////////////////////////////////////////////
-  //notebook 
+  //notebook
 
   notelbl[0] = gtk_label_new ("Posicao das Lentes");
   notelbl[1] = gtk_label_new ("Distancias Focais");
@@ -269,7 +266,7 @@ main (int argc, char **argv)
   for(i=0; i<3; i++)
     {
       gtk_notebook_append_page (GTK_NOTEBOOK (noteb), notebp[i], NULL);
-      gtk_notebook_set_tab_label(GTK_NOTEBOOK (noteb), notebp[i], 
+      gtk_notebook_set_tab_label(GTK_NOTEBOOK (noteb), notebp[i],
 				 notelbl[i]);
     }
 
@@ -301,22 +298,22 @@ main (int argc, char **argv)
 
   gtk_widget_add_events (pdat->window, GDK_BUTTON_PRESS_MASK);
 
-  gtk_widget_set_events (pdat->window, 
-			 GDK_POINTER_MOTION_MASK | 
-			 GDK_BUTTON_PRESS_MASK | 
+  gtk_widget_set_events (pdat->window,
+			 GDK_POINTER_MOTION_MASK |
+			 GDK_BUTTON_PRESS_MASK |
 			 GDK_BUTTON_RELEASE_MASK);
 
   g_signal_connect_swapped (G_OBJECT (pdat->window), "destroy",
 			    G_CALLBACK (gtk_main_quit), NULL);
 
   //callbacks butões
-  g_signal_connect (G_OBJECT (button), "clicked", 
+  g_signal_connect (G_OBJECT (button), "clicked",
 		    G_CALLBACK (set_val), pdat);
 
-  g_signal_connect (G_OBJECT (lunbtn), "clicked", 
+  g_signal_connect (G_OBJECT (lunbtn), "clicked",
 		    G_CALLBACK (luneta), pdat);
 
-  g_signal_connect (G_OBJECT (colorbtn), "clicked", 
+  g_signal_connect (G_OBJECT (colorbtn), "clicked",
 		    G_CALLBACK (colormenu), pdat);
 
   g_signal_connect (G_OBJECT (pdat->btnlock.name), "toggled",
@@ -351,16 +348,16 @@ main (int argc, char **argv)
 		    G_CALLBACK (upd_adj_free), pdat);
 
   //callbacks janela / Xwindows
-  g_signal_connect (pdat->window, "expose-event", 
-		    G_CALLBACK (RENDER), pdat);
+  g_signal_connect (pdat->window, "expose-event",
+		    G_CALLBACK (expose_ev), pdat);
 
-  g_signal_connect (pdat->window, "motion-notify-event", 
+  g_signal_connect (pdat->window, "motion-notify-event",
 		    G_CALLBACK (titanmouse), pdat);
 
-  g_signal_connect (pdat->window, "button_press_event", 
+  g_signal_connect (pdat->window, "button_press_event",
 		    G_CALLBACK (titanmouse), pdat);
 
-  g_signal_connect (pdat->window, "button_release_event", 
+  g_signal_connect (pdat->window, "button_release_event",
 		    G_CALLBACK (titanmouse), pdat);
 
   // neste caso o configure-event é accionado por mudança no tamanho da janela
@@ -369,7 +366,7 @@ main (int argc, char **argv)
 
   gtk_widget_set_app_paintable (pdat->window, TRUE);
 
-////////////////////////////////////////////////////////////////////////////////  
+////////////////////////////////////////////////////////////////////////////////
   gtk_widget_show_all (pdat->window);
   gtk_main ();
 
