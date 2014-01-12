@@ -1,3 +1,2 @@
-Este é um programa para simular uma luneta terrestre
-ele desenha o esquema optico com os raios e o cenas
-
+para compilar usar "make" para correr o programa usar ./galileo
+para compilar a documentação correr "make" na pasta doc

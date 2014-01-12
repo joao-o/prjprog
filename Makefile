@@ -19,7 +19,7 @@ PROGS  = proj.c callbacks.c miscui.c draw.c
 OBJECT = proj.o callbacks.o miscui.o draw.o
 TESTE = cairotest.c
 
-all: comp link pdf
+all: comp link 
 
 optimus:CFLAGS += $(OPT_FLAGS)
 optimus:LFLAGS += $(OPT_FLAGS)
@@ -45,14 +45,12 @@ draw.o: draw.c $(INCLUDE)
 miscui.o: miscui.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
-test: test.c
-	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $^ $(INC_FLAGS) $(LINK_LIBS)
-
 $(TARGET): $(OBJECT) $(INCLUDE)
 	$(CC) $(LFLAGS) -o $@ $^ $(LINK_LIBS)
 
-pdf: doc/Projtexshort.tex
+pdf: doc/Projtexshort.tex doc/instruc.tex
 	pdflatex  --output-directory doc/ doc/Projtexshort.tex
+	pdflatex  --output-directory doc/ doc/instruc.tex
 
 edit:
 	vim Makefile
@@ -61,4 +59,4 @@ count:
 	wc -l *.c
 
 clean:
-	$(RM) -f *~ *.o $(TARGET) test include/*~ texput.log 
+	$(RM) -f *~ *.o $(TARGET) test include/*~   

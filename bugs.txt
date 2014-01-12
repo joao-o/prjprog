@@ -1,3 +1,0 @@
-[fix]
-quando está divergente-convergente e a convergente está antes da distância focal da divergente aparece um raio estranho do lado esquerdo da divergente
-
