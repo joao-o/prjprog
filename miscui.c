@@ -7,6 +7,36 @@
 #include <stdlib.h>
 
 // Funções de UI
+const gchar *authors[2] = {"João Oliveira (79144)", "Tomás A. Reis (78811)"};
+
+void about (GtkWidget *widget, progdata *pdat)
+{
+  GtkWidget *dialog ;
+  GdkPixbuf *pixbuf ;
+  
+  pixbuf = gdk_pixbuf_new_from_file("icon0.png", NULL);
+
+  dialog = gtk_about_dialog_new();
+  gtk_window_set_title (GTK_WINDOW (dialog), "Sobre os Autores");
+  gtk_window_set_default_size (GTK_WINDOW(dialog), 600, 400);
+  gtk_about_dialog_set_name (GTK_ABOUT_DIALOG(dialog), 
+			     "Galileo");
+  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog), "versão 1.3"); 
+  gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG(dialog), 
+				authors);
+  gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG(dialog), 
+				  "Grupo 20");
+  gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG(dialog), 
+				 "Um Simulador Óptico de Luneta Terrestre"
+				 "\n para Unix");
+  gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), 
+			       "http:/github.com/joao-o/prjprog");
+  gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), pixbuf);
+  g_object_unref(pixbuf);
+
+  gtk_dialog_run(GTK_DIALOG (dialog));
+  gtk_widget_destroy(dialog);
+}
 
 void
 erroluneta (progdata * pdat)
@@ -85,7 +115,7 @@ colorreset (GtkWidget * widget, progdata *pdat)
   gdk_color_parse ("#FF8C00", &pdat->color[0]);
   gdk_color_parse ("#3636FF", &pdat->color[1]);
   gdk_color_parse ("#00CC33", &pdat->color[2]);
-  gdk_color_parse ("#66CC33", &pdat->color[3]);
+  gdk_color_parse ("#990931", &pdat->color[3]);
   gdk_color_parse ("#FFFF00", &pdat->color[4]);
   gdk_color_parse ("#00B3FF", &pdat->color[5]);
 
@@ -141,7 +171,7 @@ colorresetsing (GtkWidget * widget, progdata *pdat)
     }
   else if((GTK_TOGGLE_BUTTON(pdat->btn[3]))->active)
     {
-      gdk_color_parse ("#66CC33", &pdat->color[3]);
+      gdk_color_parse ("#990931", &pdat->color[3]);
       gtk_widget_modify_bg (pdat->btn[3],
 			    GTK_STATE_NORMAL, &pdat->color[3]);
       gtk_widget_modify_bg (pdat->btn[3],
