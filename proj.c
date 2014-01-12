@@ -117,8 +117,7 @@ main (int argc, char **argv)
   btntbl = gtk_table_new (4 , 5, TRUE);
   gtk_table_set_row_spacings(GTK_TABLE(btntbl), 5);
   gtk_table_set_col_spacings(GTK_TABLE(btntbl), 5);
-  gtk_box_pack_end( GTK_BOX (optnbox), btntbl, FALSE, FALSE, 15);
-
+ 
 ////////////////////////////////////////////////////////////////////////////////
   // adjusts e barras
 
@@ -255,6 +254,8 @@ main (int argc, char **argv)
 			GTK_STATE_PRELIGHT, &pdat->btnlock.colorhigh);
   gtk_widget_modify_bg (pdat->btnlock.name,
 			GTK_STATE_ACTIVE, &pdat->btnlock.coloron);
+
+  gtk_box_pack_start( GTK_BOX (optnbox), btntbl, FALSE, FALSE, 15);
 
 ////////////////////////////////////////////////////////////////////////////////
   //notebook 
