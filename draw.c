@@ -203,10 +203,10 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
       cairo_set_dash (cr, nodash, 0, 0);
 
       cairo_set_source_rgb (cr, 1, 0.55, 0);
-      draw_vspear (pdat->phys.c.pos, pdat->phys.axis, pdat->ldat.ylen,
+      draw_vspear (pdat->phys.c.pos, pdat->phys.axis, pdat->ldat.ylen - 15,
 		   pdat->phys.c.focus, cr);
       pdat->ldat.headwid1 = draw_vspear (pdat->phys.c.pos,
-					 pdat->phys.axis, -pdat->ldat.ylen,
+					 pdat->phys.axis, - pdat->ldat.ylen + 15,
 					 pdat->phys.c.focus, cr);
 
       cairo_arc (cr, pdat->phys.c.pos + pdat->phys.c.focus, pdat->phys.axis,
