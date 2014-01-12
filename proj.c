@@ -25,7 +25,7 @@ main (int argc, char **argv)
   GtkWidget *button, *barlensl, *barlensr,
     *barfocc, *barfocd, *barangl, *lunbtn,
     *barsclx, *lblpos, *lblfoc, *colorbtn,
-    *ampxx, *redxx, *lenstype2, *stuffings;
+    *lenstype2, *stuffings;
 
   // boxes
   GtkWidget *hbox1, *vbox1, *topbox, *midbox, *setbox, *datbox,
@@ -107,7 +107,7 @@ main (int argc, char **argv)
     }
 
   lensfrm = gtk_frame_new ("Tipo de Lentes");
-  gtk_box_pack_end (GTK_BOX (optnbox), lensfrm, TRUE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (datbox), lensfrm, TRUE, FALSE, 10);
   
   rlbox = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (lensfrm), rlbox);
@@ -205,7 +205,6 @@ main (int argc, char **argv)
 			    1, 4, 0, 1);
 
   lunbtn = gtk_button_new_with_label("Criar Luneta");
-  //  gtk_box_pack_end(GTK_BOX(optnbox), lunbtn, FALSE, FALSE, 5);
   gtk_table_attach_defaults (GTK_TABLE (btntbl), lunbtn, 
 			    1, 4, 1, 2);
 
@@ -234,6 +233,7 @@ main (int argc, char **argv)
   lenstype2 = gtk_radio_button_new_with_label(gtk_radio_button_group 
 					  (GTK_RADIO_BUTTON (pdat->lenstype)),
 					  "Desenhadas");
+
   gtk_container_add (GTK_CONTAINER (rlbox), lenstype2);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (lenstype2), FALSE);
 
@@ -277,6 +277,7 @@ main (int argc, char **argv)
 
   pdat->flg.virt = 1;
   pdat->mouse.trap = 0;
+
   gdk_color_parse ("#FF8C00", &pdat->color[0]);
   gdk_color_parse ("#3636FF", &pdat->color[1]);
   gdk_color_parse ("#00CC33", &pdat->color[2]);

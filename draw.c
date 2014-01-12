@@ -85,7 +85,7 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
   static int init = 0;
   static double buffer[5];	//espaço para fazer contas
 
-  pdat->phys.axis = pdat->drawbox->allocation.height / 2;
+  pdat->phys.axis = pdat->drawbox->allocation.height / 2 + 20;
 
   buffer[4] = tan ((M_PI / 180) * (GTK_ADJUSTMENT (pdat->barang.adj))->value);
 
@@ -207,7 +207,7 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
       cairo_set_dash (cr, nodash, 0, 0);
 
       //cairo_set_source_rgb (cr, 1, 0.55, 0);
-      gdk_cairo_set_source_color (cr, &pdat->color[1]);
+      gdk_cairo_set_source_color (cr, &pdat->color[0]);
       draw_vspear (pdat->phys.c.pos, pdat->phys.axis, pdat->ldat.ylen - 15,
 		   pdat->phys.c.focus, cr);
       pdat->ldat.headwid1 = draw_vspear (pdat->phys.c.pos,
@@ -219,7 +219,7 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
       cairo_fill (cr);
 
       //cairo_set_source_rgb (cr, 0.21, 0.21, 1);
-      gdk_cairo_set_source_color (cr, &pdat->color[0]);
+      gdk_cairo_set_source_color (cr, &pdat->color[1]);
       draw_vspear (pdat->phys.d.pos, pdat->phys.axis, pdat->ldat.ylen,
 		   pdat->phys.d.focus, cr);
       pdat->ldat.headwid2 = draw_vspear (pdat->phys.d.pos,

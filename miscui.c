@@ -201,8 +201,10 @@ colormenu (GtkWidget *widget, progdata * pdat)
   mainbox = gtk_hbox_new(FALSE, 30);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->vbox), 
 		      mainbox, TRUE, TRUE, 30);
+
   btnbox = gtk_vbox_new(FALSE, 0);
   gtk_box_pack_start (GTK_BOX (mainbox), btnbox, TRUE, TRUE, 20);
+
   colorbox = gtk_vbox_new(FALSE, 0);
   gtk_box_pack_end (GTK_BOX (mainbox), colorbox, TRUE, TRUE, 20);
 
@@ -241,10 +243,14 @@ colormenu (GtkWidget *widget, progdata * pdat)
   gtk_box_pack_end (GTK_BOX (btnbox), resetsing, FALSE, FALSE, 5);
  
   pdat->colwhl = gtk_color_selection_new();
+
   gtk_box_pack_end (GTK_BOX (colorbox), pdat->colwhl, TRUE, TRUE, 0);
   gtk_color_selection_set_current_color(GTK_COLOR_SELECTION
 					(pdat->colwhl),
 					&pdat->color[0]);
+  pdat->ptclr = &pdat->color[0];
+
+
   for(i=0;i<6;i++)
     {
 
