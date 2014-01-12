@@ -11,7 +11,7 @@ LINK_FLAGS =
 CFLAGS     = $(W_FLAGS) $(INC_FLAGS)  $(CFLAGS_GTK)
 LFLAGS     = $(W_FLAGS) $(LINK_FLAGS) $(LINK_LIBS)
 
-CC = gcc
+CC =  gcc
 RM = /bin/rm
 
 TARGET = galileo
@@ -61,4 +61,4 @@ count:
 	wc -l *.c
 
 clean:
-	$(RM) -f *~ *.o $(TARGET) test include/*~ 
+	$(RM) -f *~ *.o $(TARGET) test include/*~ texput.log 
