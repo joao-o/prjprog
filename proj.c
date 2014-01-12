@@ -267,9 +267,9 @@ main (int argc, char **argv)
 
   //butão toggle com cores
 
-  gdk_color_parse ("red", &pdat->btnlock.coloron);
-  gdk_color_parse ("green", &pdat->btnlock.coloroff);
-  gdk_color_parse ("orange", &pdat->btnlock.colorhigh);
+  gdk_color_parse ("#F73C27", &pdat->btnlock.coloron);
+  gdk_color_parse ("#00CC33", &pdat->btnlock.coloroff);
+  gdk_color_parse ("#F49F25", &pdat->btnlock.colorhigh);
   pdat->btnlock.name = gtk_toggle_button_new_with_label (pdat->btnlock.label);
 
   gtk_table_attach_defaults (GTK_TABLE (btntbl), pdat->btnlock.name,
