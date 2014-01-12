@@ -185,8 +185,19 @@ luneta (GtkWidget * widget, progdata *pdat)
     erroluneta (pdat);
   else
     {
-      *pdat->lnsd.pos = *pdat->lnsc.pos +
-	(*pdat->lnsc.focus - *pdat->lnsd.focus - 5);
+      if( *pdat->lnsc.pos + (*pdat->lnsc.focus - *pdat->lnsd.focus - 5)
+	  > (GTK_ADJUSTMENT (pdat->barr.adj))->upper)
+	{
+	  *pdat->lnsd.pos = (GTK_ADJUSTMENT (pdat->barr.adj))->upper - 10;
+	  *pdat->lnsc.pos = *pdat->lnsd.pos -
+	    (*pdat->lnsc.focus - *pdat->lnsd.focus - 5);
+	  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj),
+				 "value-changed");
+	}
+      else
+	*pdat->lnsd.pos = *pdat->lnsc.pos +
+	  (*pdat->lnsc.focus - *pdat->lnsd.focus - 5);
+      
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
 			     "value-changed");
     }

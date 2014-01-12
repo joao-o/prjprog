@@ -17,20 +17,29 @@ void about (GtkWidget *widget, progdata *pdat)
   pixbuf = gdk_pixbuf_new_from_file("icon0.png", NULL);
 
   dialog = gtk_about_dialog_new();
+
   gtk_window_set_title (GTK_WINDOW (dialog), "Sobre os Autores");
+
   gtk_window_set_default_size (GTK_WINDOW(dialog), 600, 400);
+
   gtk_about_dialog_set_name (GTK_ABOUT_DIALOG(dialog), 
 			     "Galileo");
+
   gtk_about_dialog_set_version (GTK_ABOUT_DIALOG(dialog), "versão 1.3"); 
+
   gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG(dialog), 
 				authors);
+
   gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG(dialog), 
 				  "Grupo 20");
+
   gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG(dialog), 
 				 "Um Simulador Óptico de Luneta Terrestre"
 				 "\n para Unix");
+
   gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), 
 			       "http:/github.com/joao-o/prjprog");
+
   gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), pixbuf);
   g_object_unref(pixbuf);
 
@@ -73,7 +82,7 @@ colorchange(GtkWidget * widget, progdata *pdat)
   gtk_color_selection_get_current_color(GTK_COLOR_SELECTION
 					(pdat->colwhl), pdat->ptclr);
 
-  for(i=0;i<6;i++)
+  for(i=0;i<8;i++)
     {
       gtk_widget_modify_bg (pdat->btn[i],
 			    GTK_STATE_NORMAL, &pdat->color[i]);
@@ -91,7 +100,7 @@ gboolean
 colorselec (GtkWidget *widget, progdata *pdat)
 {
   int i;
-  for(i = 0;i<6;i++)
+  for(i = 0;i<8;i++)
     {
       if((GTK_TOGGLE_BUTTON(pdat->btn[i]))->active)
 	{
@@ -118,6 +127,8 @@ colorreset (GtkWidget * widget, progdata *pdat)
   gdk_color_parse ("#990931", &pdat->color[3]);
   gdk_color_parse ("#FFFF00", &pdat->color[4]);
   gdk_color_parse ("#00B3FF", &pdat->color[5]);
+  gdk_color_parse ("#FFFFFF", &pdat->color[6]);
+  gdk_color_parse ("#000000", &pdat->color[7]);
 
   for(i=0;i<6;i++)
     {
@@ -199,6 +210,26 @@ colorresetsing (GtkWidget * widget, progdata *pdat)
       gtk_widget_modify_bg (pdat->btn[5],
 			    GTK_STATE_ACTIVE, &pdat->color[5]);
     }
+ else if((GTK_TOGGLE_BUTTON(pdat->btn[6]))->active)
+    {
+      gdk_color_parse ("#FFFFFF", &pdat->color[6]);
+      gtk_widget_modify_bg (pdat->btn[6],
+			    GTK_STATE_NORMAL, &pdat->color[6]);
+      gtk_widget_modify_bg (pdat->btn[6],
+			    GTK_STATE_PRELIGHT, &pdat->color[6]);
+      gtk_widget_modify_bg (pdat->btn[6],
+			    GTK_STATE_ACTIVE, &pdat->color[6]);
+    }
+ else if((GTK_TOGGLE_BUTTON(pdat->btn[7]))->active)
+    {
+      gdk_color_parse ("#000000", &pdat->color[7]);
+      gtk_widget_modify_bg (pdat->btn[5],
+			    GTK_STATE_NORMAL, &pdat->color[7]);
+      gtk_widget_modify_bg (pdat->btn[5],
+			    GTK_STATE_PRELIGHT, &pdat->color[7]);
+      gtk_widget_modify_bg (pdat->btn[5],
+			    GTK_STATE_ACTIVE, &pdat->color[7]);
+    }
 
   colorselec(NULL, pdat);
   gtk_widget_queue_draw (pdat->window);
@@ -261,6 +292,16 @@ colormenu (GtkWidget *widget, progdata * pdat)
 						    (pdat->btn[4])),
 						   "Raios Virtuais");
 
+  pdat->btn[6] =  gtk_radio_button_new_with_label (gtk_radio_button_group
+						   (GTK_RADIO_BUTTON
+						    (pdat->btn[5])),
+						   "Eixo");
+
+  pdat->btn[7] =  gtk_radio_button_new_with_label (gtk_radio_button_group
+						   (GTK_RADIO_BUTTON
+						    (pdat->btn[6])),
+						   "Fundo");
+
   resetsing =  gtk_button_new_with_label ("Restaurar Cor");
   reset =  gtk_button_new_with_label ("Cores Predefinidas");
 
@@ -278,7 +319,7 @@ colormenu (GtkWidget *widget, progdata * pdat)
   pdat->ptclr = &pdat->color[0];
 
 
-  for(i=0;i<6;i++)
+  for(i=0;i<8;i++)
     {
 
       gtk_box_pack_start (GTK_BOX (btnbox), pdat->btn[i], FALSE, FALSE, 0);

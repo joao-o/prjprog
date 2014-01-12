@@ -89,14 +89,14 @@ typedef struct progdata
   bardat barxx;
   tbtn btnlock;
   GtkWidget *window, *drawbox, *lenstype, 
-    *virtbtn, *distbtn, *combocolor, *btn[6],
+    *virtbtn, *distbtn, *combocolor, *btn[8],
     *colwhl;
   drawdata ldat;
   lenspt lnsc,lnsd;
   flag flg;
   rodent mouse;
   physdata phys;
-  GdkColor color[6], *ptclr;
+  GdkColor color[8], *ptclr;
 } progdata;
 
 //tentar manter as coisas modulares e nao acrescentar coisas do tipo adj1,adj2.

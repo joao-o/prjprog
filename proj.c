@@ -9,7 +9,33 @@
 #include <callbacks.h>
 #include <miscui.h>
 #include <draw.h>
+/*
 
+Mapa do Código:
+
+proj.c
+- Função "main"
+-- Cria janela com widgets
+
+callbacks.c
+- Funções chamadas pelos widgets criados em proj.c
+-- Funções auxiliares aos callbacks 
+	(i.e.: funções chamadas internamente pelos callbacks)
+
+draw.c
+- Função de desenho "expose_ev"
+-- Funções auxiliares à função de desenho
+
+miscui.c
+- Funções que criam janelas de diálogo
+-- Callbacks dos widgets presentas nas janelas de dialogo
+
+Compilar o programa:
+make
+Executar o programa:
+./galileo
+
+*/
 
 int
 main (int argc, char **argv)
@@ -288,6 +314,8 @@ main (int argc, char **argv)
   gdk_color_parse ("#990931", &pdat->color[3]);
   gdk_color_parse ("#FFFF00", &pdat->color[4]);
   gdk_color_parse ("#00B3FF", &pdat->color[5]);
+  gdk_color_parse ("#FFFFFF", &pdat->color[6]);
+  gdk_color_parse ("#000000", &pdat->color[7]);
 
   pdat->lnsc.pos = &(GTK_ADJUSTMENT (pdat->barl.adj)->value);
   pdat->lnsc.focus = &(GTK_ADJUSTMENT (pdat->barfc.adj)->value);
