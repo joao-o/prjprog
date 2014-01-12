@@ -20,6 +20,12 @@ dsign (double x)
   return (x > 0) - (x < 0);
 }
 
+double
+min (double x,double y)
+{
+  return x > y ? y : x ;
+}
+
 // ^ ...
 
 void
@@ -82,7 +88,6 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
   pdat->phys.axis = pdat->drawbox->allocation.height / 2;
 
   buffer[4] = tan ((M_PI / 180) * (GTK_ADJUSTMENT (pdat->barang.adj))->value);
-  pdat->phys.d.focus = -pdat->phys.d.focus;
 
   (GTK_ADJUSTMENT (pdat->barl.adj))->upper =
     (*wwidth - TOL) * *pdat->phys.scl;
@@ -96,6 +101,7 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
       ++init;
     }
 
+  pdat->phys.d.focus = -pdat->phys.d.focus;
   cr = gdk_cairo_create (pdat->drawbox->window);
 
   // é aqui que a magia acontece 
@@ -134,10 +140,13 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
   buffer[3] = pdat->phys.axis - buffer[4] * (lens1->pos);	//ordenada na origem raio 
   buffer[1] = buffer[4] * buffer[0] + buffer[3];	//y foco lente 1
   buffer[2] = buffer[4] * lens2->pos + buffer[3];	//y raio eixo lente 2
-
+  buffer[4] = fabs(buffer[1]-pdat->phys.axis)>fabs(buffer[2]-pdat->phys.axis)?
+              buffer[2]:buffer[1];
+  
   // desenha reais
   draw_line (cr, 0, buffer[3], lens1->pos, pdat->phys.axis);	//e
-  draw_line (cr, lens1->pos, pdat->phys.axis, lens2->pos, buffer[2]);	//e
+  draw_line (cr, lens1->pos, pdat->phys.axis, min(buffer[0],lens2->pos),
+             buffer[4]);	//e
   draw_line (cr, 0, buffer[1] - pdat->phys.axis + buffer[3], lens1->pos, buffer[1]);	//p
   draw_line (cr, (lens1->pos), buffer[1], lens2->pos, buffer[1]);	//p
 
@@ -156,7 +165,7 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
           cairo_set_dash(cr, imgdsh, 2, 0);
           cairo_set_source_rgba (cr, 0, 0.8 , 0.2, 1);
 	  draw_varrow (buffer[0], pdat->phys.axis,
-		       pdat->phys.axis - buffer[1], 20, cr);
+		       pdat->phys.axis - buffer[1], 150, cr);
 	}
       else
 	{
@@ -174,9 +183,17 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 	}
       cairo_stroke (cr);
     }
+  if(buffer[0] < lens2->pos && buffer[0] > lens1->pos)
+    {
+      cairo_set_dash (cr, nodash, 0, 0);
+      cairo_set_source_rgba (cr, 0., 0.8, 0.2, 1);
+      draw_varrow (buffer[0], pdat->phys.axis,
+		   pdat->phys.axis - buffer[1], 20, cr);
+      cairo_stroke(cr);
+    }
 
-  pdat->ldat.ylen = (fabs (buffer[2] - pdat->phys.axis) > 87.5) ?
-    buffer[2] - pdat->phys.axis : 87.5;
+  pdat->ldat.ylen = (fabs (buffer[1] - pdat->phys.axis) > 87.5) ?
+    buffer[1] - pdat->phys.axis : 87.5;
 
 
   //lentes esquemáticas
@@ -213,7 +230,7 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
       //Modo "desenhadas"
       cairo_set_source_rgba (cr, 0.75, 0.70, 0.55, 0.6);
 
-      buffer[3] = 2 * *pdat->lnsc.focus + pdat->ldat.ylen * 2 + 200;
+      buffer[3] = 2 * pdat->phys.c.focus + pdat->ldat.ylen * 2 + 200;
       buffer[2] = sqrt (buffer[3] * buffer[3] -
 			(pdat->ldat.ylen) * (pdat->ldat.ylen));
 
@@ -231,7 +248,7 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 
       cairo_set_source_rgba (cr, 0.50, 0.50, 0.65, 0.6);
 
-      buffer[3] = -2 * *pdat->lnsd.focus + pdat->ldat.ylen * 2 + 200;
+      buffer[3] = -2 * pdat->phys.d.focus + pdat->ldat.ylen * 2 + 200;
       buffer[2] = sqrt (buffer[3] * buffer[3] -
 			(pdat->ldat.ylen) * (pdat->ldat.ylen));
 
@@ -282,6 +299,15 @@ expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
     }
 
   cairo_set_dash (cr, nodash, 0, 0);
+
+  if(buffer[2] > lens2->pos)
+    {
+      cairo_set_source_rgba (cr, 0., 0.8, 0.2, 1);
+      draw_varrow (buffer[2], pdat->phys.axis,
+		   pdat->phys.axis - buffer[3], 150, cr);
+      cairo_stroke(cr);
+    }
+
   cairo_set_source_rgba (cr, 1., 1., 0., 1.);
 
   draw_line (cr, lens2->pos, pdat->phys.axis, *wwidth,

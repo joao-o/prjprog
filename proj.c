@@ -196,13 +196,7 @@ main (int argc, char **argv)
   stuffings = gtk_label_new ("");
   gtk_box_pack_start (GTK_BOX (lblbox[8]), stuffings, FALSE, FALSE, 0);
   
-  pdat->lnsc.pos = &(GTK_ADJUSTMENT (pdat->barl.adj)->value);
-  pdat->lnsc.focus = &(GTK_ADJUSTMENT (pdat->barfc.adj)->value);
-  pdat->barl.alt = &pdat->barr;
-  pdat->barr.alt = &pdat->barl;
-  pdat->lnsd.pos = &(GTK_ADJUSTMENT (pdat->barr.adj)->value);
-  pdat->lnsd.focus = &(GTK_ADJUSTMENT (pdat->barfd.adj)->value);
-  pdat->phys.scl =&(GTK_ADJUSTMENT(pdat->barxx.adj))->value;
+ 
 
 ////////////////////////////////////////////////////////////////////////////////
   //botões
@@ -290,6 +284,13 @@ main (int argc, char **argv)
   gdk_color_parse ("#FFFF00", &pdat->color[4]);
   gdk_color_parse ("#00B3FF", &pdat->color[5]);
 
+  pdat->lnsc.pos = &(GTK_ADJUSTMENT (pdat->barl.adj)->value);
+  pdat->lnsc.focus = &(GTK_ADJUSTMENT (pdat->barfc.adj)->value);
+  pdat->barl.alt = &pdat->barr;
+  pdat->barr.alt = &pdat->barl;
+  pdat->lnsd.pos = &(GTK_ADJUSTMENT (pdat->barr.adj)->value);
+  pdat->lnsd.focus = &(GTK_ADJUSTMENT (pdat->barfd.adj)->value);
+  pdat->phys.scl =&(GTK_ADJUSTMENT(pdat->barxx.adj))->value;
 
 ////////////////////////////////////////////////////////////////////////////////
   //sinais e callbacks

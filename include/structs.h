@@ -83,7 +83,6 @@ typedef struct progdata
   bardat barfc, barfd;
   bardat barang;
   bardat barxx;
-  bardat rgbscl[3];
   tbtn btnlock;
   GtkWidget *window, *drawbox, *lenstype, 
     *virtbtn, *distbtn, *combocolor, *btn[6],
@@ -96,5 +95,5 @@ typedef struct progdata
   GdkColor color[6], *ptclr;
 } progdata;
 
-//tentar manter as coisas modulares e nao acrescentar coisas do tipo adj1,adj1 .
+//tentar manter as coisas modulares e nao acrescentar coisas do tipo adj1,adj2.
 #endif
