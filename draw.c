@@ -205,8 +205,8 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
       cairo_stroke (cr);
     }
 
-  pdat->ldat.ylen = (fabs (buffer[1] - pdat->phys.axis) > 87.5) ?
-    buffer[1] - pdat->phys.axis : 87.5;
+  pdat->ldat.ylen = fabs((fabs (buffer[1] - pdat->phys.axis) > 87.5) ?
+			 buffer[1] - pdat->phys.axis : 87.5);
 
 
   //lentes esquemáticas
