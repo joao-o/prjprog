@@ -35,8 +35,9 @@ void about (GtkWidget *widget, progdata *pdat)
 
   gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG(dialog), 
 				 "Um Simulador Óptico de Luneta Terrestre"
-				 "\n para Unix\n Nenhum animal Foi Magoado\n 
-                                 Na Compilação deste programa");
+				 "\n para Unix"
+				 "\n\n[Nenhum animal foi magoado"
+				 "\n na compilação deste programa]");
 
   gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), 
 			       "http:/github.com/joao-o/prjprog");
