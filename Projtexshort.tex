@@ -1,0 +1,112 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[latin1,utf8]{inputenc}       % Tipos de caracteres
+\usepackage[portuges]{babel}             % Português
+\usepackage[a4paper,portrait]{geometry}  % Tipo de papel
+\usepackage{amsmath}                     % Extensões da American Mathematical Society
+\usepackage{multicol}                    % Para tratar colunas multiplas
+\usepackage{makeidx}                     % Para fazer índices
+\usepackage{color}                       % Para tratamento da cor
+\usepackage{fancyhdr}                    % Para cabeçalhos
+\usepackage{url}                         % Para tratar endereços 'url
+\usepackage{epstopdf}
+\usepackage[pdftex]{graphicx}
+\usepackage{graphics}
+\usepackage{fancyhdr}
+\usepackage{cleveref}
+\usepackage{hyperref}
+
+\oddsidemargin = 20pt                    % Margem do lado esquerdo: 31pt
+\topmargin = 15pt                        % Margem superior: 20pt  
+\headheight = 12pt                       % Tamanho do 'header': 12pt 
+\headsep = 25pt                          % Espaço entre o 'header' e o texto: 25pt
+\textheight = 592pt                      % Altura do texto: 592pt
+\textwidth = 390pt                       % Largura do texto: 390pt
+\marginparsep = 5pt                     % Espaço entre margem esquerda e o texto: 10pt
+\marginparwidth = 20pt                   % Margem esquerda: 35pt
+\footskip = 15pt                         % Espaço entre o texto e o 'footer': 30pt
+
+\hyphenation{asso-ciada}
+\input epsf
+
+\makeindex
+
+\begin{document}
+
+\title{\bf Breve Introdução ao Projecto "Luneta Terrestre Grupo 20"}
+\author{João Oliveira e Tomás Reis \\ 
+MEFT 1º Ano 1º Semestre \\ 
+Instituto Superior Técnico  \\
+Universidade de Lisboa\\}
+\date{12 de Janeiro de 2013}
+\maketitle
+
+\section{Óptica da Luneta Terrestre}
+A Luneta Terrestre foi desenhada e elaborada por Galileu. Trata-se de uma combinação bastante simples de uma lente convergente e uma lente divergente, em que a objectiva, a lente convergente, tem maior distância focal que a ocular, a lente divergente, estando a ocular colocada a uma distância da objectiva igual à diferença entre as distâncias focais.
+Esta combinação é utilizada para ampliar objectos a uma distância tal que possa ser tida como infinita, obtendo uma imagem não invertida. 
+\par
+ 
+\section{Utilização do Programa}
+
+Para começar a usar o programa basta, na linha de comandos, fazer {\bf make} na pasta disponibilizada para compilar os ficheiros e {\bf ./proj} para o executar.
+
+\subsection{Funcionalidades Básicas}
+O objectivo do programa é permitir ao utilizador simular um sistema óptico que pode formar uma luneta, uma lente convergente e uma lente divergente, e as ferramentas para o utilizador o alterar.
+
+\subsubsection{Posição das Lentes}
+O programa permite ao utilizador alterar a posição das lentes de duas formas distintas: através do rato ou através das barras horizontais no primeiro separador. Para alterar a posição das lentes do rato basta arrastar uma das lentes com o rato. Caso as duas lentes estejam sobrepostas, o programa dará prioridade à lente convergente. Para alterar a posição das lentes com as barras de ajuste basta seleccionar o separador {\bf Posição das Lentes} e alterar a posição de cada lente na barra respectiva.
+
+\subsubsection{Distância Focal das Lentes}
+
+A distância focal de cada lente pode ser alterada de forma semelhante. No separador {\bf Distâncias Focais} existe uma barra de ajuste para cada distâncial focal, permitindo valores até 300.
+A distância focal também pode ser alterada com o rato. Junto a cada lente existe um círculo. Este círculo pode ser arrastado com o rato, aproximando-o o afastando-o da lente. Aproximando este ponto da lente diminui a distância focal e afastando aumenta.
+\par 
+
+\subsubsection{Ângulo de Incidência}
+
+Como o objecto observado pela luneta terrestre está muito distante, os raios provenientes são paralelos. Como tal, o parâmetro relevante sobre os raios que são recebidos pela luneta é o ângulo de incidência. Para alterar o ângulo de incidência basta utilizar a primeira barra de ajuste no separador {\bf Angulo/Escala}.
+
+\subsection{Outras Opções do Programa}
+
+\subsubsection{Escala}
+
+No separador {\bf Angulo/Escala} é possível alterar a escala na segunda barra de ajuste. Alterar a escala reflecte uma multiplicação de todas as distâncias por um factor, ou seja funciona de forma semelhante a um zoom.
+\par
+
+\subsubsection{Raios Virtuais}
+
+Na caixa {\bf Opções} está disponível a opção {\bf Ver Raios Virtuais}. Entende-se por raios virtuais todas as linhas que reflectem prolongamentos de raios luminosos. Quando esta opção se encontra ligada, estes raios têm uma cor diferente e são desenhadas a tracejados. Quando desligada, não são visíveis. Também torna visíveis/invisíveis as imagens virtuais.
+\par
+
+\subsubsection{Fixar Distâncias}
+
+Na caixa {\bf Opções} está disponível a opção {\bf Fixar Distâncias}. Enquanto esta opção estiver ligada a distância entre as lentes será conservada quando uma das lentes é alterada. Isto limitará a alteração das lentes, de forma a que nunca seja possível arrastar uma lente para fora da área de desenho.
+\par
+
+\subsubsection{Recomeçar}
+
+O botão {\bf Recomeçar} altera as todas definições ajustáveis pelo utilizador aos valores iniciais. Isto inclui todas as barras de ajuste e butões.
+\par
+
+\subsubsection{Criar Luneta}
+
+O botão {\bf Criar Luneta} altera as posições das lentes de forma a que formem uma luneta terrestre. Para tal, a distância focal da lente convergente deve ser maior que a distância focal. É recomendado que a diferença entre distâncias focais seja grande para que se veja bem a luneta.
+\par
+
+\subsubsection{Cores}
+
+O botão {\bf Cores} abre um menu que permite ajustar as cores dos objectos desenhados. Isto  inclui as lentes (no modo "esquemáticas), os raios reais e virtuais e os objectos. Neste menu o botão {\bf Restaurar Cor} reverte a cor seleccionada para a cor predefinida e o botão {\bf Cores Predefinidas} restaura todas as cores.
+\par
+
+\subsubsection{Bloqueado/Desbloqueado}
+
+O botão {\bf Bloqueado/Desbloqueado} é semelhante ao botão {\bf Criar Luneta}, excepto que, enquanto estiver activo ("Bloqueado"), o programa força a existência de uma luneta. Isto é, por um lado, a posição das lentes não pode ser alterada directamente, e, por outro, caso as distâncias focais sejam alteradas a posição das lentes é automaticamente ajustada para formar uma luneta. Este botão bloqueia o botão {\bf Recomeçar}.
+
+\subsubsection{Tipo de Lentes} 
+
+A caixa {\bf Tipo de Lentes} apresenta duas opções para o desenho das lentes. A opção {\bf Esquemáticas} desenha as lentes como rectas encabeçadas por triângulos, como é padrão em esquemas de sistemas ópticos. A opção {\bf Desenhadas} desenha de uma forma ilustrativa as lentes, com um perfil de lente esférica.
+\par
+
+\par
+\end{document}
+
+-----------> footnotes
