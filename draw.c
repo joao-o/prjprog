@@ -152,9 +152,11 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
   // desenha reais
   draw_line (cr, 0, buffer[3], lens1->pos, pdat->phys.axis);
   //e
-  draw_line (cr, lens1->pos, pdat->phys.axis, min (buffer[0], lens2->pos), buffer[4]);
+  draw_line (cr, lens1->pos, pdat->phys.axis, min (buffer[0], lens2->pos),
+	     buffer[4]);
   //e
-  draw_line (cr, 0, buffer[1] - pdat->phys.axis + buffer[3], lens1->pos, buffer[1]);
+  draw_line (cr, 0, buffer[1] - pdat->phys.axis + buffer[3], lens1->pos,
+	     buffer[1]);
   //p
   draw_line (cr, (lens1->pos), buffer[1], lens2->pos, buffer[1]);
   //p
@@ -168,8 +170,10 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
       gdk_cairo_set_source_color (cr, &pdat->color[5]);
       if (lens1->focus < 0)
 	{
-	  draw_line (cr, buffer[0], buffer[1], lens1->pos, buffer[1]);	//e
-	  draw_line (cr, buffer[0], buffer[1], lens1->pos, pdat->phys.axis);	//p
+	  draw_line (cr, buffer[0], buffer[1], lens1->pos, buffer[1]);	
+          //e
+	  draw_line (cr, buffer[0], buffer[1], lens1->pos, pdat->phys.axis);	
+          //p
 	  cairo_stroke (cr);
 	  cairo_set_dash (cr, imgdsh, 2, 0);
 	  gdk_cairo_set_source_color (cr, &pdat->color[2]);
