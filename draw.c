@@ -4,8 +4,6 @@
 #include <math.h>
 
 #include <structs.h>
-#include <cairofunc.h>
-#include <phys.h>
 #include <time.h>
 #include <callbacks.h>
 
@@ -77,7 +75,7 @@ draw_vspear (double x, double y, double hgt, double focus, cairo_t * cr)
 
 
 gboolean
-expose_e (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
+expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 {
   cairo_t *cr;
   lens *lens1, *lens2;

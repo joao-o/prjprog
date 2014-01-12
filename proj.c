@@ -7,8 +7,6 @@
 
 #include <structs.h>
 #include <callbacks.h>
-#include <prjcairo.h>
-#include <cairofunc.h>
 #include <miscui.h>
 #include <draw.h>
 
