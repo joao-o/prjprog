@@ -9,6 +9,7 @@
 #include <callbacks.h>
 #include <miscui.h>
 #include <draw.h>
+#include <file.h>
 /*
 
 Mapa do Código:
@@ -44,16 +45,14 @@ main (int argc, char **argv)
 
   //barras e butões
   GtkWidget *button, *barlensl, *barlensr,
-    *barfocc, *barfocd, *barangl, *lunbtn,
-    *barsclx, *lblpos, *lblfoc, *colorbtn,
-    *lenstype2, *stuffings, *abtbtn;
+    *barfocc, *barfocd, *barangl, *lunbtn, *filebtn,
+    *barsclx, *lblpos, *lblfoc, *colorbtn, *lenstype2, *stuffings, *abtbtn;
 
   // boxes
   GtkWidget *hbox1, *vbox1, *topbox,
     *midbox, *setbox, *datbox,
     *noteb, *notebp[4], *padding,
-    *optnbox, *statusbox, *noteb4xx, *rlbox, *lblbox[9],
-    *btntbl, *notelbl[4];
+    *optnbox, *statusbox, *noteb4xx, *rlbox, *lblbox[9], *btntbl, *notelbl[4];
 
   //frames
   GtkWidget *dtbfrm, *drwfrm,
@@ -79,7 +78,8 @@ main (int argc, char **argv)
   pdat->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (pdat->window), 920, 650);
   gtk_window_set_position (GTK_WINDOW (pdat->window), GTK_WIN_POS_CENTER);
-  gtk_window_set_icon_from_file (GTK_WINDOW(pdat->window),"icon0.png",NULL);
+  gtk_window_set_icon_from_file (GTK_WINDOW (pdat->window), "icon0.png",
+				 NULL);
 ////////////////////////////////////////////////////////////////////////////////
   // layout geral das boxes
 
@@ -125,9 +125,9 @@ main (int argc, char **argv)
   gtk_box_pack_end (GTK_BOX (datbox), statusfrm, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (statusfrm), statusbox);
 
-  for(i=0; i<9; i++)
+  for (i = 0; i < 9; i++)
     {
-      lblbox[i] = gtk_hbox_new(FALSE, 0);
+      lblbox[i] = gtk_hbox_new (FALSE, 0);
       gtk_box_pack_start (GTK_BOX (statusbox), lblbox[i], FALSE, FALSE, 2);
     }
 
@@ -137,10 +137,10 @@ main (int argc, char **argv)
   rlbox = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (lensfrm), rlbox);
 
-  btntbl = gtk_table_new (5 , 5, TRUE);
-  gtk_table_set_row_spacings(GTK_TABLE(btntbl), 5);
-  gtk_table_set_col_spacings(GTK_TABLE(btntbl), 5);
- 
+  btntbl = gtk_table_new (6, 5, TRUE);
+  gtk_table_set_row_spacings (GTK_TABLE (btntbl), 5);
+  gtk_table_set_col_spacings (GTK_TABLE (btntbl), 5);
+
 ////////////////////////////////////////////////////////////////////////////////
   // adjusts e barras
 
@@ -199,7 +199,8 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (bangfrm), barangl);
 
   pdat->barang.lbl = gtk_label_new (pdat->barang.str);
-  gtk_box_pack_start (GTK_BOX (lblbox[6]), pdat->barang.lbl, FALSE, FALSE, 10);
+  gtk_box_pack_start (GTK_BOX (lblbox[6]), pdat->barang.lbl, FALSE, FALSE,
+		      10);
 
   //escala
   pdat->barxx.adj = gtk_adjustment_new (2, 1, 10.0, 0.1, 1.0, 1.0);
@@ -225,42 +226,41 @@ main (int argc, char **argv)
 ////////////////////////////////////////////////////////////////////////////////
   //botões
   button = gtk_button_new_with_label ("Recomeçar");
-  gtk_table_attach_defaults (GTK_TABLE (btntbl), button,
-			    1, 4, 0, 1);
+  gtk_table_attach_defaults (GTK_TABLE (btntbl), button, 1, 4, 0, 1);
 
-  lunbtn = gtk_button_new_with_label("Criar Luneta");
-  gtk_table_attach_defaults (GTK_TABLE (btntbl), lunbtn,
-			    1, 4, 1, 2);
+  lunbtn = gtk_button_new_with_label ("Criar Luneta");
+  gtk_table_attach_defaults (GTK_TABLE (btntbl), lunbtn, 1, 4, 1, 2);
 
   colorbtn = gtk_button_new_with_label ("Cores");
-  gtk_table_attach_defaults (GTK_TABLE (btntbl), colorbtn,
-			    1, 4, 2, 3);
+  gtk_table_attach_defaults (GTK_TABLE (btntbl), colorbtn, 1, 4, 2, 3);
+
+  filebtn = gtk_button_new_with_label ("Ficheiros");
+  gtk_table_attach_defaults (GTK_TABLE (btntbl), filebtn, 1, 4, 4, 5);
 
   abtbtn = gtk_button_new_with_label ("Sobre");
-  gtk_table_attach_defaults (GTK_TABLE (btntbl), abtbtn,
-  			    4, 5, 4, 5);
+  gtk_table_attach_defaults (GTK_TABLE (btntbl), abtbtn, 4, 5, 5, 6);
 
-  pdat->virtbtn = gtk_check_button_new_with_label("Raios Virtuais");
-  gtk_box_pack_start(GTK_BOX(optnbox), pdat->virtbtn, FALSE, FALSE, 5);
+  pdat->virtbtn = gtk_check_button_new_with_label ("Raios Virtuais");
+  gtk_box_pack_start (GTK_BOX (optnbox), pdat->virtbtn, FALSE, FALSE, 5);
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->virtbtn), TRUE);
 
   pdat->distbtn = gtk_check_button_new_with_label
     ("Fixar Distância\nentre Lentes");
-  gtk_box_pack_start(GTK_BOX(optnbox), pdat->distbtn, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (optnbox), pdat->distbtn, FALSE, FALSE, 0);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->distbtn), FALSE);
 
 
   //radio type
 
-  pdat->lenstype = gtk_radio_button_new_with_label(NULL,
-						   "Esquemáticas");
+  pdat->lenstype = gtk_radio_button_new_with_label (NULL, "Esquemáticas");
   gtk_container_add (GTK_CONTAINER (rlbox), pdat->lenstype);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->lenstype), TRUE);
 
-  lenstype2 = gtk_radio_button_new_with_label(gtk_radio_button_group
-					  (GTK_RADIO_BUTTON (pdat->lenstype)),
-					  "Desenhadas");
+  lenstype2 = gtk_radio_button_new_with_label (gtk_radio_button_group
+					       (GTK_RADIO_BUTTON
+						(pdat->lenstype)),
+					       "Desenhadas");
 
   gtk_container_add (GTK_CONTAINER (rlbox), lenstype2);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (lenstype2), FALSE);
@@ -273,7 +273,7 @@ main (int argc, char **argv)
   pdat->btnlock.name = gtk_toggle_button_new_with_label (pdat->btnlock.label);
 
   gtk_table_attach_defaults (GTK_TABLE (btntbl), pdat->btnlock.name,
-			    1, 4, 3, 4);
+			     1, 4, 3, 4);
 
   gtk_widget_modify_bg (pdat->btnlock.name,
 			GTK_STATE_NORMAL, &pdat->btnlock.coloroff);
@@ -282,7 +282,7 @@ main (int argc, char **argv)
   gtk_widget_modify_bg (pdat->btnlock.name,
 			GTK_STATE_ACTIVE, &pdat->btnlock.coloron);
 
-  gtk_box_pack_start( GTK_BOX (optnbox), btntbl, FALSE, FALSE, 15);
+  gtk_box_pack_start (GTK_BOX (optnbox), btntbl, FALSE, FALSE, 15);
 
 ////////////////////////////////////////////////////////////////////////////////
   //notebook
@@ -293,11 +293,11 @@ main (int argc, char **argv)
 
   noteb = gtk_notebook_new ();
 
-  for(i=0; i<3; i++)
+  for (i = 0; i < 3; i++)
     {
       gtk_notebook_append_page (GTK_NOTEBOOK (noteb), notebp[i], NULL);
-      gtk_notebook_set_tab_label(GTK_NOTEBOOK (noteb), notebp[i],
-				 notelbl[i]);
+      gtk_notebook_set_tab_label (GTK_NOTEBOOK (noteb), notebp[i],
+				  notelbl[i]);
     }
 
   gtk_box_pack_start (GTK_BOX (setbox), noteb, TRUE, TRUE, 0);
@@ -323,7 +323,7 @@ main (int argc, char **argv)
   pdat->barr.alt = &pdat->barl;
   pdat->lnsd.pos = &(GTK_ADJUSTMENT (pdat->barr.adj)->value);
   pdat->lnsd.focus = &(GTK_ADJUSTMENT (pdat->barfd.adj)->value);
-  pdat->phys.scl =&(GTK_ADJUSTMENT(pdat->barxx.adj))->value;
+  pdat->phys.scl = &(GTK_ADJUSTMENT (pdat->barxx.adj))->value;
 
 ////////////////////////////////////////////////////////////////////////////////
   //sinais e callbacks
@@ -332,21 +332,21 @@ main (int argc, char **argv)
 
   gtk_widget_set_events (pdat->window,
 			 GDK_POINTER_MOTION_MASK |
-			 GDK_BUTTON_PRESS_MASK |
-			 GDK_BUTTON_RELEASE_MASK);
+			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 
   g_signal_connect_swapped (G_OBJECT (pdat->window), "destroy",
 			    G_CALLBACK (gtk_main_quit), NULL);
 
   //callbacks butões
-  g_signal_connect (G_OBJECT (button), "clicked",
-		    G_CALLBACK (set_val), pdat);
+  g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (set_val), pdat);
 
-  g_signal_connect (G_OBJECT (lunbtn), "clicked",
-		    G_CALLBACK (luneta), pdat);
+  g_signal_connect (G_OBJECT (lunbtn), "clicked", G_CALLBACK (luneta), pdat);
 
   g_signal_connect (G_OBJECT (colorbtn), "clicked",
 		    G_CALLBACK (colormenu), pdat);
+
+  g_signal_connect (G_OBJECT (filebtn), "clicked",
+		    G_CALLBACK (filemenu), pdat);
 
   g_signal_connect (G_OBJECT (pdat->btnlock.name), "toggled",
 		    G_CALLBACK (lchange), pdat);
@@ -360,8 +360,7 @@ main (int argc, char **argv)
   g_signal_connect (G_OBJECT (lenstype2), "toggled",
 		    G_CALLBACK (typechange), pdat);
 
-  g_signal_connect (G_OBJECT (abtbtn), "clicked",
-		    G_CALLBACK (about), pdat);
+  g_signal_connect (G_OBJECT (abtbtn), "clicked", G_CALLBACK (about), pdat);
 
 
   //callbacks barras
@@ -406,7 +405,6 @@ main (int argc, char **argv)
   gtk_widget_show_all (pdat->window);
   gtk_main ();
 
-  free(pdat);
+  free (pdat);
   return 0;
 }
-

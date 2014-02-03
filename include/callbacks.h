@@ -13,4 +13,5 @@ extern gboolean scalechange (GtkWidget*, gpointer);
 extern gboolean typechange  (GtkWidget*, gpointer);
 extern gboolean luneta      (GtkWidget*, gpointer);
 extern gboolean titanmouse  (GtkWidget*, GdkEvent*, gpointer);
+
 #endif

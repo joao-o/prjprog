@@ -15,8 +15,8 @@ CC =  gcc
 RM = /bin/rm
 
 TARGET = galileo
-PROGS  = proj.c callbacks.c miscui.c draw.c
-OBJECT = proj.o callbacks.o miscui.o draw.o
+PROGS  = proj.c callbacks.c miscui.c draw.c file.c
+OBJECT = proj.o callbacks.o miscui.o draw.o file.o
 TESTE = cairotest.c
 
 all: comp link 
@@ -45,12 +45,11 @@ draw.o: draw.c $(INCLUDE)
 miscui.o: miscui.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
 
+file.o: file.c $(INCLUDE)
+	$(CC) $(CFLAGS) -c $< $(INC_FLAGS)
+
 $(TARGET): $(OBJECT) $(INCLUDE)
 	$(CC) $(LFLAGS) -o $@ $^ $(LINK_LIBS)
-
-pdf: doc/Projtexshort.tex doc/instruc.tex
-	pdflatex  --output-directory doc/ doc/Projtexshort.tex
-	pdflatex  --output-directory doc/ doc/instruc.tex
 
 edit:
 	vim Makefile

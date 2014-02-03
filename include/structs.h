@@ -26,7 +26,7 @@ typedef struct bardat bardat;
 struct bardat
 {
   GtkObject *adj;
-  GtkWidget *nome, *lbl;
+  GtkWidget *lbl;
   char str[40];
   double save;
   bardat *alt;
@@ -78,7 +78,7 @@ typedef struct physdata
   double axis;
   double ldist;
   double *scl; 
-} physdata;
+} ysdata;
 
 // struct principal com os dados do programa
 typedef struct progdata
@@ -90,7 +90,7 @@ typedef struct progdata
   tbtn btnlock;
   GtkWidget *window, *drawbox, *lenstype, 
     *virtbtn, *distbtn, *btn[8],
-    *colwhl;
+    *colwhl,*field;
   drawdata ldat;
   lenspt lnsc,lnsd;
   flag flg;
@@ -98,5 +98,14 @@ typedef struct progdata
   physdata phys;
   GdkColor color[8], *ptclr;
 } progdata;
+
+typedef struct filestruct
+{
+  double sbarl,sbarr,sbarfc,sbarfd,sbarang,sbarxx;
+  double vbarl,vbarr,vbarfc,vbarfd,vbarang,vbarxx;
+  GdkColor color[8];
+  unsigned int check;
+  flag flg;
+} filestruct;
 
 #endif

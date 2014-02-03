@@ -96,13 +96,13 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
       > (GTK_ADJUSTMENT (pdat->barl.adj))->upper)
 
     (GTK_ADJUSTMENT (pdat->barl.adj))->value =
-      (GTK_ADJUSTMENT (pdat->barl.adj))->upper-TOL;
+      (GTK_ADJUSTMENT (pdat->barl.adj))->upper - TOL;
 
   if ((GTK_ADJUSTMENT (pdat->barr.adj))->value
       > (GTK_ADJUSTMENT (pdat->barr.adj))->upper)
 
     (GTK_ADJUSTMENT (pdat->barr.adj))->value =
-      (GTK_ADJUSTMENT (pdat->barr.adj))->upper-TOL;
+      (GTK_ADJUSTMENT (pdat->barr.adj))->upper - TOL;
 
 
   //verifica se init é 0 e seguidamete incrementa-a
@@ -178,8 +178,8 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 
   cairo_stroke (cr);
 
-  buffer[4] = (buffer[1]-pdat->phys.axis)*
-    (lens2->pos - lens1->pos)/(lens2->pos - buffer[0]) + pdat->phys.axis;
+  buffer[4] = (buffer[1] - pdat->phys.axis) *
+    (lens2->pos - lens1->pos) / (lens2->pos - buffer[0]) + pdat->phys.axis;
 
   if (pdat->flg.virt)		//desenha virtuais
     {
@@ -187,11 +187,11 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
       gdk_cairo_set_source_color (cr, &pdat->color[5]);
       if (lens1->focus < 0)
 	{
-	  draw_line (cr, buffer[0], buffer[1], lens1->pos, buffer[1]);	
-          //e
+	  draw_line (cr, buffer[0], buffer[1], lens1->pos, buffer[1]);
+	  //e
 	  draw_line (cr, buffer[0], buffer[1], lens1->pos, pdat->phys.axis);
 	  draw_line (cr, buffer[0], buffer[1], lens1->pos, buffer[4]);
-          //p
+	  //p
 	  cairo_stroke (cr);
 	  cairo_set_dash (cr, imgdsh, 2, 0);
 	  gdk_cairo_set_source_color (cr, &pdat->color[2]);
@@ -199,10 +199,11 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 		       pdat->phys.axis - buffer[1], 150, cr);
 	}
       else
-	{	  
+	{
 	  if (buffer[0] > lens2->pos)
 	    {
-	      draw_line (cr, lens2->pos, pdat->phys.axis, buffer[0], buffer[1]);
+	      draw_line (cr, lens2->pos, pdat->phys.axis, buffer[0],
+			 buffer[1]);
 	      draw_line (cr, lens2->pos, buffer[2], buffer[0], buffer[1]);
 	      draw_line (cr, lens2->pos, buffer[1], buffer[0], buffer[1]);
 	      cairo_stroke (cr);
@@ -214,7 +215,7 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 	}
       cairo_stroke (cr);
     }
-  
+
   cairo_set_dash (cr, nodash, 0, 0);
   gdk_cairo_set_source_color (cr, &pdat->color[4]);
 
@@ -229,14 +230,14 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
       cairo_stroke (cr);
     }
 
-  if(lens1->focus < 0)
+  if (lens1->focus < 0)
     {
       draw_line (cr, lens2->pos, pdat->phys.axis, lens1->pos, buffer[4]);
       cairo_stroke (cr);
     }
 
-  pdat->ldat.ylen = fabs((fabs (buffer[1] - pdat->phys.axis) > 87.5) ?
-			 buffer[1] - pdat->phys.axis : 87.5);
+  pdat->ldat.ylen = fabs ((fabs (buffer[1] - pdat->phys.axis) > 87.5) ?
+			  buffer[1] - pdat->phys.axis : 87.5);
 
 
   //lentes esquemáticas
@@ -273,7 +274,7 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
     {
       //Modo "desenhadas"
       cairo_set_source_rgba (cr, 0.75, 0.70, 0.55, 0.6);
-     
+
       buffer[3] = 2 * pdat->phys.c.focus + pdat->ldat.ylen * 2 + 200;
       buffer[2] = sqrt (buffer[3] * buffer[3] -
 			(pdat->ldat.ylen) * (pdat->ldat.ylen));
@@ -317,7 +318,7 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 
   cairo_set_line_width (cr, RAY);
   buffer[3] = (buffer[0] - lens2->pos);	//difrença entre fc(l1) e pos(l2)
-  buffer[0] = (buffer[1] - pdat->phys.axis) / buffer[3];	
+  buffer[0] = (buffer[1] - pdat->phys.axis) / buffer[3];
   //declive do raio eixo lente2
 
   buffer[2] = (lens2->focus + buffer[3]);
@@ -339,7 +340,7 @@ expose_ev (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 	  draw_line (cr, lens2->pos, pdat->phys.axis, buffer[2], buffer[3]);
 	  draw_line (cr, lens2->pos, buffer[1], buffer[2], buffer[3]);
 	  cairo_stroke (cr);
-	  
+
 	  cairo_set_dash (cr, imgdsh, 2, 0);
 	  gdk_cairo_set_source_color (cr, &pdat->color[3]);
 	  draw_varrow (buffer[2], pdat->phys.axis,

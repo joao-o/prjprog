@@ -29,7 +29,7 @@ upd_phys (progdata * pdat)
 }
 
 gboolean
-cfg_event (GtkWidget * widget, GdkEventExpose * event, progdata *pdat)
+cfg_event (GtkWidget * widget, GdkEventExpose * event, progdata * pdat)
 {
   gtk_widget_queue_draw (pdat->window);
   return FALSE;
@@ -52,14 +52,15 @@ upd_mod (bardat * barra, int offset)
     (GTK_ADJUSTMENT (barra->adj))->value =
       (GTK_ADJUSTMENT (barra->adj))->lower;
 
-  sprintf (barra->str + offset, "%5.1f", (GTK_ADJUSTMENT (barra->adj))->value);
+  sprintf (barra->str + offset, "%5.1f",
+	   (GTK_ADJUSTMENT (barra->adj))->value);
   gtk_label_set_text (GTK_LABEL (barra->lbl), barra->str);
   barra->save = (GTK_ADJUSTMENT (barra->adj))->value;
   return;
 }
 
 gboolean
-upd_adj (GtkWidget * widget, progdata *pdat)
+upd_adj (GtkWidget * widget, progdata * pdat)
 {
   bardat *barra;
   double temp;
@@ -84,13 +85,13 @@ upd_adj (GtkWidget * widget, progdata *pdat)
 	      temp < pdat->drawbox->allocation.width * *pdat->phys.scl - TOL)
 	    {
 	      GTK_ADJUSTMENT (barra->alt->adj)->value = temp;
-	      upd_mod (barra->alt,OFFPOS);
+	      upd_mod (barra->alt, OFFPOS);
 	    }
 	  else
 	    GTK_ADJUSTMENT (barra->adj)->value = barra->save;
 	}
 
-      upd_mod (barra,OFFPOS);
+      upd_mod (barra, OFFPOS);
       gtk_widget_queue_draw (pdat->window);
     }
   else
@@ -105,7 +106,7 @@ upd_adj (GtkWidget * widget, progdata *pdat)
 // callback que muda coisas quando os ajust mudam (independente do lock)
 
 gboolean
-upd_adj_free (GtkWidget * widget, progdata *pdat)
+upd_adj_free (GtkWidget * widget, progdata * pdat)
 {
   bardat *barra;
   int l = OFFFOC;
@@ -130,12 +131,12 @@ upd_adj_free (GtkWidget * widget, progdata *pdat)
     {
       *pdat->lnsd.pos = *pdat->lnsc.pos +
 	*pdat->lnsc.focus - *pdat->lnsd.focus - 5;
-      upd_mod (&(pdat->barr),l);
+      upd_mod (&(pdat->barr), l);
     }
   else if (pdat->flg.lock && !pdat->flg.dist)
     (GTK_ADJUSTMENT (barra->adj))->value = barra->save;
 
-  upd_mod(barra,l);
+  upd_mod (barra, l);
   gtk_widget_queue_draw (pdat->window);
 
   upd_phys (pdat);
@@ -145,7 +146,7 @@ upd_adj_free (GtkWidget * widget, progdata *pdat)
 //CSR do butão reset
 //Estes valores fazem uma luneta bonitinha
 gboolean
-set_val (GtkWidget * widget, progdata *pdat)
+set_val (GtkWidget * widget, progdata * pdat)
 {
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pdat->btnlock.name),
 				FALSE);
@@ -171,7 +172,7 @@ set_val (GtkWidget * widget, progdata *pdat)
 }
 
 gboolean
-luneta (GtkWidget * widget, progdata *pdat)
+luneta (GtkWidget * widget, progdata * pdat)
 {
   unsigned char t = 0;
 
@@ -185,7 +186,7 @@ luneta (GtkWidget * widget, progdata *pdat)
     erroluneta (pdat);
   else
     {
-      if( *pdat->lnsc.pos + (*pdat->lnsc.focus - *pdat->lnsd.focus - 5)
+      if (*pdat->lnsc.pos + (*pdat->lnsc.focus - *pdat->lnsd.focus - 5)
 	  > (GTK_ADJUSTMENT (pdat->barr.adj))->upper)
 	{
 	  *pdat->lnsd.pos = (GTK_ADJUSTMENT (pdat->barr.adj))->upper - 10;
@@ -197,7 +198,7 @@ luneta (GtkWidget * widget, progdata *pdat)
       else
 	*pdat->lnsd.pos = *pdat->lnsc.pos +
 	  (*pdat->lnsc.focus - *pdat->lnsd.focus - 5);
-      
+
       g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj),
 			     "value-changed");
     }
@@ -212,7 +213,7 @@ luneta (GtkWidget * widget, progdata *pdat)
 // CSR do butão "lock"
 
 gboolean
-lchange (GtkWidget * widget, progdata *pdat)
+lchange (GtkWidget * widget, progdata * pdat)
 {
   tbtn *btnlock;
   btnlock = &pdat->btnlock;
@@ -238,7 +239,7 @@ lchange (GtkWidget * widget, progdata *pdat)
 }
 
 gboolean
-virtchange (GtkWidget * widget, progdata *pdat)
+virtchange (GtkWidget * widget, progdata * pdat)
 {
   pdat->flg.virt = !pdat->flg.virt;
   gtk_widget_queue_draw (pdat->window);
@@ -247,7 +248,7 @@ virtchange (GtkWidget * widget, progdata *pdat)
 
 //ainda só funciona no rato
 gboolean
-distchange (GtkWidget * widget, progdata *pdat)
+distchange (GtkWidget * widget, progdata * pdat)
 {
   pdat->phys.ldist = fabs (*pdat->lnsc.pos - *pdat->lnsd.pos);
   pdat->flg.dist = !pdat->flg.dist;
@@ -255,7 +256,7 @@ distchange (GtkWidget * widget, progdata *pdat)
 }
 
 gboolean
-typechange (GtkWidget * widget, progdata *pdat)
+typechange (GtkWidget * widget, progdata * pdat)
 {
   pdat->flg.ltype = !pdat->flg.ltype;
   gtk_widget_queue_draw (pdat->window);
@@ -263,7 +264,7 @@ typechange (GtkWidget * widget, progdata *pdat)
 }
 
 gboolean
-scalechange (GtkWidget * widget, progdata *pdat)
+scalechange (GtkWidget * widget, progdata * pdat)
 {
   int *wwidth = &pdat->drawbox->allocation.width;
 
@@ -274,17 +275,17 @@ scalechange (GtkWidget * widget, progdata *pdat)
     (*wwidth - TOL) * *pdat->phys.scl;
   (GTK_ADJUSTMENT (pdat->barr.adj))->upper =
     (*wwidth - TOL) * *pdat->phys.scl;
- 
-  upd_mod(&pdat->barr,OFFPOS);
-  upd_mod(&pdat->barl,OFFPOS);
-  upd_phys(pdat);
 
-  upd_mod(&pdat->barxx,OFFSCL);
+  upd_mod (&pdat->barr, OFFPOS);
+  upd_mod (&pdat->barl, OFFPOS);
+  upd_phys (pdat);
+
+  upd_mod (&pdat->barxx, OFFSCL);
   gtk_widget_queue_draw (pdat->window);
 
   return TRUE;
 }
-    
+
 void
 jerrylens (progdata * pdat, bardat * barra)
 {
@@ -337,7 +338,7 @@ mickeyfocus (progdata * pdat, bardat * barra)
 
 //callback quando rato é usado para mexer coisas
 gboolean
-titanmouse (GtkWidget * widget, GdkEvent * event, progdata *pdat)
+titanmouse (GtkWidget * widget, GdkEvent * event, progdata * pdat)
 {
 
   /*
