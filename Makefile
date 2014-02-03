@@ -1,7 +1,7 @@
 W_FLAGS    = -Wall
 CFLAGS_GTK = `pkg-config --cflags glib-2.0` `pkg-config --cflags gtk+-2.0`
 DB_FLAGS   = -ggdb -g
-OPT_FLAGS  = -O3
+OPT_FLAGS  = -O2
 
 INC_FLAGS  = -I./include
 GTK_LINK   = `pkg-config --libs glib-2.0` `pkg-config --libs gtk+-2.0`

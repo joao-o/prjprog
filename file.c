@@ -14,25 +14,29 @@ savedata (GtkWidget * widget, progdata * pdat)
   filestruct *data;
   double *i, *j;
   GtkObject **k;
+
   fp = fopen (gtk_entry_get_text (GTK_ENTRY (pdat->field)), "wt");
   if (fp == NULL)
     return TRUE;
+
   data = malloc (sizeof (filestruct));
+  data->check = 0;
 
   for (i = &(pdat->barl.save), j = &data->sbarl;
        j <= &data->sbarxx; i = ((void *) i) + sizeof (bardat), j++)
-    *j = *i;
+    {
+      *j = *i;
+      data->check += *i;
+    }
 
   for (k = &(pdat->barl.adj), j = &data->vbarl;
        j <= &data->vbarxx; k = ((void *) k) + sizeof (bardat), j++)
-    *j = GTK_ADJUSTMENT (*k)->value;
-
+    {
+      *j = GTK_ADJUSTMENT (*k)->value;
+      data->check += GTK_ADJUSTMENT (*k)->value;
+    }
   memcpy (&data->color, &pdat->color, sizeof (GdkColor) * 8);
   memcpy (&data->flg, &pdat->flg, 1);
-
-  data->check = 0xffffffff;
-
-  printf("%lu\n",sizeof(GdkColor));
 
   fwrite (data, sizeof (filestruct), 1, fp);
   fclose (fp);
@@ -43,6 +47,48 @@ savedata (GtkWidget * widget, progdata * pdat)
 gboolean
 loaddata (GtkWidget * widget, progdata * pdat)
 {
+  FILE *fp;
+  filestruct *data;
+  double *i, *j;
+  GtkObject **k;
+  double check = 0;
+
+  fp = fopen (gtk_entry_get_text (GTK_ENTRY (pdat->field)), "rt");
+  if (fp == NULL)
+    return TRUE;
+
+  data = malloc (sizeof (filestruct));
+  fread (data, sizeof (filestruct), 1, fp);
+
+  for (i = &data->sbarl; i <= &data->vbarxx; i++)
+    check += *i;
+
+  if (check != data->check)
+    {
+      printf("check falhou\n");
+      return TRUE;
+    }
+
+  for (i = &(pdat->barl.save), j = &data->sbarl;
+       j <= &data->sbarxx; i = ((void *) i) + sizeof (bardat), j++)
+    *i = *j;
+
+  for (k = &(pdat->barl.adj), j = &data->vbarl;
+       j <= &data->vbarxx; k = ((void *) k) + sizeof (bardat), j++)
+    GTK_ADJUSTMENT (*k)->value = *j;
+
+  memcpy (&pdat->color, &data->color, sizeof (GdkColor) * 8);
+  memcpy (&pdat->flg, &data->flg, 1);
+
+  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barl.adj), "value-changed");
+  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barfc.adj), "value-changed");
+  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barfd.adj), "value-changed");
+  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barr.adj), "value-changed");
+  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barang.adj), "value-changed");
+  g_signal_emit_by_name (GTK_ADJUSTMENT (pdat->barxx.adj), "value-changed");
+
+  fclose (fp);
+  free (data);
   return TRUE;
 }
 

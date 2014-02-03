@@ -78,7 +78,7 @@ typedef struct physdata
   double axis;
   double ldist;
   double *scl; 
-} ysdata;
+} physdata;
 
 // struct principal com os dados do programa
 typedef struct progdata
@@ -104,8 +104,8 @@ typedef struct filestruct
   double sbarl,sbarr,sbarfc,sbarfd,sbarang,sbarxx;
   double vbarl,vbarr,vbarfc,vbarfd,vbarang,vbarxx;
   GdkColor color[8];
-  unsigned int check;
   flag flg;
+  double check;
 } filestruct;
 
 #endif
